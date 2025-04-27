@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./assets/css/all.min.css" rel="stylesheet">    <!-- Font Awesome -->
+    <style>
+        /* Simple colors */
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --sidebar-width: 240px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            overflow-x: hidden;
+        }
+
+        /* Fixed navbar */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-width);
+            right: 0;
+            z-index: 1000;
+            height: 60px;
+        }
+
+        /* Fixed sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            z-index: 1001;
+            overflow-y: auto;
+        }
+
+        /* Main content area */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding-top: 60px; /* Same as navbar height */
+            min-height: 100vh;
+        }
+
+        /* Sidebar menu styles */
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .sidebar-menu .accordion-button {
+            background-color: transparent;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+
+        .sidebar-menu .accordion-button:not(.collapsed) {
+            color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+
+        .sidebar-menu .accordion-button:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        .sidebar-menu .submenu-item {
+            padding: 8px 15px 8px 40px;
+        }
+
+        .sidebar-menu .submenu-item:hover {
+            background-color: rgba(0,0,0,0.03);
+        }
+
+        .sidebar-menu .submenu-item.active {
+            color: var(--primary-color);
+        }
+
+        /* Bottom navigation for mobile */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .bottom-nav-item {
+            padding: 10px;
+            text-align: center;
+            color: #6c757d;
+        }
+
+        .bottom-nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .bottom-nav-dropup {
+            position: absolute;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            background: white;
+            display: none;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+
+        .bottom-nav-dropup.show {
+            display: block;
+        }
+
+        .bottom-nav-dropup-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Simple card styles */
+        .card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .welcome-card {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e6ebff 100%);
+        }
+
+        /* Make sidebar go to bottom on mobile */
+        @media (max-width: 768px) {
+            .navbar {
+                left: 0;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding-bottom: 60px;
+            }
+
+            .bottom-nav {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar d-none d-md-block">
+        <div class="sidebar-header p-3">
+            <h5 class="mb-0 text-primary"><i class="fas fa-cube me-2"></i>Menu</h5>
+        </div>
+        <div class="sidebar-menu">
+            <div class="accordion" id="sidebarMenu">
+                <!-- Clients -->
+                <div class="accordion-item border-0">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#clients">
+                            <i class="fas fa-users me-2" style='color: rgb(62, 86, 180);'></i>Clients
+                        </button>
+                    </h2>
+                    <div id="clients" class="accordion-collapse collapse" data-bs-parent="#sidebarMenu">
+                        <div class="accordion-body p-0">
+                            <div class="submenu-item"><a href="#" class="text-decoration-none d-block"><i class="fas fa-plus-circle me-2"></i> Ajouter Client</a></div>
+                            <div class="submenu-item"><a href="#" class="text-decoration-none d-block"><i class="fas fa-list me-2"></i> Liste Clients</a></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products -->
+                <div class="accordion-item border-0">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#products">
+                            <i class="fas fa-boxes me-2" style='color: rgb(175, 142, 107);'></i>Produits
+                        </button>
+                    </h2>
+                    <div id="products" class="accordion-collapse collapse" data-bs-parent="#sidebarMenu">
+                        <div class="accordion-body p-0">
+                            <div class="submenu-item"><a href="#" class="text-decoration-none d-block"><i class="fas fa-plus-circle me-2"></i> Ajouter Produit</a></div>
+                            <div class="submenu-item"><a href="#" class="text-decoration-none d-block"><i class="fas fa-list me-2"></i> Liste Produits</a></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                <div class="accordion-item border-0">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#categories">
+                            <i class="fas fa-tags me-2" style='color: rgb(237, 117, 25);'></i>Catégories
+                        </button>
+                    </h2>
+                    <div id="categories" class="accordion-collapse collapse " data-bs-parent="#sidebarMenu">
+                        <div class="accordion-body p-0">
+                            <div class="submenu-item"><a href="#" class="text-decoration-none d-block"><i class="fas fa-plus-circle me-2"></i> Ajouter Catégorie</a></div>
+                            <div class="submenu-item"><a href="#" class="text-decoration-none d-block"><i class="fas fa-list me-2"></i> Liste Catégories</a></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documents -->
+                <div class="accordion-item border-0">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#documents">
+                            <i class="fas fa-file-alt me-2" style='color: rgb(148, 149, 151);'></i> Documents
+                        </button>
+                    </h2>
+                    <div id="documents" class="accordion-collapse collapse" data-bs-parent="#sidebarMenu">
+                        <div class="accordion-body p-0">
+                            <div class="submenu-item"><a href="#" class="text-decoration-none d-block"><i class="fas fa-file-invoice me-2"></i> Devis</a></div>
+                            <div class="submenu-item"><a href="#" class="text-decoration-none d-block"><i class="fas fa-truck me-2"></i> Bon de Livraison</a></div>
+                            <div class="submenu-item"><a href="#" class="text-decoration-none d-block"><i class="fas fa-file-invoice-dollar me-2"></i> Factures</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand">
+        <div class="container-fluid">
+            <span class="navbar-brand">Dashboard</span>
+            <div class="d-flex align-items-center">
+                <div class="dropdown">
+                    <a href="#" class="dropdown-toggle d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown">
+                        <div class="bg-primary text-white rounded-circle p-2 me-2">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span>Admin</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container-fluid p-4">
+            <!-- Welcome Card -->
+            <div class="card welcome-card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-home me-2"></i> Bienvenue</h5>
+                    <p class="card-text">Gérez votre entreprise facilement avec ce tableau de bord.</p>
+                </div>
+            </div>
+
+            <!-- Content Placeholder -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-file-alt me-2"></i> Votre Contenu</h5>
+                    <p class="card-text">Remplacez cette section avec votre code PHP.</p>
+                    <div class="alert alert-primary">
+                        <i class="fas fa-info-circle me-2"></i> Le menu se déplace en bas sur les petits écrans.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation (Mobile) -->
+    <div class="bottom-nav d-md-none">
+        <div class="bottom-nav-item" onclick="toggleMenu('clients')">
+            <i class="fas fa-users"></i>
+            <div class="bottom-nav-dropup" id="clients-menu">
+                <div class="bottom-nav-dropup-item"><i class="fas fa-plus-circle me-2"></i>Ajouter Client</div>
+                <div class="bottom-nav-dropup-item"><i class="fas fa-list me-2"></i>Liste Clients</div>
+            </div>
+        </div>
+        <div class="bottom-nav-item" onclick="toggleMenu('products')">
+            <i class="fas fa-boxes"></i>
+            <div class="bottom-nav-dropup" id="products-menu">
+                <div class="bottom-nav-dropup-item"><i class="fas fa-plus-circle me-2"></i>Ajouter Produit</div>
+                <div class="bottom-nav-dropup-item"><i class="fas fa-list me-2"></i>Liste Produits</div>
+            </div>
+        </div>
+        <div class="bottom-nav-item" onclick="toggleMenu('categories')">
+            <i class="fas fa-tags"></i>
+            <div class="bottom-nav-dropup" id="categories-menu">
+                <div class="bottom-nav-dropup-item"><i class="fas fa-plus-circle me-2"></i>Ajouter Catégorie</div>
+                <div class="bottom-nav-dropup-item"><i class="fas fa-list me-2"></i>Liste Catégories</div>
+            </div>
+        </div>
+        <div class="bottom-nav-item" onclick="toggleMenu('documents')">
+            <i class="fas fa-file-alt"></i>
+            <div class="bottom-nav-dropup" id="documents-menu">
+                <div class="bottom-nav-dropup-item"><i class="fas fa-file-invoice me-2"></i>Devis</div>
+                <div class="bottom-nav-dropup-item"><i class="fas fa-truck me-2"></i>Bon de Livraison</div>
+                <div class="bottom-nav-dropup-item"><i class="fas fa-file-invoice-dollar me-2"></i>Factures</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="./assets/js/bootstrap.bundle.min.js"></script>    
+    <script>
+        // Simple function to toggle mobile menus
+        function toggleMenu(menuId) {
+            // Hide all menus first
+            document.querySelectorAll('.bottom-nav-dropup').forEach(menu => {
+                menu.classList.remove('show');
+            });
+            
+            // Show the clicked menu
+            const menu = document.getElementById(menuId + '-menu');
+            menu.classList.toggle('show');
+        }
+
+        // Close menus when clicking elsewhere
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.bottom-nav-item')) {
+                document.querySelectorAll('.bottom-nav-dropup').forEach(menu => {
+                    menu.classList.remove('show');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
