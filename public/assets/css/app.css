@@ -202,8 +202,6 @@ navbar .notification-badge:after {
     transition: transform 0.25s ease;
 }
 
-/* ---------------------------------------------------------------*/
-
 /* Submenu styling */
 .submenu-item {
     padding: 0.6rem 1rem;

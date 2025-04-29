@@ -5,6 +5,11 @@ class ClientController {
         include VIEW_PATH . '/layouts/main.php';
     }
 
+    public function create() {
+        $content_view = 'pages/clients/add';
+        include VIEW_PATH . '/layouts/main.php';
+    }
+
     public function add() {
         $content_view = 'pages/clients/add';
         include VIEW_PATH . '/layouts/main.php';

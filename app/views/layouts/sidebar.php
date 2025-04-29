@@ -14,8 +14,8 @@
                 </h2>
                 <div id="clients" class="accordion-collapse collapse" data-bs-parent="#sidebarMenu">
                     <div class="accordion-body p-0">
-                        <div class="submenu-item ms-3"><a href="stage/clients/add" class="text-decoration-none d-block"><i class="fas fa-plus-circle me-2"></i> Ajouter Client</a></div>
-                        <div class="submenu-item ms-3"><a href="stage/clients/show" class="text-decoration-none d-block"><i class="fas fa-list me-2"></i> Liste Clients</a></div>
+                        <div class="submenu-item ms-3"><a href="/stage/clients/add" class="text-decoration-none d-block"><i class="fas fa-plus-circle me-2"></i> Ajouter Client</a></div>
+                        <div class="submenu-item ms-3"><a href="/stage/clients" class="text-decoration-none d-block"><i class="fas fa-list me-2"></i> Liste Clients</a></div>
                     </div>
                 </div>
             </div>

@@ -2,9 +2,9 @@
 
 function databaseConnection() {
     $host = 'localhost';
-    $dbname = 'your_database';
-    $username = 'your_username';
-    $password = 'your_password';
+    $dbname = 'sellm';
+    $username = 'root';
+    $password = '';
 
     try {
         $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
