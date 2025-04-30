@@ -1,4 +1,5 @@
 <?php
+
 class Router {
     private $routes = [];
 
@@ -9,10 +10,18 @@ class Router {
             'controllerAction' => $controllerAction
         ];
     }
+    
 
     public function dispatch($requestUri, $requestMethod) {
         // Strip the "/stage" prefix from the request URI
         $requestUri = preg_replace('/\/stage/', '', $requestUri, 1);
+
+         // Remove query string and trailing slashes
+         $requestUri = strtok($requestUri, '?');
+         $requestUri = rtrim($requestUri, '/');
+         if (empty($requestUri)) {
+             $requestUri = '/';
+         }
 
         foreach ($this->routes as $route) {
             if ($route['method'] === $requestMethod && $this->matchPath($route['path'], $requestUri)) {

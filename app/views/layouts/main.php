@@ -19,7 +19,7 @@
 
     <div class="main-content">
         <div class="container-fluid">
-            <?php include __DIR__ . '/../' . $content_view . '.php'; ?>
+            <?php include VIEW_PATH. '/' . $content_view . '.php'; ?>
         </div>
     </div>
 
