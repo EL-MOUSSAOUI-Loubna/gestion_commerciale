@@ -1,0 +1,120 @@
+<?php
+class CategorieModel {
+    public $db;
+
+    public function __construct($dbConnection) {
+        $this->db = $dbConnection;
+    }
+
+    public function getCategoryTree($parentId = null) {
+        try {
+            $query = "SELECT * FROM categories WHERE parent_id " 
+                   . ($parentId ? "= ?" : "IS NULL") ;
+            $stmt = $this->db->prepare($query);
+            $stmt->execute($parentId ? [$parentId] : []);
+            
+            $tree = [];
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $row['children'] = $this->getCategoryTree($row['id']); // Note: $this->
+                $tree[] = $row;
+            }
+            return $tree;
+        } catch (PDOException $e) {
+            error_log("Category tree error: " . $e->getMessage());
+            return []; // Return empty array on failure
+        }
+    }
+
+    public function getCategoryById ($id){
+        try {
+            $query = "SELECT * FROM categories WHERE id = ?";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute([$id]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Category by ID error: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    public function addCategory($categorie, $categorie_parente) {
+        try {
+            $query = "INSERT INTO categories (nom, parent_id) VALUES (:categorie, :categorie_parente)";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute([
+                'categorie' => $categorie,
+                'categorie_parente' => $categorie_parente,
+            ]);
+            return true;
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function updateCategory ($id, $categorie, $categorie_parente) {
+        try {
+            $query = "UPDATE categories SET 
+                        nom = :categorie, parent_id = :categorie_parente
+                        WHERE id = :id";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute([
+                'id'    => $id,
+                'categorie' => $categorie,
+                'categorie_parente' => $categorie_parente,
+            ]);
+            return true;
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function deleteCategory($id) {
+        try {
+            $this->db->beginTransaction();
+            
+            // First delete all children recursively
+            $this->deleteChildCategories($id);
+            
+            // Then delete the category itself
+            $stmt = $this->db->prepare("DELETE FROM categories WHERE id = ?");
+            $success = $stmt->execute([$id]);
+            
+            $this->db->commit();
+            return $success;
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            error_log("Delete error: " . $e->getMessage());
+            return false;
+        }
+    }
+    private function deleteChildCategories($parentId) {
+        // Get all children of this category
+        $stmt = $this->db->prepare("SELECT id FROM categories WHERE parent_id = ?");
+        $stmt->execute([$parentId]);
+        
+        // Recursively delete each child
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $this->deleteChildCategories($row['id']); // Delete grandchildren first
+            $delStmt = $this->db->prepare("DELETE FROM categories WHERE id = ?");
+            $delStmt->execute([$row['id']]);
+        }
+    }
+
+
+
+    /*public function getCategoriesHierarchy($parentId = null) {
+        $query = "SELECT * FROM categories WHERE parent_id " . ($parentId ? "= ?" : "IS NULL");
+        $stmt = $this->db->prepare($query);
+        $stmt->execute($parentId ? [$parentId] : []);
+        
+        $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        foreach ($categories as &$categorie) {
+            $categorie['children'] = $this->getCategoriesHierarchy($categorie['id']);
+        }
+        
+        return $categories;
+    }*/
+}

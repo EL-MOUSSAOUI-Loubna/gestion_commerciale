@@ -12,7 +12,15 @@ define('CONFIG_PATH', ROOT_PATH . '/config');
 require_once CONFIG_PATH . '/db.php';
 require_once MODEL_PATH . '/BaseModel.php';
 require_once MODEL_PATH . '/ClientModel.php';
+require_once MODEL_PATH . '/ProduitModel.php';
+require_once MODEL_PATH . '/CategorieModel.php';
+require_once MODEL_PATH . '/FactureModel.php';
 require_once CONTROLLER_PATH . '/ClientController.php';
+require_once CONTROLLER_PATH . '/ProduitController.php';
+require_once CONTROLLER_PATH . '/CategorieController.php';
+require_once CONTROLLER_PATH . '/FactureController.php';
+
+
 //require_once ROUTING_PATH . '/Router.php';
 //require_once ROUTING_PATH . '/routes.php';  // This will contain our route definitions
 
@@ -52,7 +60,30 @@ $routes = [
     'GET /clients/edit' => 'ClientController@edit',
     'POST /clients/update' => 'ClientController@update',
     'POST /clients/delete' => 'ClientController@delete',
-    'GET /clients/show' => 'ClientController@show'
+    'GET /clients/show' => 'ClientController@show',
+    
+    'GET /produits' => 'ProduitController@index',
+    'GET /produits/add' => 'ProduitController@create',
+    'POST /produits/store' => 'ProduitController@store',
+    'GET /produits/edit' => 'ProduitController@edit',
+    'POST /produits/update' => 'ProduitController@update',
+    'POST /produits/delete' => 'ProduitController@delete',
+    'GET /produits/show' => 'ProduitController@show',
+
+    'GET /categories' => 'CategorieController@index',
+    'POST /categories/store' => 'CategorieController@store',
+    'GET /categories/edit' => 'CategorieController@edit',
+    'POST /categories/update' => 'CategorieController@update',
+    'POST /categories/delete' => 'CategorieController@delete',
+
+    'GET /factures' => 'FactureController@index',
+    'GET /factures/add' => 'FactureController@create',
+    'POST /factures/store' => 'FactureController@store',
+    'GET /factures/edit' => 'FactureController@edit',
+    'POST /factures/update' => 'FactureController@update',
+    'POST /factures/delete' => 'FactureController@delete',
+    'GET /factures/show' => 'FactureController@show',
+    'POST /factures/saveLine' => 'FactureController@saveLine',
 ];
 
 // Find Matching Route - Using exact match

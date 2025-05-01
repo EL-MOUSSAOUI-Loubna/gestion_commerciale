@@ -30,8 +30,8 @@
                 </h2>
                 <div id="products" class="accordion-collapse collapse" data-bs-parent="#sidebarMenu">
                     <div class="accordion-body p-0">
-                        <div class="submenu-item"><a href="../dashboard/clients/add.php" class="text-decoration-none d-block"><i class="fas fa-plus-circle me-2"></i> Ajouter Produit</a></div>
-                        <div class="submenu-item"><a href="#" class="text-decoration-none d-block"><i class="fas fa-list me-2"></i> Liste Produits</a></div>
+                        <div class="submenu-item"><a href="/stage/produits/add" class="text-decoration-none d-block"><i class="fas fa-plus-circle me-2"></i> Ajouter Produit</a></div>
+                        <div class="submenu-item"><a href="/stage/produits" class="text-decoration-none d-block"><i class="fas fa-list me-2"></i> Liste Produits</a></div>
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                 <div id="categories" class="accordion-collapse collapse " data-bs-parent="#sidebarMenu">
                     <div class="accordion-body p-0">
                         <div class="submenu-item"><a href="#" class="text-decoration-none d-block"><i class="fas fa-plus-circle me-2"></i> Ajouter Catégorie</a></div>
-                        <div class="submenu-item"><a href="#" class="text-decoration-none d-block"><i class="fas fa-list me-2"></i> Liste Catégories</a></div>
+                        <div class="submenu-item"><a href="/stage/categories" class="text-decoration-none d-block"><i class="fas fa-list me-2"></i> Liste Catégories</a></div>
                     </div>
                 </div>
             </div>

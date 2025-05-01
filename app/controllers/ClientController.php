@@ -49,7 +49,7 @@ class ClientController {
     // Update client (POST)
     public function update() {
         $success = $this->clientModel->updateClient(
-            $$_POST['id'],
+            $_POST['id'],
             $_POST['nom_ste'] ?? '',
             $_POST['ice'] ?? '',
             $_POST['idf'] ?? '',

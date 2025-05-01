@@ -28,6 +28,7 @@ $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         Email : <input type="email" name="email" value="<?= $client['email'] ?>"><br>
         logo : <input type="text" name="logo" value="<?= $client['logo'] ?>"><br>
         
+        <input type="hidden" name="id" value="<?= $client['id'] ?>">
         <!-- File upload (note: PHP will use $_FILES['logo']) 
         Logo : <input type="file" name="logo" accept="image/*"><br>-->
 

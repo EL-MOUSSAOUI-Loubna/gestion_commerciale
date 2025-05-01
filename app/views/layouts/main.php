@@ -1,3 +1,6 @@
+<?php // At the top of the form page (add.php):
+session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -25,6 +28,10 @@
 
     <?php include __DIR__ . '/b_nav.php'; ?>
     <?php include __DIR__ . '/footer.php'; ?>
+
+    <script src="/stage/public/assets/js/bootstrap.bundle.min.jss"></script>
+    <script src="/stage/public/assets/js/app.js"></script>
+    
 </body>
 
 </html>
