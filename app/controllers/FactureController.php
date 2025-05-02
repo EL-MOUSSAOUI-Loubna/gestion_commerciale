@@ -25,13 +25,43 @@ class FactureController {
 
     // Store new client (POST)
     public function store() {
-        $success = $this->factureModel->addFacture(
-            
-        );
-        if ($success) {
-            header('Location: /stage/factures?success=created');
+        $data = json_decode(file_get_contents('php://input'), true);
+    
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            echo json_encode([
+                'success' => false, 
+                'message' => 'Invalid JSON data: ' . json_last_error_msg()
+            ]);
+            return;
+        }
+        // Validate required fields
+        if (!isset($data['client_id']) || !isset($data['date_emission']) || !isset($data['lignes']) || 
+            !isset($data['total_ht']) || !isset($data['total_ttc'])) {
+            echo json_encode([
+                'success' => false, 
+                'message' => 'Missing required fields'
+            ]);
+            return;
+        }
+
+        $clientId = $data['client_id'];
+        $date_emission = $data['date_emission'];
+        $lignes = $data['lignes'];
+        $total_ht = $data['total_ht'];
+        $total_ttc = $data['total_ttc'];
+        $modes_paiement = isset($data['modes_paiement']) ? $data['modes_paiement'] : '';
+        
+        $resultat = $this->factureModel->addFacture($clientId, $date_emission, $lignes,
+         $total_ht, $total_ttc, $modes_paiement);
+
+        if ($resultat) {
+            echo json_encode(['success' => true, 'facture_id' => $resultat]);
+            // Don't use header() redirect here since this is an AJAX call
+            // The client-side JS will handle the redirect if needed
+            //header('Location: /stage/factures?success=created');
         } else {
-            header('Location: /stage/factures/add?error=create_failed');
+            echo json_encode(['success' => false, 'error' => 'Database insert failed']);
+            //header('Location: /stage/factures/add?error=create_failed');
         }
     }
 
@@ -45,7 +75,6 @@ class FactureController {
     // Update client (POST)
     public function update() {
         $success = $this->factureModel->updateFacture(
-            
         );
         if ($success) {
             header('Location: /stage/factures?success=updated');
@@ -85,9 +114,11 @@ class FactureController {
         //$ttc = $ht_remise * (1 + $produit['ttva'] / 100);
 
         echo json_encode([
+            'produit_id' => $_POST['produit_id'],
             'libelle' => $produit['libelle'],
             'qte' => $qte,
             'prix_u' => $produit['prix_u'],
+            'ttva' => $produit['ttva'],
             'ht' => round($ht, 2),
             'remise' => $remise,
             'ttc' => round($ttc, 2)

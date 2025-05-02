@@ -1,6 +1,7 @@
 <?php
 
 define('ROOT_PATH', dirname(__DIR__));
+define('PUBLIC_PATH', ROOT_PATH . '/public');
 define('APP_PATH', ROOT_PATH . '/app');
 define('VIEW_PATH', APP_PATH . '/views');
 define('CONTROLLER_PATH', APP_PATH . '/controllers');

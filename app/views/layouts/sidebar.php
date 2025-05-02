@@ -5,6 +5,21 @@
     </div>
     <div class="sidebar-menu">
         <div class="accordion" id="sidebarMenu">
+            <!-- Factures -->
+            <div class="accordion-item border-0">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#factures">
+                        <i class="fas fa-users me-2" style='color: rgb(255, 255, 255);'></i>Factures
+                    </button>
+                </h2>
+                <div id="factures" class="accordion-collapse collapse" data-bs-parent="#sidebarMenu">
+                    <div class="accordion-body p-0">
+                        <div class="submenu-item ms-3"><a href="/stage/factures/add" class="text-decoration-none d-block"><i class="fas fa-plus-circle me-2"></i> Ajouter Factures</a></div>
+                        <div class="submenu-item ms-3"><a href="/stage/factures" class="text-decoration-none d-block"><i class="fas fa-list me-2"></i> Liste Factures</a></div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Clients -->
             <div class="accordion-item border-0">
                 <h2 class="accordion-header">
