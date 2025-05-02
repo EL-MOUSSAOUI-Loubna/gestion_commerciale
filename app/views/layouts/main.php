@@ -21,7 +21,7 @@ session_start(); ?>
     <?php include __DIR__ . '/navbar.php'; ?>
 
     <div class="main-content">
-        <div class="container-fluid">
+        <div class="container-fluid" style="overflow-x: auto;">
             <?php include VIEW_PATH. '/' . $content_view . '.php'; ?>
         </div>
     </div>

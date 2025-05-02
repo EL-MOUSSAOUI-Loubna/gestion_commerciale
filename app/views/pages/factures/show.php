@@ -1,3 +1,12 @@
+<div class="d-flex justify-content-evenly mb-3 gap-2">
+    <!-- Modifier Button -->
+    <a href="/factures/edit?id=<?= $facture['id'] ?>" class="btn btn-primary">Modifier</a>
+    
+    <!-- Imprimer Button -->
+    <button onclick="window.print()" class="btn btn-success">Imprimer</button>
+</div>
+
+
 <div class="facture container bg-white p-4 d-block align-content-between">
     <div class="">
         <div class='d-flex'>
@@ -34,10 +43,10 @@
                 <tr>
                     <td><?= $ligne['libelle'] ?></td>
                     <td><?= $ligne['qte'] ?></td>
-                    <td><?= $ligne['prix_u'] ?></td>
-                    <td><?= $ligne['remise'] ?></td>
-                    <td><?= $ligne['ht'] ?></td>
-                    <td><?= $ligne['ttc'] ?></td>
+                    <td><?= $ligne['prix_u'] ?> dh</td>
+                    <td><?= $ligne['remise'] ?> %</td>
+                    <td><?= $ligne['ht'] ?> dh</td>
+                    <td><?= $ligne['ttc'] ?> dh</td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -80,7 +89,7 @@
 
 <style>
     .facture {
-        max-width: 800px;
+        width: 800px;
         margin: auto;
         border: 1px solid #ddd;
         box-shadow: 0 0 10px rgba(0,0,0,0.05);
