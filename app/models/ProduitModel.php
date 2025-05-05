@@ -30,22 +30,19 @@ class ProduitModel {
         }
     }
 
-    public function addProduit($libelle, $reference, $description_p, $prix_u, $qte, $ttva, $u_mesure, $categorie, $fournisseur, $image_p) {
+    public function addProduit($libelle, $reference, $description_p, $prix_u, $ttva, $categorie, $fournisseur) {
         try {
-            $query = "INSERT INTO produits (libelle, reference, description_p, prix_u, qte, ttva, u_mesure, categorie, fournisseur, image_p) 
-                      VALUES (:libelle, :reference, :description_p, :prix_u, :qte, :ttva, :u_mesure, :categorie, :fournisseur, :image_p)";
+            $query = "INSERT INTO produits (libelle, reference, description_p, prix_u, ttva, categorie, fournisseur) 
+                      VALUES (:libelle, :reference, :description_p, :prix_u, :ttva, :categorie, :fournisseur)";
             $stmt = $this->db->prepare($query);
             $stmt->execute([
                 'libelle'    => $libelle,
                 'reference'  => $reference,
                 'description_p'        => $description_p,
                 'prix_u'    => $prix_u,
-                'qte'     => $qte,
                 'ttva'  => $ttva,
-                'u_mesure'       => $u_mesure,
                 'categorie' => $categorie,
                 'fournisseur' => $fournisseur,
-                'image_p'       => $image_p,
             ]);
             return true;
         } catch (PDOException $e) {
@@ -54,12 +51,12 @@ class ProduitModel {
         }
     }
 
-    public function updateProduit($id, $libelle, $reference, $description_p, $prix_u, $qte, $ttva, $u_mesure, $categorie, $fournisseur, $image_p) {
+    public function updateProduit($id, $libelle, $reference, $description_p, $prix_u, $ttva, $categorie, $fournisseur) {
         try {
             $query = "UPDATE produits SET 
                         libelle = :libelle, reference = :reference, description_p = :description_p, 
-                        prix_u = :prix_u, qte = :qte, ttva = :ttva, u_mesure = :u_mesure, 
-                        categorie = :categorie, fournisseur = :fournisseur, image_p = :image_p
+                        prix_u = :prix_u, ttva = :ttva, 
+                        categorie = :categorie, fournisseur = :fournisseur
                         WHERE id = :id";
             $stmt = $this->db->prepare($query);
             $stmt->execute([
@@ -68,12 +65,9 @@ class ProduitModel {
                 'reference'  => $reference,
                 'description_p'        => $description_p,
                 'prix_u'    => $prix_u,
-                'qte'     => $qte,
                 'ttva'  => $ttva,
-                'u_mesure'       => $u_mesure,
                 'categorie' => $categorie,
                 'fournisseur' => $fournisseur,
-                'image_p'       => $image_p,
             ]);
             return true;
         } catch (PDOException $e) {

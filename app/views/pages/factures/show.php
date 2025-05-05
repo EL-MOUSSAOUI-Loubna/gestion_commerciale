@@ -1,4 +1,4 @@
-<div class="d-flex justify-content-evenly mb-3 gap-2">
+<div class="d-flex justify-content-evenly mb-3 gap-2 no-print">
     <!-- Modifier Button -->
     <a href="/factures/edit?id=<?= $facture['id'] ?>" class="btn btn-primary">Modifier</a>
     
@@ -7,11 +7,15 @@
 </div>
 
 
-<div class="facture container bg-white p-4 d-block align-content-between">
+<div class="facture container bg-white p-4 d-block align-content-between" id="printable-invoice">
     <div class="">
         <div class='d-flex'>
             <img src= '/stage/public/assets/img/sellm.png' alt='logo sellm' class="logo me-3" style="width: 100px; height: 100px; object-fit: contain;" /> 
-            <h2 class='mt-4'>SellM</h2>
+            <div class='mt-1'>
+                <h2 >SellM</h2>
+                <p>adresse :</p>
+                <p>telephone :</p>
+            </div>
         </div>
         <div class="d-flex justify-content-between">
             <div class="mt-5">
@@ -21,22 +25,35 @@
                 <p>telephone : <?= $facture['telephone'] ?></p>
                 <p>email : <?= $facture['email'] ?></p>
             </div>
-            <div >
-                <p>facture n : <span style="font-size: 28px; font-weight: bold; color:rgb(81, 89, 141);"><?= $facture['num_facture'] ?></span></p>
-                <p>date emission : <?= $facture['date_emission'] ?></p>
+            <div>
+                <p>facture n : <span style="font-size: 25px; font-weight: bold; color:rgb(81, 89, 141);"><?= $facture['num_facture'] ?></span></p>
+                <p>date d'émission : <?= $facture['date_emission'] ?></p>
             </div>
         </div>
     </div>
-    <div class="mt-4">
-        <h1 class="text-center mb-2">Facture</h1>
-        <table class='table table-borderless'>
+    <?php
+    // Example data
+    $rows = [];
+    for ($i = 1; $i <= 10; $i++) {
+        $rows[] = [
+            'id' => $i,
+            'name' => 'Item ' . $i,
+            'description' => 'Description of item ' . $i
+        ];
+    }
+    ?>
+    <div class="mt-2 invoice-content">
+        <h2 class="text-center mb-2">Facture</h2>
+        <table class='table table-borderless' id="factures">
             <thead>
-                <th>Designation</th>
-                <th>Qte</th>
-                <th>P.U</th>
-                <th>Remise</th>
-                <th>HT</th>
-                <th>TTC</th>
+                <tr>
+                    <th>Designation</th>
+                    <th>Qte</th>
+                    <th>P.U</th>
+                    <th>Remise</th>
+                    <th>HT</th>
+                    <th>TTC</th>
+                </tr>
             </thead>
             <tbody>
                 <?php foreach($facture['lignes'] as $ligne): ?>
@@ -49,6 +66,14 @@
                     <td><?= $ligne['ttc'] ?> dh</td>
                 </tr>
                 <?php endforeach; ?>
+
+                <?php foreach ($rows as $row): ?>
+            <tr>
+                <td><?= $row['id'] ?></td>
+                <td><?= htmlspecialchars($row['name']) ?></td>
+                <td><?= htmlspecialchars($row['description']) ?></td>
+            </tr>
+        <?php endforeach; ?>
             </tbody>
         </table>
         <hr>
@@ -62,13 +87,16 @@
                 <p><?= $facture['total_ttc'] ?> dh</p>
             </div>
         </div>
-        <div class="signature">
-            <p>mode de payement :</p>
-            <input type="checkbox" <?php echo in_array('espèce', $facture['modes_pay']) ? 'checked' : ''; ?> disabled> <span class='me-2'>espèce</span>
-            <input type="checkbox" <?php echo in_array('chèque', $facture['modes_pay']) ? 'checked' : ''; ?> disabled> <span class='me-2'>chèque</span>
-            <input type="checkbox" <?php echo in_array('carte', $facture['modes_pay']) ? 'checked' : ''; ?> disabled> <span class='me-2'>carte</span>
-            <input type="checkbox" <?php echo in_array('effet', $facture['modes_pay']) ? 'checked' : ''; ?> disabled> <span class='me-2'>effet</span>
-            <input type="checkbox" <?php echo in_array('autre', $facture['modes_pay']) ? 'checked' : ''; ?> disabled> <span>autre</span>
+        <div class="signature d-flex justify-content-between mt-5">
+            <div class="">
+                <p>mode de payement :</p>
+                <input type="checkbox" <?php echo in_array('espèce', $facture['modes_pay']) ? 'checked' : ''; ?> disabled> <span class='me-2'>espèce</span>
+                <input type="checkbox" <?php echo in_array('chèque', $facture['modes_pay']) ? 'checked' : ''; ?> disabled> <span class='me-2'>chèque</span>
+                <input type="checkbox" <?php echo in_array('carte', $facture['modes_pay']) ? 'checked' : ''; ?> disabled> <span class='me-2'>carte</span>
+                <input type="checkbox" <?php echo in_array('effet', $facture['modes_pay']) ? 'checked' : ''; ?> disabled> <span class='me-2'>effet</span>
+                <input type="checkbox" <?php echo in_array('autre', $facture['modes_pay']) ? 'checked' : ''; ?> disabled> <span>autre</span>
+            </div>
+            <p class="sign text-center pt-2">signature client :</p>
         </div>
     </div>
     <div class="footer d-flex justify-content-evenly pt-2">
@@ -88,6 +116,7 @@
 </div>
 
 <style>
+    /* Regular styles for screen display */
     .facture {
         width: 800px;
         margin: auto;
@@ -136,17 +165,83 @@
         margin: 20px 0;
     }
 
-    .facture .signature {
-        height: 100px;
+    .facture .sign {
+        border: 1px solid #aaa;
+        width: 220px; 
+        padding-bottom: 150px;
     }
-
     .facture .footer {
         border-top: 1px solid #ddd;
-        margin-top: 80px;
+        margin-top: 10px;
     }
 
     .facture .footer p {
         font-size: 12px;
         margin: 2px 0;
+    }
+    
+    /* Print styles */
+    @media print {
+        /* Hide everything except what we want to print */
+        body * {
+            visibility: hidden;
+        }
+        
+        /* Show only the invoice section */
+        #printable-invoice, #printable-invoice * {
+            visibility: visible;
+        }
+        
+        /* Hide action buttons when printing */
+        .no-print {
+            display: none !important;
+        }
+        
+        /* Position the invoice at the top of the page */
+        #printable-invoice {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 30px;
+            background-color: white !important;
+            box-shadow: none;
+            border: none;
+        }
+        
+        /* Make content fill the page better */
+        .facture {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: white !important;
+        }
+        
+        /* Ensure table headers repeat on multiple pages */
+        thead {
+            display: table-header-group;
+        }
+        
+        /* Prevent rows from breaking across pages */
+        tr {
+            page-break-inside: avoid;
+        }
+        
+        /* Ensure table has room to breathe before footer */
+        .facture table {
+            margin-bottom: 80px;
+        }
+        
+        /* Add space before footer on all pages */
+        @page {
+            margin-bottom: 20px;
+            padding-bottom: 80px;
+            background-color: white !important;
+            size: a4 portrait;
+        }
+
     }
 </style>

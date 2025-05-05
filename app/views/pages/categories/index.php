@@ -1,314 +1,449 @@
-<?php // At the top of the form page (add.php):
+<di?php // At the top of the form page (add.php):
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 ?>
-
-<div class="category-container" id="category-tree">
-    <!-- Toast notification -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<div class="container categories mt-4">
+    <!-- Toast Notification -->
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-        <div id="deleteToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header bg-success text-white">
-                <strong class="me-auto">Success</strong>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-                <span id="toastMessage">Category deleted successfully</span>
+        <div id="actionToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage">Action completed successfully</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
     </div>
 
-    <div class="mb-5">
-        <h1>Ajouter categorie</h1>
-        <!-- Display errors if any -->
-        <?php if (isset($_GET['error'])): ?>
-            <div class="error">Erreur lors de l'ajout du client.</div>
-        <?php endif; ?>
+    <!-- Add Category Form -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <div class="h5 mb-0"><i class="fas fa-folder-plus me-2"></i>Add New Category</div>
+        </div>
+        <div class="card-body">
+            <form id="addCategoryForm" class="needs-validation" novalidate>
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
 
-        <form method="post" action="/stage/categories/store" enctype="multipart/form-data">
-            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="categoryName" class="form-label">Category Name <span class='text-danger'>*</span></label>
+                        <input type="text" class="form-control" id="categoryName" name="categoryName" required>
+                        <div class="invalid-feedback">
+                            Please enter a category name.
+                        </div>
+                    </div>
 
-            <label for="categorie">Nom categorie : </label>
-            <input type="text" id="categorie" name="categorie"><br>
+                    <div class="col-md-6">
+                        <label for="parentCategory" class="form-label">Parent Category</label>
+                        <select class="form-select" name="parentCategory" id="parentCategory">
+                            <option value="">- Root Category -</option>
+                            <?php 
+                            function displayCategoryOptions($categories, $indent = '') {
+                                foreach ($categories as $category) {
+                                    echo '<option value="' . htmlspecialchars($category['id']) . '">' . 
+                                        $indent . htmlspecialchars($category['nom']) . 
+                                        '</option>';
+                                    
+                                    if (!empty($category['children'])) {
+                                        displayCategoryOptions($category['children'], $indent . '&nbsp;&nbsp;');
+                                    }
+                                }
+                            }
+                            displayCategoryOptions($categories);
+                            ?>
+                        </select>
+                    </div>
+                </div>
 
-            <label for="categorie_parente">Categorie parente : </label>
-            <select name="categorie_parente" id="categorie_parente">
-                <option value="">- catégorie racine</option>
-                <?php 
-                // Recursive function to display categories with proper indentation
-                function displayCategoryOptions($categories, $indent = '') {
-                    foreach ($categories as $category) {
-                        // Output this category
-                        echo '<option value="' . htmlspecialchars($category['id']) . '">' . 
-                            $indent . htmlspecialchars($category['nom']) . 
-                            '</option>';
-                        
-                        // If this category has children, recursively add them with increased indentation
-                        if (!empty($category['children'])) {
-                            displayCategoryOptions($category['children'], $indent . '&nbsp;&nbsp;&nbsp;&nbsp;');
-                        }
-                    }
-                }
-                
-                // Start the recursive display
-                displayCategoryOptions($categories);
-                ?>
-            </select><br>
-
-            <input type="submit" value="Ajouter">
-        </form>
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-1"></i> Add Category
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <div>
-    <?php function renderCategories($categories, $level = 0) { ?>
-        <?php foreach ($categories as $category): ?>
-            <?php if (empty($category['children'])): ?>
-                <!-- Simple category (no children) -->
-                <div class="category-item" data-category-id="<?= $category['id'] ?>">
-                    <div class="category-content">
-                        <span class="category-name"><?= htmlspecialchars($category['nom']) ?></span>
-                    </div>
-                    <div class="category-actions">
-                        <div class="btn-group">
-                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 12px;">
-                                action
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" data-id="<?= $category['id'] ?>">show</a></li>
-                                <li><a class="dropdown-item" href="/stage/categories/edit?id=<?= $category['id'] ?>">edit</a></li>
-                                <li>
-                                    <form method="post" class="delete-category-form" data-confirm="Êtes-vous sûr de vouloir supprimer cette catégorie?">
-                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
-                                        <input type="hidden" name="id" value="<?= $category['id'] ?>">
-                                        <button type="submit" class="dropdown-item text-danger">
-                                            <i class="fas fa-trash me-1"></i> Delete
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            <?php else: ?>
-                <!-- Category with children -->
-                <div class="category-item parent-category flex-column <?= $level > 0 ? 'nested' : '' ?>" data-category-id="<?= $category['id'] ?>">
-                    <div class="category-row">
-                        <div class="category-content">
-                            <span class="category-name"><?= htmlspecialchars($category['nom']) ?></span>
-                            <span class="toggle-icon ps-2" data-category-id="<?= $category['id'] ?>">
-                                <i class="fa fa-chevron-right"></i>
-                            </span> 
-                        </div>
-                        <div class="category-actions">
-                            <div class="btn-group">
-                                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 12px;">
-                                    action
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#" data-id="<?= $category['id'] ?>">show</a></li>
-                                    <li><a class="dropdown-item" href="/stage/categories/edit?id=<?= $category['id'] ?>">edit</a></li>
-                                    <li>
-                                        <form method="post" class="delete-category-form" 
-                                        data-confirm="Êtes-vous sûr de vouloir supprimer cette catégorie et toutes ses sous-catégories?">
-                                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
-                                            <input type="hidden" name="id" value="<?= $category['id'] ?>">
-                                            <button type="submit" class="dropdown-item text-danger">
-                                                <i class="fas fa-trash me-1"></i> Delete
-                                            </button>
-                                        </form>
-                                    </li>
-                                </ul>
+    <!-- Categories Tree -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <div class="h5 mb-0"><i class="fas fa-sitemap me-2"></i>Categories Hierarchy</div>
+            <button id="expandAllBtn" class="btn btn-sm btn-outline-light">
+                <i class="fas fa-expand me-1"></i> Expand All
+            </button>
+        </div>
+        <div class="card-body p-0">
+            <div id="categoryTree" class="tree-view">
+                <?php function renderCategories($categories, $level = 0) { ?>
+                    <?php foreach ($categories as $category): ?>
+                        <div class="tree-node" data-level="<?= $level ?>" data-category-id="<?= $category['id'] ?>">
+                            <div class="node-header">
+                                <?php if (!empty($category['children'])): ?>
+                                    <button class="toggle-btn btn btn-sm btn-link">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                <?php else: ?>
+                                    <span class="toggle-spacer"></span>
+                                <?php endif; ?>
+                                
+                                <span class="node-name"><?= htmlspecialchars($category['nom']) ?></span>
+                                
+                                <div class="node-actions dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item" href="/stage/categories/edit?id=<?= $category['id'] ?>">
+                                                <i class="fas fa-edit me-2"></i>Edit
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <form class="delete-category-form" data-category-id="<?= $category['id'] ?>">
+                                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+                                                <input type="hidden" name="id" value="<?= $category['id'] ?>">
+                                                <button type="submit" class="dropdown-item text-danger">
+                                                    <i class="fas fa-trash me-2"></i>Delete
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
+                            
+                            <?php if (!empty($category['children'])): ?>
+                                <div class="node-children">
+                                    <?php renderCategories($category['children'], $level + 1); ?>
+                                </div>
+                            <?php endif; ?>
                         </div>
-                    </div>
-                    <div class="subcategories w-100" id="children-<?= $category['id'] ?>" style="display: none;">
-                        <?php renderCategories($category['children'], $level + 1); ?>
-                    </div>
-                </div>
-            <?php endif; ?>
-        <?php endforeach; ?>
-    <?php } ?>
-    
-    <?php renderCategories($categories); ?>
+                    <?php endforeach; ?>
+                <?php } ?>
+                
+                <?php renderCategories($categories); ?>
+            </div>
+        </div>
     </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Toggle functionality
-    document.querySelectorAll('.toggle-icon').forEach(function(toggle) {
-        toggle.addEventListener('click', function(e) {
-            e.stopPropagation();
-            
-            var categoryId = this.getAttribute('data-category-id');
-            var childrenContainer = document.getElementById('children-' + categoryId);
-            var icon = this.querySelector('i');
-            
-            if (childrenContainer.style.display === 'none' || !childrenContainer.style.display) {
-                childrenContainer.style.display = 'block';
-                if (icon) {
-                    icon.classList.remove('fa-chevron-right');
-                    icon.classList.add('fa-chevron-down');
-                }
-            } else {
-                childrenContainer.style.display = 'none';
-                if (icon) {
-                    icon.classList.remove('fa-chevron-down');
-                    icon.classList.add('fa-chevron-right');
-                }
-            }
-        });
-    });
-    
-    // Row click to toggle
-    document.querySelectorAll('.parent-category .category-row').forEach(function(row) {
-        row.addEventListener('click', function() {
-            var toggle = this.querySelector('.toggle-icon');
-            if (toggle) {
-                toggle.click();
-            }
-        });
-    });
-    
-    // AJAX Delete functionality
-    document.querySelectorAll('.delete-category-form').forEach(form => {
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        if (!confirm('Delete this category?')) return;
+<style>
 
+    .categories {
+        font-size: 13px;
+        height: 80vh;
+    }
+
+    .categories .card-header {
+        font-size: 16px;
+    }
+/* Tree View Styles */
+.tree-view {
+    padding: 15px;
+}
+
+.tree-node {
+    margin-bottom: 5px;
+}
+
+.node-header {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    transition: all 0.2s;
+}
+
+.node-header:hover {
+    background-color: #e9ecef;
+}
+
+.toggle-btn, .toggle-spacer {
+    width: 24px;
+    min-width: 24px;
+    text-align: center;
+    margin-right: 8px;
+}
+
+.toggle-btn i {
+    transition: transform 0.2s;
+}
+
+.tree-node.expanded > .node-header > .toggle-btn i {
+    transform: rotate(90deg);
+}
+
+.node-name {
+    flex-grow: 1;
+    font-weight: 500;
+}
+
+.node-actions {
+    margin-left: auto;
+}
+
+.node-children {
+    margin-left: 32px;
+    border-left: 2px solid #dee2e6;
+    padding-left: 10px;
+    display: none;
+}
+
+.tree-node.expanded > .node-children {
+    display: block;
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .node-header {
+        padding: 6px 8px;
+    }
+    
+    .node-children {
+        margin-left: 20px;
+    }
+}
+</style>
+
+<script>
+class CategoryManager {
+    constructor() {
+        this.initEventListeners();
+        this.initTreeView();
+        this.toast = new bootstrap.Toast(document.getElementById('actionToast'));
+    }
+
+    initEventListeners() {
+        // Add category form submission
+        document.getElementById('addCategoryForm').addEventListener('submit', (e) => this.handleAddCategory(e));
+        
+        // Expand all button
+        document.getElementById('expandAllBtn').addEventListener('click', () => this.toggleAllNodes());
+        
+        // Initialize dropdowns
+        document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+            new bootstrap.Dropdown(toggle);
+        });
+    }
+
+    initTreeView() {
+        document.querySelectorAll('.tree-node').forEach(node => {
+            const toggleBtn = node.querySelector('.toggle-btn');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    node.classList.toggle('expanded');
+                });
+            }
+            
+            // Make entire header clickable for toggling
+            const header = node.querySelector('.node-header');
+            if (header && node.querySelector('.toggle-btn')) {
+                header.addEventListener('click', (e) => {
+                    if (!e.target.closest('.dropdown') && !e.target.closest('.toggle-btn')) {
+                        node.classList.toggle('expanded');
+                    }
+                });
+            }
+            
+            // Delete category forms
+            const deleteForm = node.querySelector('.delete-category-form');
+            if (deleteForm) {
+                deleteForm.addEventListener('submit', (e) => this.handleDeleteCategory(e));
+            }
+        });
+    }
+
+    toggleAllNodes() {
+        const expandAllBtn = document.getElementById('expandAllBtn');
+        const shouldExpand = !expandAllBtn.classList.contains('active');
+        
+        expandAllBtn.classList.toggle('active', shouldExpand);
+        expandAllBtn.innerHTML = shouldExpand 
+            ? '<i class="fas fa-compress me-1"></i> Collapse All' 
+            : '<i class="fas fa-expand me-1"></i> Expand All';
+        
+        document.querySelectorAll('.tree-node').forEach(node => {
+            if (node.querySelector('.node-children')) {
+                node.classList.toggle('expanded', shouldExpand);
+            }
+        });
+    }
+
+    async handleAddCategory(e) {
+        e.preventDefault();
+        const form = e.target;
         const formData = new FormData(form);
+        
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            return;
+        }
+        
+        try {
+            const response = await fetch('/stage/categories/store', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (response.ok && result.success) {
+                this.showToast('Category added successfully');
+                this.addCategoryToTree(result.category);
+                form.reset();
+                form.classList.remove('was-validated');
+            } else {
+                throw new Error(result.message || 'Failed to add category');
+            }
+        } catch (error) {
+            this.showToast(error.message, 'danger');
+            console.error('Error:', error);
+        }
+    }
+
+    addCategoryToTree(category) {
+        const parentId = category.parent_id || '';
+        const parentSelect = document.getElementById('parentCategory');
+        
+        // Add to dropdown
+        const option = new Option(
+            (category.parent_id ? '    ' : '') + category.nom, 
+            category.id
+        );
+        parentSelect.add(option);
+        
+        // Add to tree view
+        if (!category.parent_id) {
+            // Add as root node
+            const treeContainer = document.getElementById('categoryTree');
+            const newNode = this.createTreeNode(category, 0);
+            treeContainer.prepend(newNode);
+        } else {
+            // Find parent node and add as child
+            const parentNode = document.querySelector(`.tree-node[data-category-id="${category.parent_id}"]`);
+            if (parentNode) {
+                parentNode.classList.add('expanded');
+                let childrenContainer = parentNode.querySelector('.node-children');
+                
+                if (!childrenContainer) {
+                    childrenContainer = document.createElement('div');
+                    childrenContainer.className = 'node-children';
+                    parentNode.appendChild(childrenContainer);
+                    
+                    // Add toggle button if it didn't exist
+                    const header = parentNode.querySelector('.node-header');
+                    const toggleSpacer = header.querySelector('.toggle-spacer');
+                    if (toggleSpacer) {
+                        toggleSpacer.replaceWith(this.createToggleButton());
+                    }
+                }
+                
+                const newNode = this.createTreeNode(category, parseInt(parentNode.dataset.level) + 1);
+                childrenContainer.appendChild(newNode);
+            }
+        }
+        
+        // Reinitialize tree interactions for new nodes
+        this.initTreeView();
+    }
+
+    createTreeNode(category, level) {
+        const node = document.createElement('div');
+        node.className = 'tree-node';
+        node.dataset.level = level;
+        node.dataset.categoryId = category.id;
+        
+        node.innerHTML = `
+            <div class="node-header">
+                <span class="toggle-spacer"></span>
+                <span class="node-name">${category.nom}</span>
+                <div class="node-actions dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" href="/stage/categories/edit?id=${category.id}">
+                                <i class="fas fa-edit me-2"></i>Edit
+                            </a>
+                        </li>
+                        <li>
+                            <form class="delete-category-form" data-category-id="${category.id}">
+                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+                                <input type="hidden" name="id" value="${category.id}">
+                                <button type="submit" class="dropdown-item text-danger">
+                                    <i class="fas fa-trash me-2"></i>Delete
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        `;
+        
+        return node;
+    }
+
+    createToggleButton() {
+        const btn = document.createElement('button');
+        btn.className = 'toggle-btn btn btn-sm btn-link';
+        btn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        return btn;
+    }
+
+    async handleDeleteCategory(e) {
+        e.preventDefault();
+        const form = e.target;
+        const categoryId = form.dataset.categoryId;
+        const confirmMessage = form.closest('.tree-node').querySelector('.node-children') 
+            ? 'Are you sure you want to delete this category and all its subcategories?'
+            : 'Are you sure you want to delete this category?';
+        
+        if (!confirm(confirmMessage)) return;
         
         try {
             const response = await fetch('/stage/categories/delete', {
                 method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest' // Helps identify AJAX
-                }
+                body: new FormData(form)
             });
             
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(errorText || 'Delete failed');
-            }
+            const result = await response.json();
             
-            const data = await response.json();
-            if (data.success) {
-                form.closest('.category-item').remove();
+            if (response.ok && result.success) {
+                this.showToast('Category deleted successfully');
+                form.closest('.tree-node').remove();
+                
+                // Remove from dropdown
+                const parentSelect = document.getElementById('parentCategory');
+                const option = parentSelect.querySelector(`option[value="${categoryId}"]`);
+                if (option) option.remove();
             } else {
-                throw new Error(data.message);
+                throw new Error(result.message || 'Failed to delete category');
             }
         } catch (error) {
+            this.showToast(error.message, 'danger');
             console.error('Error:', error);
-            alert('Delete error: ' + error.message);
         }
-    });
-});
-    
+    }
+
+    showToast(message, type = 'success') {
+        const toast = document.getElementById('actionToast');
+        const toastMessage = document.getElementById('toastMessage');
+        
+        toast.className = `toast align-items-center text-white bg-${type} border-0`;
+        toastMessage.textContent = message;
+        
+        this.toast.show();
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    new CategoryManager();
 });
 </script>
-
-
-
-<style>
-#category-tree {
-    width: 100%;
-    font-family: Arial, sans-serif;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-#category-tree .category-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    border-top: 1px solid #eee;
-    background-color: white;
-}
-
-#category-tree .category-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    cursor: pointer;
-}
-
-#category-tree .category-content {
-    display: flex;
-    align-items: center;
-}
-
-#category-tree .category-content img {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    border-radius: 4px;
-    margin-right: 15px;
-}
-
-#category-tree .category-name {
-    font-size: 15px;
-    color: #333;
-}
-
-#category-tree .category-actions {
-    display: flex;
-    align-items: center;
-}
-
-#category-tree .toggle-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 15px;
-    cursor: pointer;
-    color: #888;
-}
-
-#category-tree .toggle-icon i {
-    transition: transform 0.2s;
-}
-
-#category-tree .fa-chevron-down {
-    transform: rotate(90deg);
-}
-
-#category-tree .edit-btn {
-    color: #007bff;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-#category-tree .edit-btn:hover {
-    text-decoration: underline;
-}
-
-#category-tree .subcategories {
-    padding-left: 0;
-}
-
-#category-tree .subcategories .category-item {
-    padding-left: 45px;
-    background-color: #ffffff;
-}
-
-#category-tree .subcategories .subcategories .category-item {
-    padding-left: 45px;
-    background-color:rgb(255, 255, 255);
-}
-
-/* Optional: Add a slight hover effect */
-#category-tree .category-item:hover {
-    background-color: rgb(253, 253, 253);
-}
-
-#category-tree .parent-category .category-row:hover {
-    background-color:rgb(253, 253, 253);
-}
-</style>
-
-<!-- Note: This implementation uses Font Awesome icons. Add this to your header if you don't already have it: -->
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->

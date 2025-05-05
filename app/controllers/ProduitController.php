@@ -28,12 +28,9 @@ class ProduitController {
             $_POST['reference'] ?? '',
             $_POST['description_p'] ?? '',
             $_POST['prix_u'] ?? '',
-            $_POST['qte'] ?? '',
             $_POST['ttva'] ?? '',
-            $_POST['u_mesure'] ?? '',
             $_POST['categorie'] ?? '',
             $_POST['fournisseur'] ?? '',
-            $_POST['image_p'] ?? '',
         );
         if ($success) {
             header('Location: /stage/produits?success=created');
@@ -57,12 +54,9 @@ class ProduitController {
             $_POST['reference'] ?? '',
             $_POST['description_p'] ?? '',
             $_POST['prix_u'] ?? '',
-            $_POST['qte'] ?? '',
             $_POST['ttva'] ?? '',
-            $_POST['u_mesure'] ?? '',
             $_POST['categorie'] ?? '',
             $_POST['fournisseur'] ?? '',
-            $_POST['image_p'] ?? '',
         );
         if ($success) {
             header('Location: /stage/produits?success=updated');

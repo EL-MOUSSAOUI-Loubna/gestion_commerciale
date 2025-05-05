@@ -30,10 +30,10 @@ class ClientModel {
         }
     }
 
-    public function addClient($nom_ste, $ice, $idf, $adresse, $email, $telephone, $logo) {
+    public function addClient($nom_ste, $ice, $idf, $adresse, $email, $telephone) {
         try {
             $query = "INSERT INTO clients (nom_ste, ice, `idf`, adresse, email, telephone, logo) 
-                      VALUES (:nom_ste, :ice, :idf, :adresse, :email, :telephone, :logo)";
+                      VALUES (:nom_ste, :ice, :idf, :adresse, :email, :telephone,)";
             $stmt = $this->db->prepare($query);
             $stmt->execute([
                 'nom_ste'    => $nom_ste,
@@ -42,7 +42,6 @@ class ClientModel {
                 'adresse'    => $adresse,
                 'email'     => $email,
                 'telephone'  => $telephone,
-                'logo'       => $logo
             ]);
             return true;
         } catch (PDOException $e) {
@@ -51,11 +50,11 @@ class ClientModel {
         }
     }
 
-    public function updateClient($id, $nom_ste, $ice, $idf, $adresse, $email, $telephone, $logo) {
+    public function updateClient($id, $nom_ste, $ice, $idf, $adresse, $email, $telephone) {
         try {
             $query = "UPDATE clients SET 
                       nom_ste = :nom_ste, ice = :ice, idf = :idf, adresse = :adresse, 
-                      email = :email, telephone = :telephone, logo = :logo 
+                      email = :email, telephone = :telephone
                       WHERE id = :id";
             $stmt = $this->db->prepare($query);
             $stmt->execute([
@@ -66,7 +65,6 @@ class ClientModel {
                 'adresse'    => $adresse,
                 'email'     => $email,
                 'telephone'  => $telephone,
-                'logo'       => $logo
             ]);
             return true;
         } catch (PDOException $e) {

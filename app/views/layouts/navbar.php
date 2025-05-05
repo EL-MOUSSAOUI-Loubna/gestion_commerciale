@@ -17,7 +17,7 @@
                     </div>
                     <span>Admin</span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end">
+                <ul class="dropdown-menu dropdown-menu-end" style="font-size: 14px">
                     <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Profile</a></li>
                     <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Settings</a></li>
                     <li><a class="dropdown-item" href="#"><i class="fas fa-palette"></i> Theme</a></li>
