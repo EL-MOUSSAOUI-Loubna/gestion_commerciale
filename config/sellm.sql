@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 02 mai 2025 à 11:17
+-- Généré le : lun. 05 mai 2025 à 07:12
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -63,17 +63,17 @@ CREATE TABLE `clients` (
   `idf` int(11) DEFAULT NULL,
   `adresse` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `telephone` varchar(15) DEFAULT NULL,
-  `logo` varchar(100) DEFAULT NULL
+  `telephone` varchar(15) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `clients`
 --
 
-INSERT INTO `clients` (`id`, `nom_ste`, `ice`, `idf`, `adresse`, `email`, `telephone`, `logo`) VALUES
-(2, 'test', 123456789, 147258369, 'morocco', 'mail@stlit.ma', '0605040302', 'imgg'),
-(3, 'stlit', 123456789, 147258369, 'morocco', 'mail@stlit.ma', '0605040302', 'imgg');
+INSERT INTO `clients` (`id`, `nom_ste`, `ice`, `idf`, `adresse`, `email`, `telephone`) VALUES
+(2, 'ste1', 123456789, 147258369, 'morocco', 'ste1@gmail.com', '0605040302'),
+(3, 'stlit', 123456789, 147258369, 'morocco', 'mail@stlit.ma', '0605040302'),
+(4, 'ste 3', 123456, 0, 'maroc', 'ste3@gmail.com', '0666666666');
 
 -- --------------------------------------------------------
 
@@ -103,7 +103,8 @@ INSERT INTO `factures` (`id`, `client_id`, `date_emission`, `num_facture`, `tota
 (8, 2, '2025-05-02', 'FAC-2025-00008', 60.00, 66.00, 'espèce', '2025-05-02 05:29:34'),
 (9, 2, '2025-05-02', 'FAC-2025-00009', 124.16, 140.30, 'espèce', '2025-05-02 05:32:35'),
 (10, 3, '2025-05-02', 'FAC-2025-00010', 120.00, 132.00, 'carte', '2025-05-02 06:13:25'),
-(11, 2, '2025-05-02', 'FAC-2025-00011', 30060.00, 36066.00, 'espèce,carte', '2025-05-02 06:28:08');
+(11, 2, '2025-05-02', 'FAC-2025-00011', 30060.00, 36066.00, 'espèce,carte', '2025-05-02 06:28:08'),
+(12, 3, '2025-05-03', 'FAC-2025-00012', 60.00, 66.00, 'effet', '2025-05-03 03:08:56');
 
 -- --------------------------------------------------------
 
@@ -136,7 +137,8 @@ INSERT INTO `lignes_facture` (`id`, `facture_id`, `produit_id`, `qte`, `remise`,
 (6, 9, 4, 2, 3, 64.00, 13, 124.16, 140.30),
 (7, 10, 3, 4, 0, 30.00, 10, 120.00, 132.00),
 (8, 11, 3, 2, 0, 30.00, 10, 60.00, 66.00),
-(9, 11, 1, 6, 0, 5000.00, 20, 30000.00, 36000.00);
+(9, 11, 1, 6, 0, 5000.00, 20, 30000.00, 36000.00),
+(10, 12, 3, 2, 0, 30.00, 10, 60.00, 66.00);
 
 -- --------------------------------------------------------
 
@@ -149,23 +151,21 @@ CREATE TABLE `produits` (
   `libelle` varchar(255) NOT NULL,
   `reference` varchar(100) DEFAULT NULL,
   `description_p` text DEFAULT NULL,
-  `prix_u` decimal(10,0) NOT NULL,
-  `qte` int(11) NOT NULL,
-  `ttva` int(11) NOT NULL,
-  `u_mesure` enum('kg','g','l','ml','m','cm','piece') NOT NULL,
+  `prix_u` decimal(10,2) NOT NULL,
+  `ttva` decimal(10,2) NOT NULL,
   `categorie` varchar(150) DEFAULT NULL,
-  `fournisseur` varchar(150) DEFAULT NULL,
-  `image_p` varchar(50) DEFAULT NULL
+  `fournisseur` varchar(150) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `produits`
 --
 
-INSERT INTO `produits` (`id`, `libelle`, `reference`, `description_p`, `prix_u`, `qte`, `ttva`, `u_mesure`, `categorie`, `fournisseur`, `image_p`) VALUES
-(1, 'samsung s24', 'a123a123', 'descr samsung', 5000, 4, 20, 'piece', 'cat1', 'four2', 'phone'),
-(3, 'libellé2', 'bio53', 'buio', 30, 15, 10, 'g', '0', '0', '0'),
-(4, 'zr', 'vjbk', 'k i', 64, 3, 13, 'cm', 'cat2', 'four2', 'bjk');
+INSERT INTO `produits` (`id`, `libelle`, `reference`, `description_p`, `prix_u`, `ttva`, `categorie`, `fournisseur`) VALUES
+(1, 'samsung s24', 'a123a123', 'descr samsung', 5000.00, 20.00, 'cat1', 'four2'),
+(3, 'libellé2', 'bio53', 'buio', 30.00, 10.00, '0', '0'),
+(4, 'zr', 'vjbk', 'k i', 64.00, 13.00, 'cat2', 'four2'),
+(5, 'produit5', '987654321', '', 30.50, 20.00, 'cat3', 'four1');
 
 -- --------------------------------------------------------
 
@@ -242,25 +242,25 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT pour la table `clients`
 --
 ALTER TABLE `clients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `factures`
 --
 ALTER TABLE `factures`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT pour la table `lignes_facture`
 --
 ALTER TABLE `lignes_facture`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pour la table `produits`
 --
 ALTER TABLE `produits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `users`
