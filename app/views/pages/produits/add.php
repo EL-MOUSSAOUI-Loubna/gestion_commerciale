@@ -64,9 +64,15 @@
                     <div class="col-md-4">
                         <label for="categorie" class="form-label">Catégorie</label>
                         <select class="form-select" id="categorie" name="categorie">
-                            <option value="cat1">Catégorie 1</option>
-                            <option value="cat2">Catégorie 2</option>
-                            <option value="cat3">Catégorie 3</option>
+                        <?php if (!empty($categories) && is_array($categories)): ?>
+                            <?php foreach($categories as $category): ?>
+                                <option value="<?= $category['id'] ?? '' ?>">
+                                    <?= $category['nom'] ?? 'Catégorie sans nom' ?>
+                                </option>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <option value="">Aucune catégorie disponible</option>
+                        <?php endif; ?>
                         </select>
                     </div>
 
@@ -74,9 +80,15 @@
                     <div class="col-md-6">
                         <label for="fournisseur" class="form-label">Fournisseur</label>
                         <select class="form-select" id="fournisseur" name="fournisseur">
-                            <option value="four1">Fournisseur 1</option>
-                            <option value="four2">Fournisseur 2</option>
-                            <option value="four3">Fournisseur 3</option>
+                        <?php if (!empty($fournisseurs) && is_array($fournisseurs)): ?>
+                            <?php foreach($fournisseurs as $fournisseur): ?>
+                                <option value="<?= $fournisseur['id'] ?? '' ?>">
+                                    <?= $fournisseur['nom_ste'] ?? 'Nom non disponible' ?>
+                                </option>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <option value="">Aucun fournisseur disponible</option>
+                        <?php endif; ?>
                         </select>
                     </div>
                 </div>

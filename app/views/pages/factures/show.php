@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-evenly mb-3 gap-2 no-print">
     <!-- Modifier Button -->
-    <a href="/factures/edit?id=<?= $facture['id'] ?>" class="btn btn-primary">Modifier</a>
+    <a href="/stage/factures/edit?id=<?= $facture['id'] ?>" class="btn btn-primary">Modifier</a>
     
     <!-- Imprimer Button -->
     <button onclick="window.print()" class="btn btn-success">Imprimer</button>
@@ -31,17 +31,7 @@
             </div>
         </div>
     </div>
-    <?php
-    // Example data
-    $rows = [];
-    for ($i = 1; $i <= 10; $i++) {
-        $rows[] = [
-            'id' => $i,
-            'name' => 'Item ' . $i,
-            'description' => 'Description of item ' . $i
-        ];
-    }
-    ?>
+
     <div class="mt-2 invoice-content">
         <h2 class="text-center mb-2">Facture</h2>
         <table class='table table-borderless' id="factures">
@@ -66,14 +56,6 @@
                     <td><?= $ligne['ttc'] ?> dh</td>
                 </tr>
                 <?php endforeach; ?>
-
-                <?php foreach ($rows as $row): ?>
-            <tr>
-                <td><?= $row['id'] ?></td>
-                <td><?= htmlspecialchars($row['name']) ?></td>
-                <td><?= htmlspecialchars($row['description']) ?></td>
-            </tr>
-        <?php endforeach; ?>
             </tbody>
         </table>
         <hr>

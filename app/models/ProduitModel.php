@@ -8,7 +8,7 @@ class ProduitModel {
 
     public function getProduits() {
         try {
-            $query = "SELECT * FROM produits";
+            $query = "SELECT p.*, c.nom AS nom_categorie FROM produits p LEFT JOIN categories c ON p.categorie = c.id";
             $stmt = $this->db->prepare($query);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -87,4 +87,40 @@ class ProduitModel {
             return false;
         }
     }
+
+    public function getCategories (){
+        try {
+            $query = "SELECT * FROM categories";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getFournisseurs (){
+        try {
+            $query = "SELECT * FROM fournisseurs";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return [];
+        }
+    }
+    public function getCategoryOfProduct ($id){
+        try {
+            $query = "SELECT c.nom FROM categories c INNER JOIN produits p ON c.id = p.categorie WHERE p.id = :id ";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute(['id' => $id]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return [];
+        }
+    }
+
 }

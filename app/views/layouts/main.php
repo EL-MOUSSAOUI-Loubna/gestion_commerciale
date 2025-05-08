@@ -36,100 +36,104 @@ $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     <?php include __DIR__ . '/footer.php'; ?>
 
 <script src="/stage/public/assets/js/jquery-3.6.0.min.js"></script>
-<script>
+
+<!-- JS Section -->
+<script>/*
   let clientNom = '';
   let factureDate = '';
   let lignesProduits = [];
   let totalHT = 0; 
-    let totalTTC = 0;
+  let totalTTC = 0;
 
+  // Submit modal to select client/date
   $("#initForm").on("submit", function(e) {
-        e.preventDefault();
-        let selectedClient = $("select[name='client_id'] option:selected");
-        clientNom = selectedClient.text();
-        factureDate = $("input[name='date_emission']").val();
+    e.preventDefault();
+    let selectedClient = $("select[name='client_id'] option:selected");
+    clientNom = selectedClient.text();
+    factureDate = $("input[name='date_emission']").val();
 
-        $("#hiddenClientId").val(selectedClient.val());
-        $("#hiddenDateFacture").val(factureDate);
+    $("#hiddenClientId").val(selectedClient.val());
+    $("#hiddenDateFacture").val(factureDate);
 
-        $("#clientInfo").html(`Client : ${clientNom} | Date : ${factureDate}`);
-        $("#clientModal").hide();
-        $("#facturePage").show();
+    $("#clientInfo").html(`Client : ${clientNom} | Date : ${factureDate}`);
+    $("#clientModal").addClass("d-none");
+    $("#facturePage").show();
   });
 
+  // Show modal to re-edit
+  $("#editClientBtn").on("click", function() {
+    $("#clientModal").removeClass("d-none");
+  });
 
+  // Submit product form
   $("#produitForm").on("submit", function(e) {
     e.preventDefault();
     $.ajax({
-        url: "/stage/factures/saveLine",
-        method: "POST",
-        data: $(this).serialize(),
-        dataType: "json",
-        success: function(res) {
-            let row = `<tr>
-                <td>${res.libelle}</td>
-                <td>${res.qte}</td>
-                <td>${res.prix_u} dh</td>
-                <td>${parseFloat(res.remise).toFixed(2)} %</td>
-                <td>${res.ht} dh</td>
-                <td>${res.ttc} dh</td>
-            </tr>`;
-            $("#ligneProduits").append(row);
-
-            totalHT += parseFloat(res.ht);  // Add to the total HT
-            totalTTC += parseFloat(res.ttc); // Add to the total TTC
-
-             // Update the displayed totals
-             $("#totalHT").text(totalHT.toFixed(2));  // Update total HT
-            $("#totalTTC").text(totalTTC.toFixed(2)); // Update total TTC
-
-            // Save line for later
-            lignesProduits.push(res);
-            } ,
-        error: function(xhr) {
-            alert("Erreur lors de l'ajout du produit : " + xhr.responseText);
-        }
+      url: "/stage/factures/saveLine",
+      method: "POST",
+      data: $(this).serialize(),
+      dataType: "json",
+      success: function(res) {
+        let row = `<tr>
+          <td>${res.libelle}</td>
+          <td>${res.qte}</td>
+          <td>${res.prix_u} dh</td>
+          <td>${parseFloat(res.remise).toFixed(2)} %</td>
+          <td>${res.ht} dh</td>
+          <td>${res.ttc} dh</td>
+        </tr>`;
+        $("#ligneProduits").append(row);
+        totalHT += parseFloat(res.ht);
+        totalTTC += parseFloat(res.ttc);
+        $("#totalHT").text(totalHT.toFixed(2));
+        $("#totalTTC").text(totalTTC.toFixed(2));
+        lignesProduits.push(res);
+      },
+      error: function(xhr) {
+        alert("Erreur lors de l'ajout du produit : " + xhr.responseText);
+      }
     });
   });
 
+  // Enregistrer la facture
   $("#enregistrerBtn").on("click", function() {
     let selectedPaymentMethods = [];
-
     $('.payment-method-checkbox:checked').each(function() {
-        selectedPaymentMethods.push($(this).val());
+      selectedPaymentMethods.push($(this).val());
     });
 
     const data = {
-        client_id: $("#hiddenClientId").val(),
-        date_emission: $("#hiddenDateFacture").val(),
-        lignes: lignesProduits,
-        total_ht : parseFloat(totalHT.toFixed(2)),  // Ensure consistent decimal precision
-        total_ttc: parseFloat(totalTTC.toFixed(2)),
-        modes_paiement: selectedPaymentMethods.join(',')
+      client_id: $("#hiddenClientId").val(),
+      date_emission: $("#hiddenDateFacture").val(),
+      lignes: lignesProduits,
+      total_ht : parseFloat(totalHT.toFixed(2)),
+      total_ttc: parseFloat(totalTTC.toFixed(2)),
+      modes_paiement: selectedPaymentMethods.join(',')
     };
     console.log(data);
 
     $.ajax({
-        url: "/stage/factures/store", // adjust to match your routing system
-        method: "POST",
-        contentType: "application/json", // Make sure this is set
-        data: JSON.stringify(data),
-        dataType: "json",
-        success: function(response) {
+      url: "/stage/factures/store",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      dataType: "json",
+      success: function(response) {
         if (response.success) {
-            alert("Facture enregistrée avec succès !");
-            window.location.href = "/stage/factures/show?id=" + response.facture_id + "&success=created";
+          alert("Facture enregistrée avec succès !");
+          window.location.href = "/stage/factures/show?id=" + response.facture_id + "&success=created";
         } else {
-            alert("Erreur lors de l'enregistrement : " + (response.message || "Erreur inconnue"));
+          alert("Erreur lors de l'enregistrement : " + (response.message || "Erreur inconnue"));
         }
-        },
-        error: function(xhr) {
-            console.log(xhr.responseText);
+      },
+      error: function(xhr) {
+        console.log(xhr.responseText);
         alert("Erreur lors de l'enregistrement : " + xhr.responseText);
-        }
+      }
     });
-    });
+  }); 
 </script>
+
 
 <script>
     $(document).ready(function() {

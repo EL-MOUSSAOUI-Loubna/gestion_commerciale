@@ -20,7 +20,7 @@ class FactureModel {
 
     public function getFactureById($id) {
         try {
-            $query = "SELECT f.*, c.nom_ste, c.ice, c.idf, c.adresse, c.email, c.telephone FROM factures f INNER JOIN clients c 
+            $query = "SELECT f.*, c.id as client_id, c.nom_ste, c.ice, c.idf, c.adresse, c.email, c.telephone FROM factures f INNER JOIN clients c 
             ON f.client_id = c.id WHERE f.id = :id";
             $stmt = $this->db->prepare($query);
             $stmt->execute(['id' => $id]);
@@ -38,7 +38,7 @@ class FactureModel {
             }
 
             // 2. Fetch line items
-            $linesQuery = "SELECT lf.qte, lf.remise, lf.prix_u, lf.ht, lf.ttc, p.libelle 
+            $linesQuery = "SELECT lf.qte, lf.remise, lf.prix_u, lf.ht, lf.ttva, lf.ttc, p.id as produit_id, p.libelle 
             FROM lignes_facture lf 
             INNER JOIN produits p ON lf.produit_id = p.id 
             WHERE lf.facture_id = :id";
@@ -108,6 +108,54 @@ class FactureModel {
             return false;
         }
     }
+
+    public function updateFacture($factureData, $lignes)
+{
+    try {
+        $this->db->beginTransaction();
+
+        // Update main facture
+        $stmt = $this->db->prepare("UPDATE factures SET client_id = :client_id, 
+        date_emission = :date_emission, total_ht = :total_ht, total_ttc = :total_ttc, 
+        modes_pay = :modes_paiement WHERE id = :id");
+        $stmt->execute([
+            'client_id' => $factureData['client_id'],
+            'date_emission' => $factureData['date_emission'],
+            'total_ht' => $factureData['total_ht'],
+            'total_ttc' => $factureData['total_ttc'],
+            'modes_paiement' => $factureData['modes_paiement'],
+            'id' => $factureData['id']
+        ]);
+
+        // Delete old lignes_factures
+        $stmt = $this->db->prepare("DELETE FROM lignes_facture WHERE facture_id = :facture_id");
+        $stmt->execute(['facture_id' => $factureData['id']]);
+
+        // Insert new lignes_factures
+        $stmt = $this->db->prepare("INSERT INTO lignes_facture (facture_id, produit_id, qte, prix_u, 
+            remise, ht, ttva, ttc) VALUES (:facture_id, :produit_id, :qte, :prix_u, 
+            :remise, :ht, :ttva, :ttc)");
+
+        foreach ($lignes as $ligne) {
+            $stmt->execute([
+                'facture_id' => $factureData['id'],
+                'produit_id' => $ligne['produit_id'],
+                'qte' => $ligne['qte'],
+                'prix_u' => $ligne['prix_u'],
+                'remise' => $ligne['remise'],
+                'ht' => $ligne['ht'],
+                'ttva' => $ligne['ttva'],
+                'ttc' => $ligne['ttc']
+            ]);
+        }
+
+        $this->db->commit();
+
+    } catch (Exception $e) {
+        $this->db->rollBack();
+        throw $e;
+    }
+}
 
 
     public function deleteFacture($id) {

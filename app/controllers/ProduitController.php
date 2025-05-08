@@ -17,6 +17,8 @@ class ProduitController {
 
     // Show create form
     public function create() {
+        $categories = $this->produitModel->getCategories();
+        $fournisseurs = $this->produitModel->getFournisseurs();
         $content_view = 'pages/produits/add';
         include VIEW_PATH . '/layouts/main.php';
     }
@@ -42,6 +44,8 @@ class ProduitController {
     // Show edit form
     public function edit() {
         $produit = $this->produitModel->getProduitById($_GET['id']);
+        $categories = $this->produitModel->getCategories();
+        $fournisseurs = $this->produitModel->getFournisseurs();
         $content_view = 'pages/produits/edit';
         include VIEW_PATH . '/layouts/main.php';
     }
@@ -78,6 +82,7 @@ class ProduitController {
     // Show single client
     public function show() {
         $produit = $this->produitModel->getProduitById($_GET['id']);
+        $category = $this->produitModel->getCategoryOfProduct($_GET['id']);
         $content_view = 'pages/produits/show';
         include VIEW_PATH . '/layouts/main.php';
     }

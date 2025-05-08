@@ -64,7 +64,7 @@
                             <td><?= htmlspecialchars($produit['reference']) ?></td>
                             <td><?= htmlspecialchars($produit['libelle']) ?></td>
                             <td><?= htmlspecialchars($produit['prix_u']) ?></td>
-                            <td><?= htmlspecialchars($produit['categorie']) ?></td>
+                            <td><?= htmlspecialchars($produit['nom_categorie']) ?></td>
                             <td class="d-flex">
                                 <!-- Show button -->
                                 <a href="/stage/produits/show?id=<?= $produit['id'] ?>" class="btn btn-info btn-sm me-1"
