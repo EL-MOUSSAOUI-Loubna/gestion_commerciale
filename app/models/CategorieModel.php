@@ -15,13 +15,13 @@ class CategorieModel {
             
             $tree = [];
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $row['children'] = $this->getCategoryTree($row['id']); // Note: $this->
+                $row['children'] = $this->getCategoryTree($row['id']);
                 $tree[] = $row;
             }
             return $tree;
         } catch (PDOException $e) {
             error_log("Category tree error: " . $e->getMessage());
-            return []; // Return empty array on failure
+            return [];
         }
     }
 
@@ -39,11 +39,12 @@ class CategorieModel {
 
     public function addCategory($categorie, $categorie_parente) {
         try {
+            $parente_id = $categorie_parente ? $categorie_parente : null;
             $query = "INSERT INTO categories (nom, parent_id) VALUES (:categorie, :categorie_parente)";
             $stmt = $this->db->prepare($query);
             $stmt->execute([
                 'categorie' => $categorie,
-                'categorie_parente' => $categorie_parente,
+                'categorie_parente' => $parente_id,
             ]);
             return true;
         } catch (PDOException $e) {
@@ -74,12 +75,10 @@ class CategorieModel {
         try {
             $this->db->beginTransaction();
             
-            // First delete all children recursively
             $this->deleteChildCategories($id);
             
-            // Then delete the category itself
-            $stmt = $this->db->prepare("DELETE FROM categories WHERE id = ?");
-            $success = $stmt->execute([$id]);
+            $stmt = $this->db->prepare("DELETE FROM categories WHERE id = :id");
+            $success = $stmt->execute(['id' => $id]);
             
             $this->db->commit();
             return $success;
@@ -90,15 +89,13 @@ class CategorieModel {
         }
     }
     private function deleteChildCategories($parentId) {
-        // Get all children of this category
-        $stmt = $this->db->prepare("SELECT id FROM categories WHERE parent_id = ?");
-        $stmt->execute([$parentId]);
+        $stmt = $this->db->prepare("SELECT id FROM categories WHERE parent_id = :parent_id");
+        $stmt->execute(['parent_id' => $parentId]);
         
-        // Recursively delete each child
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $this->deleteChildCategories($row['id']); // Delete grandchildren first
-            $delStmt = $this->db->prepare("DELETE FROM categories WHERE id = ?");
-            $delStmt->execute([$row['id']]);
+            $this->deleteChildCategories($row['id']);
+            $delStmt = $this->db->prepare("DELETE FROM categories WHERE id = :id");
+            $delStmt->execute(['id' => $row['id']]);
         }
     }
 

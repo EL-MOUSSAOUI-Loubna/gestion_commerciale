@@ -10,7 +10,6 @@ class FactureController
         $this->factureModel = new FactureModel($db);
     }
 
-    // List all clients
     public function index()
     {
         $factures = $this->factureModel->getFactures();
@@ -18,7 +17,6 @@ class FactureController
         include VIEW_PATH . '/layouts/main.php';
     }
 
-    // Show create form
     public function create()
     {
         $clients = $this->factureModel->getClients();
@@ -27,7 +25,6 @@ class FactureController
         include VIEW_PATH . '/layouts/main.php';
     }
 
-    // Store new client (POST)
     public function store()
     {
         $data = json_decode(file_get_contents('php://input'), true);
@@ -39,7 +36,6 @@ class FactureController
             ]);
             return;
         }
-        // Validate required fields
         if (
             !isset($data['client_id']) || !isset($data['date_emission']) || !isset($data['lignes']) ||
             !isset($data['total_ht']) || !isset($data['total_ttc'])
@@ -69,16 +65,12 @@ class FactureController
 
         if ($resultat) {
             echo json_encode(['success' => true, 'facture_id' => $resultat]);
-            // Don't use header() redirect here since this is an AJAX call
-            // The client-side JS will handle the redirect if needed
-            //header('Location: /stage/factures?success=created');
         } else {
             echo json_encode(['success' => false, 'error' => 'Database insert failed']);
             //header('Location: /stage/factures/add?error=create_failed');
         }
     }
 
-    // Show edit form
     public function edit()
     {
         $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
@@ -90,99 +82,48 @@ class FactureController
     }
 
     public function update()
-{
-    // Check if it's an AJAX request
-    if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') {
-        http_response_code(400);
-        echo "Cette action nécessite une requête AJAX";
-        return;
-    }
-
-    try {
-        // Collect main invoice data
-        $facture_id = $_POST['facture_id'] ?? null;
-        $client_id = $_POST['client_id'] ?? null;
-        $date_emission = $_POST['date_emission'] ?? null;
-        $total_ht = $_POST['total_ht'] ?? 0;
-        $total_ttc = $_POST['total_ttc'] ?? 0;
-        $modes_paiement = $_POST['modes_paiement'] ?? '';
-        $lignes = $_POST['lignes'] ?? [];
-
-        if (!$facture_id || !$client_id || !$date_emission || empty($lignes)) {
-            throw new Exception("Données incomplètes pour la facture");
-        }
-
-        // Prepare facture and lignes data
-        $factureData = [
-            'id' => $facture_id,
-            'client_id' => $client_id,
-            'date_emission' => $date_emission,
-            'total_ht' => $total_ht,
-            'total_ttc' => $total_ttc,
-            'modes_paiement' => $modes_paiement
-        ];
-
-        // Call the model to handle update in a transaction
-        $this->factureModel->updateFacture($factureData, $lignes);
-
-        // Return success
-        header('Content-Type: application/json');
-        echo json_encode(['success' => true]);
-
-    } catch (Exception $e) {
-        http_response_code(500);
-        header('Content-Type: application/json');
-        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
-    }
-}
-
-
-
-    // Update client (POST)
-    /*
-    public function update() {
-        $data = json_decode(file_get_contents('php://input'), true);
-        
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            echo json_encode([
-                'success' => false, 
-                'message' => 'Invalid JSON data: ' . json_last_error_msg()
-            ]);
+    {
+        if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') {
+            http_response_code(400);
+            echo "Cette action nécessite une requête AJAX";
             return;
         }
-    
-        // Validate required fields
-        if (!isset($data['facture_id']) || !isset($data['client_id']) || !isset($data['date_emission']) || 
-            !isset($data['lignes']) || !isset($data['total_ht']) || !isset($data['total_ttc'])) {
-            echo json_encode([
-                'success' => false, 
-                'message' => 'Missing required fields'
-            ]);
-            return;
-        }
-    
-        $factureId = $data['facture_id'];
-        $clientId = $data['client_id'];
-        $date_emission = $data['date_emission'];
-        $lignes = $data['lignes'];
-        $total_ht = $data['total_ht'];
-        $total_ttc = $data['total_ttc'];
-        $modes_paiement = isset($data['modes_paiement']) ? $data['modes_paiement'] : '';
-        
-        $result = $this->factureModel->updateFacture($factureId, $clientId, $date_emission, 
-            $lignes, $total_ht, $total_ttc, $modes_paiement);
-    
-        if ($result) {
+
+        try {
+            $facture_id = $_POST['facture_id'] ?? null;
+            $client_id = $_POST['client_id'] ?? null;
+            $date_emission = $_POST['date_emission'] ?? null;
+            $total_ht = $_POST['total_ht'] ?? 0;
+            $total_ttc = $_POST['total_ttc'] ?? 0;
+            $modes_paiement = $_POST['modes_paiement'] ?? '';
+            $lignes = $_POST['lignes'] ?? [];
+
+            if (!$facture_id || !$client_id || !$date_emission || empty($lignes)) {
+                throw new Exception("Données incomplètes pour la facture");
+            }
+
+            $factureData = [
+                'id' => $facture_id,
+                'client_id' => $client_id,
+                'date_emission' => $date_emission,
+                'total_ht' => $total_ht,
+                'total_ttc' => $total_ttc,
+                'modes_paiement' => $modes_paiement
+            ];
+
+            $this->factureModel->updateFacture($factureData, $lignes);
+
+            header('Content-Type: application/json');
             echo json_encode(['success' => true]);
-        } else {
-            echo json_encode(['success' => false, 'error' => 'Database update failed']);
+
+        } catch (Exception $e) {
+            http_response_code(500);
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
-    }*/
+    }
 
 
-
-
-    // Delete client (POST)
     public function delete()
     {
         $success = $this->factureModel->deleteFacture($_POST['id']);
@@ -193,7 +134,6 @@ class FactureController
         }
     }
 
-    // Show single client
     public function show()
     {
         $facture = $this->factureModel->getFactureById($_GET['id']);

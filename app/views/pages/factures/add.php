@@ -151,7 +151,7 @@
     $("#hiddenClientId").val(selectedClient.val());
     $("#hiddenDateFacture").val(factureDate);
 
-    $("#clientInfo").html(`Client : ${clientNom} | Date : ${factureDate}`);
+    $("#clientInfo").html(`Client : <span style='color:rgb(69, 97, 157); font-weight: bold;'>${clientNom}</span> | Date : <span style='color:rgb(69, 97, 157); font-weight: bold;'>${factureDate}</span>`);
     $("#clientModal").hide();
     $("#facturePage").show();
   });
@@ -175,12 +175,12 @@
             </tr>`;
         $("#ligneProduits").append(row);
 
-        totalHT += parseFloat(res.ht);  // Add to the total HT
-        totalTTC += parseFloat(res.ttc); // Add to the total TTC
+        totalHT += parseFloat(res.ht); 
+        totalTTC += parseFloat(res.ttc);
 
         // Update the displayed totals
-        $("#totalHT").text(totalHT.toFixed(2));  // Update total HT
-        $("#totalTTC").text(totalTTC.toFixed(2)); // Update total TTC
+        $("#totalHT").text(totalHT.toFixed(2)); 
+        $("#totalTTC").text(totalTTC.toFixed(2));
 
         // Save line for later
         lignesProduits.push(res);
@@ -202,14 +202,14 @@
       client_id: $("#hiddenClientId").val(),
       date_emission: $("#hiddenDateFacture").val(),
       lignes: lignesProduits,
-      total_ht: parseFloat(totalHT.toFixed(2)),  // Ensure consistent decimal precision
+      total_ht: parseFloat(totalHT.toFixed(2)), 
       total_ttc: parseFloat(totalTTC.toFixed(2)),
       modes_paiement: selectedPaymentMethods.join(',')
     };
     console.log(data);
 
     $.ajax({
-      url: "/stage/factures/store", // adjust to match your routing system
+      url: "/stage/factures/store",
       method: "POST",
       contentType: "application/json", // Make sure this is set
       data: JSON.stringify(data),

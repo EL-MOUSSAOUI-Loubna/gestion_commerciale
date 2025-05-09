@@ -27,17 +27,15 @@ class FactureModel {
             $facture = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$facture) {
-                return false; // Invoice not found
+                return false;
             }
             
-            // Convert comma-separated modes_pay into an array
             if (isset($facture['modes_pay'])) {
                 $facture['modes_pay'] = explode(',', $facture['modes_pay']);
             } else {
-                $facture['modes_pay'] = []; // Default empty array
+                $facture['modes_pay'] = [];
             }
 
-            // 2. Fetch line items
             $linesQuery = "SELECT lf.qte, lf.remise, lf.prix_u, lf.ht, lf.ttva, lf.ttc, p.id as produit_id, p.libelle 
             FROM lignes_facture lf 
             INNER JOIN produits p ON lf.produit_id = p.id 
@@ -69,11 +67,9 @@ class FactureModel {
             ]);
             $facture_id = $this->db->lastInsertId();
 
-            // 3. Generate formatted numero_facture (e.g., FAC-2025-00012)
             $year = date('Y', strtotime($date_emission));
             $num_facture = "FAC-$year-" . str_pad($facture_id, 5, '0', STR_PAD_LEFT);
 
-            // 4. Update the record with the numero_facture
             $updateQuery = "UPDATE factures SET num_facture = :num WHERE id = :id";
             $updateStmt = $this->db->prepare($updateQuery);
             $updateStmt->execute([
@@ -81,7 +77,6 @@ class FactureModel {
                 'id' => $facture_id
             ]);
 
-             // Insert each line into lignes_facture
             $query2 = "INSERT INTO lignes_facture (facture_id, produit_id, qte, remise, prix_u, ttva, ht, ttc)
                       VALUES (:facture_id, :produit_id, :qte, :remise, :prix_u, :ttva, :ht, :ttc)";
                     
@@ -114,7 +109,6 @@ class FactureModel {
     try {
         $this->db->beginTransaction();
 
-        // Update main facture
         $stmt = $this->db->prepare("UPDATE factures SET client_id = :client_id, 
         date_emission = :date_emission, total_ht = :total_ht, total_ttc = :total_ttc, 
         modes_pay = :modes_paiement WHERE id = :id");
@@ -127,11 +121,9 @@ class FactureModel {
             'id' => $factureData['id']
         ]);
 
-        // Delete old lignes_factures
         $stmt = $this->db->prepare("DELETE FROM lignes_facture WHERE facture_id = :facture_id");
         $stmt->execute(['facture_id' => $factureData['id']]);
 
-        // Insert new lignes_factures
         $stmt = $this->db->prepare("INSERT INTO lignes_facture (facture_id, produit_id, qte, prix_u, 
             remise, ht, ttva, ttc) VALUES (:facture_id, :produit_id, :qte, :prix_u, 
             :remise, :ht, :ttva, :ttc)");

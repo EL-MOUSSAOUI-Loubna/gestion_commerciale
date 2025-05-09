@@ -8,14 +8,12 @@ class ProduitController {
         $this->produitModel = new ProduitModel($db);
     }
 
-    // List all clients
     public function index() {
         $produits = $this->produitModel->getProduits();
         $content_view = 'pages/produits/index';
         include VIEW_PATH . '/layouts/main.php';
     }
 
-    // Show create form
     public function create() {
         $categories = $this->produitModel->getCategories();
         $fournisseurs = $this->produitModel->getFournisseurs();
@@ -23,7 +21,6 @@ class ProduitController {
         include VIEW_PATH . '/layouts/main.php';
     }
 
-    // Store new client (POST)
     public function store() {
         $success = $this->produitModel->addProduit(
             $_POST['libelle'] ?? '',
@@ -41,7 +38,6 @@ class ProduitController {
         }
     }
 
-    // Show edit form
     public function edit() {
         $produit = $this->produitModel->getProduitById($_GET['id']);
         $categories = $this->produitModel->getCategories();
@@ -50,7 +46,6 @@ class ProduitController {
         include VIEW_PATH . '/layouts/main.php';
     }
 
-    // Update client (POST)
     public function update() {
         $success = $this->produitModel->updateProduit(
             $_POST['id'],
@@ -69,7 +64,6 @@ class ProduitController {
         }
     }
 
-    // Delete client (POST)
     public function delete() {
         $success = $this->produitModel->deleteProduit($_POST['id']);
         if ($success) {
@@ -79,7 +73,6 @@ class ProduitController {
         }
     }
 
-    // Show single client
     public function show() {
         $produit = $this->produitModel->getProduitById($_GET['id']);
         $category = $this->produitModel->getCategoryOfProduct($_GET['id']);

@@ -1,15 +1,11 @@
 <style>
-    
-
-    /* Table Header Styling */
-    #myTable thead th {
+        #myTable thead th {
         background-color: #0d6efd !important;
         color: white !important;
         font-weight: 600;
         padding: 12px 10px !important;
     }
 
-    /* Table Row Hover Effect */
     #myTable tbody tr:hover {
         background-color: rgba(13, 110, 253, 0.1) !important;
     }
@@ -93,7 +89,7 @@
                                 <i class="fas fa-edit"></i>
                             </a>
 
-                            <!-- Delete button (form with POST method) -->
+                            <!-- Delete button -->
                             <form method="post" action="/stage/facture/delete" class="d-inline"
                                 onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette facture?');">
                                 <?php if (isset($_SESSION['csrf_token'])): ?>
