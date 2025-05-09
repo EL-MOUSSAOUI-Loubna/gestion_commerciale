@@ -1,14 +1,14 @@
 <?php
-class ClientModel {
+class FournisseurModel {
     public $db;
 
     public function __construct($dbConnection) {
         $this->db = $dbConnection;
     }
 
-    public function getClients() {
+    public function getFournisseurs() {
         try {
-            $query = "SELECT * FROM clients";
+            $query = "SELECT * FROM fournisseurs";
             $stmt = $this->db->prepare($query);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -18,9 +18,9 @@ class ClientModel {
         }
     }
 
-    public function getClientById($id) {
+    public function getFournisseurById($id) {
         try {
-            $query = "SELECT * FROM clients WHERE id = :id";
+            $query = "SELECT * FROM fournisseurs WHERE id = :id";
             $stmt = $this->db->prepare($query);
             $stmt->execute(['id' => $id]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -30,10 +30,10 @@ class ClientModel {
         }
     }
 
-    public function addClient($nom_ste, $ice, $idf, $adresse, $email, $telephone) {
+    public function addFournisseur($nom_ste, $ice, $idf, $adresse, $email, $telephone) {
         try {
-            $query = "INSERT INTO clients (nom_ste, ice, `idf`, adresse, email, telephone) 
-                      VALUES (:nom_ste, :ice, :idf, :adresse, :email, :telephone,)";
+            $query = "INSERT INTO fournisseurs (nom_ste, ice, idf, adresse, email, telephone) 
+                      VALUES (:nom_ste, :ice, :idf, :adresse, :email, :telephone)";
             $stmt = $this->db->prepare($query);
             $stmt->execute([
                 'nom_ste'    => $nom_ste,
@@ -50,9 +50,9 @@ class ClientModel {
         }
     }
 
-    public function updateClient($id, $nom_ste, $ice, $idf, $adresse, $email, $telephone) {
+    public function updateFournisseur($id, $nom_ste, $ice, $idf, $adresse, $email, $telephone) {
         try {
-            $query = "UPDATE clients SET 
+            $query = "UPDATE fournisseurs SET 
                       nom_ste = :nom_ste, ice = :ice, idf = :idf, adresse = :adresse, 
                       email = :email, telephone = :telephone
                       WHERE id = :id";
@@ -73,9 +73,9 @@ class ClientModel {
         }
     }
 
-    public function deleteClient($id) {
+    public function deleteFournisseur($id) {
         try {
-            $query = "DELETE FROM clients WHERE id = :id";
+            $query = "DELETE FROM fournisseurs WHERE id = :id";
             $stmt = $this->db->prepare($query);
             $stmt->execute(['id' => $id]);
             return true;

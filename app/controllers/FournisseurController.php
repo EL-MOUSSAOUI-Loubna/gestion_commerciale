@@ -1,29 +1,29 @@
 <?php
-require_once MODEL_PATH . '/ClientModel.php';
+require_once MODEL_PATH . '/FournisseurModel.php';
 
-class ClientController {
-    private $clientModel;
+class FournisseurController {
+    private $fournisseurModel;
     
     public function __construct($db) {
-        $this->clientModel = new ClientModel($db);
+        $this->fournisseurModel = new FournisseurModel($db);
     }
 
     // List all clients
     public function index() {
-        $clients = $this->clientModel->getClients();
-        $content_view = 'pages/clients/index';
+        $fournisseurs = $this->fournisseurModel->getFournisseurs();
+        $content_view = 'pages/fournisseurs/index';
         include VIEW_PATH . '/layouts/main.php';
     }
 
     // Show create form
     public function create() {
-        $content_view = 'pages/clients/add';
+        $content_view = 'pages/fournisseurs/add';
         include VIEW_PATH . '/layouts/main.php';
     }
 
     // Store new client (POST)
     public function store() {
-        $success = $this->clientModel->addClient(
+        $success = $this->fournisseurModel->addFournisseur(
             $_POST['nom_ste'] ?? '',
             $_POST['ice'] ?? '',
             $_POST['idf'] ?? '',
@@ -32,22 +32,22 @@ class ClientController {
             $_POST['telephone'] ?? '',
         );
         if ($success) {
-            header('Location: /stage/clients?success=created');
+            header('Location: /stage/fournisseurs?success=created');
         } else {
-            header('Location: /stage/clients/add?error=create_failed');
+            header('Location: /stage/fournisseurs/add?error=create_failed');
         }
     }
 
     // Show edit form
     public function edit() {
-        $client = $this->clientModel->getClientById($_GET['id']);
-        $content_view = 'pages/clients/edit';
+        $fournisseur = $this->fournisseurModel->getFournisseurById($_GET['id']);
+        $content_view = 'pages/fournisseurs/edit';
         include VIEW_PATH . '/layouts/main.php';
     }
 
     // Update client (POST)
     public function update() {
-        $success = $this->clientModel->updateClient(
+        $success = $this->fournisseurModel->updateFournisseur(
             $_POST['id'],
             $_POST['nom_ste'] ?? '',
             $_POST['ice'] ?? '',
@@ -57,26 +57,26 @@ class ClientController {
             $_POST['telephone'] ?? '',
         );
         if ($success) {
-            header('Location: /stage/clients?success=updated');
+            header('Location: /stage/fournisseurs?success=updated');
         } else {
-            header('Location: /stage/clients/edit?id='.$_POST['id'].'&error=update_failed');
+            header('Location: /stage/fournisseurs/edit?id='.$_POST['id'].'&error=update_failed');
         }
     }
 
     // Delete client (POST)
     public function delete() {
-        $success = $this->clientModel->deleteClient($_POST['id']);
+        $success = $this->fournisseurModel->deleteFournisseur($_POST['id']);
         if ($success) {
-            header('Location: /stage/clients?success=deleted');
+            header('Location: /stage/fournisseurs?success=deleted');
         } else {
-            header('Location: /stage/clients?error=delete_failed');
+            header('Location: /stage/fournisseurs?error=delete_failed');
         }
     }
 
     // Show single client
     public function show() {
-        $client = $this->clientModel->getClientById($_GET['id']);
-        $content_view = 'pages/clients/show';
+        $fournisseur = $this->fournisseurModel->getFournisseurById($_GET['id']);
+        $content_view = 'pages/fournisseurs/show';
         include VIEW_PATH . '/layouts/main.php';
     }
 }

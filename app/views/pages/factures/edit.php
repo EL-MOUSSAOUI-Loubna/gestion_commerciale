@@ -1,9 +1,7 @@
 <div class='edit_facture'>
     <div class="position-relative mb-4">
         <a href="/stage/factures" class="back-button">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-            </svg>
+        <i class="fas fa-arrow-left"></i>
             Retour à la liste
         </a>
         <p class="facture-label text-center m-0">
@@ -204,11 +202,11 @@
         color:rgb(49, 74, 129);
     }
 
-    .edit_facture .back-button {
+    .back-button {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 0.4rem 1rem;
+        padding: 0.5rem 1rem;
         background-color: white;
         color: #2563eb;
         border: 1px solid #e5e7eb;
@@ -216,6 +214,19 @@
         text-decoration: none;
         font-weight: 500;
         transition: all 0.15s ease;
+    }
+
+    .back-button:hover {
+        background-color: #dbeafe;
+        border-color: #2563eb;
+    }
+
+    .back-button i {
+        transition: transform 0.15s ease;
+    }
+
+    .back-button:hover i {
+        transform: translateX(-2px);
     }
 
     .edit_facture #enregistrerBtn {

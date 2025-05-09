@@ -1,55 +1,55 @@
-<div class="client-details">
-    <?php if (isset($client) && is_array($client)): ?>
-        <div class="client-card">
-            <h1 class="client-title"><?= htmlspecialchars($client['nom_ste'] ?? 'Client non spécifié') ?></h1>
+<div class="fournisseur-details">
+    <?php if (isset($fournisseur) && is_array($fournisseur)): ?>
+        <div class="fournisseur-card">
+            <h1 class="fournisseur-title"><?= htmlspecialchars($fournisseur['nom_ste'] ?? 'Fournisseur non spécifié') ?></h1>
 
-            <div class="client-grid">
+            <div class="fournisseur-grid">
                 <div class="detail-group">
                     <span class="detail-label">ICE</span>
-                    <span class="detail-value"><?= htmlspecialchars($client['ice'] ?? 'N/A') ?></span>
+                    <span class="detail-value"><?= htmlspecialchars($fournisseur['ice'] ?? 'N/A') ?></span>
                 </div>
 
                 <div class="detail-group">
                     <span class="detail-label">IDF</span>
-                    <span class="detail-value"><?= htmlspecialchars($client['idf'] ?? 'N/A') ?></span>
+                    <span class="detail-value"><?= htmlspecialchars($fournisseur['idf'] ?? 'N/A') ?></span>
                 </div>
 
                 <div class="detail-group full-width">
                     <span class="detail-label">Adresse</span>
-                    <p class="detail-value"><?= htmlspecialchars($client['adresse'] ?? 'Non renseignée') ?></p>
+                    <p class="detail-value"><?= htmlspecialchars($fournisseur['adresse'] ?? 'Non renseignée') ?></p>
                 </div>
 
                 <div class="detail-group">
                     <span class="detail-label">Téléphone</span>
-                    <span class="detail-value contact"><?= htmlspecialchars($client['telephone'] ?? 'N/A') ?></span>
+                    <span class="detail-value contact"><?= htmlspecialchars($fournisseur['telephone'] ?? 'N/A') ?></span>
                 </div>
 
                 <div class="detail-group">
                     <span class="detail-label">Email</span>
-                    <span class="detail-value contact"><?= htmlspecialchars($client['email'] ?? 'Non renseigné') ?></span>
+                    <span class="detail-value contact"><?= htmlspecialchars($fournisseur['email'] ?? 'Non renseigné') ?></span>
                 </div>
             </div>
 
-            <a href="/stage/clients" class="back-button">
+            <a href="/stage/fournisseurs" class="back-button">
                 <i class="fas fa-arrow-left"></i> Retour à la liste
             </a>
         </div>
     <?php else: ?>
         <div class="error-message">
             <i class="far fa-info-circle"></i>
-            <p>Client introuvable.</p>
+            <p>Fournisseur introuvable.</p>
         </div>
     <?php endif; ?>
 </div>
 
 <style>
-    .client-details {
+    .fournisseur-details {
         max-width: 800px;
         margin: 2rem auto;
         font-family: 'Inter', system-ui, sans-serif;
     }
 
-    .client-card {
+    .fournisseur-card {
         background: white;
         border-radius: 0.5rem;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -57,7 +57,7 @@
         border: 1px solid #e5e7eb;
     }
 
-    .client-title {
+    .fournisseur-title {
         color: #1f2937;
         font-size: 1.5rem;
         font-weight: 600;
@@ -66,7 +66,7 @@
         border-bottom: 1px solid #e5e7eb;
     }
 
-    .client-grid {
+    .fournisseur-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 1.5rem;
@@ -152,7 +152,7 @@
     }
 
     @media (max-width: 640px) {
-        .client-grid {
+        .fournisseur-grid {
             grid-template-columns: 1fr;
         }
     }

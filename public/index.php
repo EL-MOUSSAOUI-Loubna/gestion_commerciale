@@ -16,10 +16,12 @@ require_once MODEL_PATH . '/ClientModel.php';
 require_once MODEL_PATH . '/ProduitModel.php';
 require_once MODEL_PATH . '/CategorieModel.php';
 require_once MODEL_PATH . '/FactureModel.php';
+require_once MODEL_PATH . '/FournisseurModel.php';
 require_once CONTROLLER_PATH . '/ClientController.php';
 require_once CONTROLLER_PATH . '/ProduitController.php';
 require_once CONTROLLER_PATH . '/CategorieController.php';
 require_once CONTROLLER_PATH . '/FactureController.php';
+require_once CONTROLLER_PATH . '/FournisseurController.php';
 
 
 //require_once ROUTING_PATH . '/Router.php';
@@ -55,6 +57,7 @@ if ($path != '/' && substr($path, -1) == '/') {
 $routes = [
     'GET /' => 'DashboardController@index',
     'GET /login' => 'DashboardController@login',
+
     'GET /clients' => 'ClientController@index',
     'GET /clients/add' => 'ClientController@create',
     'POST /clients/store' => 'ClientController@store',
@@ -62,6 +65,14 @@ $routes = [
     'POST /clients/update' => 'ClientController@update',
     'POST /clients/delete' => 'ClientController@delete',
     'GET /clients/show' => 'ClientController@show',
+
+    'GET /fournisseurs' => 'FournisseurController@index',
+    'GET /fournisseurs/add' => 'FournisseurController@create',
+    'POST /fournisseurs/store' => 'FournisseurController@store',
+    'GET /fournisseurs/edit' => 'FournisseurController@edit',
+    'POST /fournisseurs/update' => 'FournisseurController@update',
+    'POST /fournisseurs/delete' => 'FournisseurController@delete',
+    'GET /fournisseurs/show' => 'FournisseurController@show',
     
     'GET /produits' => 'ProduitController@index',
     'GET /produits/add' => 'ProduitController@create',
@@ -73,9 +84,9 @@ $routes = [
 
     'GET /categories' => 'CategorieController@index',
     'POST /categories/store' => 'CategorieController@store',
-    'GET /categories/edit' => 'CategorieController@edit',
-    'POST /categories/update' => 'CategorieController@update',
+    'GET /categories/show' => 'CategorieController@show',
     'POST /categories/delete' => 'CategorieController@delete',
+    'POST /categories/rename' => 'CategorieController@rename',
 
     'GET /factures' => 'FactureController@index',
     'GET /factures/add' => 'FactureController@create',
@@ -85,6 +96,7 @@ $routes = [
     'POST /factures/delete' => 'FactureController@delete',
     'GET /factures/show' => 'FactureController@show',
     'POST /factures/saveLine' => 'FactureController@saveLine',
+
 ];
 
 // Find Matching Route - Using exact match

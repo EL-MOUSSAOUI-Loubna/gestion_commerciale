@@ -43,6 +43,8 @@ $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
             $('#facturesTable').DataTable();
             $('#clientsTable').DataTable();
             $('#produitsTable').DataTable();
+            $('#categorieProduits').DataTable();
+            $('#fournisseursTable').DataTable();
 
 
         });

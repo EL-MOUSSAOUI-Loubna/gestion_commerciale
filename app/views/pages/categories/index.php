@@ -17,18 +17,24 @@
             case 'updated':
                 $toastMessage = 'Categorie a été modifié avec succès 😊';
                 break;
+            case 'renamed':
+                $toastMessage = 'Categorie a été renommée avec succès 🎉';
+                break;
         }
         $toastType = 'success';
     } elseif (isset($_GET['error'])) {
         switch ($_GET['error']) {
             case 'delete_failed':
-                $toastMessage = 'Failed to delete category.';
+                $toastMessage = 'Echec de suppression 🥺';
                 break;
             case 'create_failed':
-                $toastMessage = 'Failed to create category.';
+                $toastMessage = 'Echec de creation 🥺';
                 break;
             case 'update_failed':
-                $toastMessage = 'Failed to update category.';
+                $toastMessage = 'Echec de modification 🥺';
+                break;
+            case 'rename_failed':
+                $toastMessage = 'Echec de renommage 🥺';
                 break;
         }
         $toastType = 'danger';
@@ -124,6 +130,21 @@
                                     <a href="/stage/categories/show?id=<?= $category['id'] ?>" class="node-name">
                                         <?= htmlspecialchars($category['nom']) ?>
                                     </a>
+                                    <!-- Formulaire de renommage (initialement caché) -->
+                                    <form action="/stage/categories/rename" method="POST" class="rename-form d-none">
+                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+                                        <input type="hidden" name="id" value="<?= $category['id'] ?>">
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control form-control-sm rename-input" 
+                                                name="categoryName" value="<?= htmlspecialchars($category['nom']) ?>" required>
+                                            <button type="submit" class="btn btn-sm btn-success">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-secondary cancel-rename">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </form>
                                 </span>
 
                                 <div class="node-actions dropdown">
@@ -133,9 +154,9 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
-                                            <a class="dropdown-item" href="/stage/categories/edit?id=<?= $category['id'] ?>">
-                                                <i class="fas fa-edit me-2"></i>Modifier
-                                            </a>
+                                            <button class="dropdown-item rename-btn" data-category-id="<?= $category['id'] ?>">
+                                                <i class="fas fa-pen me-2"></i>Renommer
+                                            </button>
                                         </li>
                                         <li>
                                             <form method="POST" action="/stage/categories/delete" class="delete-category-form"
@@ -254,6 +275,26 @@
     .dropdown-toggle::after {
         display: none;
     }
+    
+    /* Style pour le formulaire de renommage */
+    .rename-form {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .input-group-sm > .form-control-sm {
+        height: calc(1.5em + .5rem + 2px);
+        padding: .25rem .5rem;
+        font-size: .875rem;
+    }
+    
+    .rename-form.d-none {
+        display: none !important;
+    }
+    
+    .node-name.d-none {
+        display: none !important;
+    }
 
     /* Responsive adjustments */
     @media (max-width: 768px) {
@@ -284,6 +325,7 @@
             }
         }
 
+        // Gestion du clic sur les boutons d'expansion des catégories
         $('.tree-node').each(function () {
             const $node = $(this);
             const $toggleBtn = $node.find('> .node-header .toggle-btn').first();
@@ -299,13 +341,15 @@
                     if (!$(e.target).closest('.dropdown').length && 
                         !$(e.target).is('.node-name') && 
                         !$(e.target).closest('.node-name').length && 
-                        !$(e.target).closest('.toggle-btn').length) {
+                        !$(e.target).closest('.toggle-btn').length &&
+                        !$(e.target).closest('.rename-form').length) {
                         $toggleBtn.click();
                     }
                 });
             }
         });
 
+        // Bouton d'expansion/réduction globale
         $('#expandAllBtn').on('click', function () {
             const $btn = $(this);
             const shouldExpand = !$btn.hasClass('active');
@@ -322,6 +366,7 @@
             });
         });
 
+        // Confirmation de suppression
         $('.delete-category-form').on('submit', function (e) {
             const $form = $(this);
             const $node = $form.closest('.tree-node');
@@ -336,6 +381,7 @@
             }
         });
 
+        // Validation du formulaire d'ajout
         $('#addCategoryForm').on('submit', function (e) {
             const form = this;
             if (!form.checkValidity()) {
@@ -343,6 +389,55 @@
                 e.stopPropagation();
             }
             $(form).addClass('was-validated');
+        });
+        
+        // Gestion du bouton Renommer
+        $('.rename-btn').on('click', function(e) {
+            e.preventDefault();
+            
+            // Fermer tout formulaire de renommage déjà ouvert
+            $('.node-name').removeClass('d-none');
+            $('.rename-form').addClass('d-none');
+            
+            // Ouvrir le formulaire de renommage pour cette catégorie
+            const $node = $(this).closest('.tree-node');
+            const $nameContainer = $node.find('.node-name-container');
+            const $nodeName = $nameContainer.find('.node-name');
+            const $renameForm = $nameContainer.find('.rename-form');
+            
+            $nodeName.addClass('d-none');
+            $renameForm.removeClass('d-none');
+            $renameForm.find('.rename-input').focus();
+            
+            // Fermer le dropdown
+            $(this).closest('.dropdown-menu').removeClass('show');
+        });
+        
+        // Annuler le renommage
+        $('.cancel-rename').on('click', function(e) {
+            e.preventDefault();
+            const $nameContainer = $(this).closest('.node-name-container');
+            $nameContainer.find('.node-name').removeClass('d-none');
+            $nameContainer.find('.rename-form').addClass('d-none');
+        });
+        
+        // Validation du formulaire de renommage
+        $('.rename-form').on('submit', function(e) {
+            const form = this;
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(form).addClass('was-validated');
+            }
+        });
+        
+        // Fermeture du formulaire de renommage si on clique ailleurs
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.rename-form').length && 
+                !$(e.target).closest('.rename-btn').length) {
+                $('.node-name').removeClass('d-none');
+                $('.rename-form').addClass('d-none');
+            }
         });
     });
 </script>

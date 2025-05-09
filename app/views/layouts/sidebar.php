@@ -34,6 +34,21 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Fournisseurs -->
+            <div class="accordion-item border-0">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fournisseurs">
+                        <i class="fas fa-users me-2" style='color: rgb(255, 255, 255);'></i>Fournisseurs
+                    </button>
+                </h2>
+                <div id="fournisseurs" class="accordion-collapse collapse" data-bs-parent="#sidebarMenu">
+                    <div class="accordion-body p-0">
+                        <div class="submenu-item ms-3"><a href="/stage/fournisseurs/add" class="text-decoration-none d-block"><i class="fas fa-plus-circle me-2"></i> Ajouter Fournisseurs</a></div>
+                        <div class="submenu-item ms-3"><a href="/stage/fournisseurs" class="text-decoration-none d-block"><i class="fas fa-list me-2"></i> Liste Fournisseurs</a></div>
+                    </div>
+                </div>
+            </div>
             
             
             <!-- Products -->

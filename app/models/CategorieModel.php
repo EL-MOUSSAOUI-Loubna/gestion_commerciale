@@ -27,9 +27,9 @@ class CategorieModel {
 
     public function getCategoryById ($id){
         try {
-            $query = "SELECT * FROM categories WHERE id = ?";
+            $query = "SELECT * FROM categories WHERE id = :id";
             $stmt = $this->db->prepare($query);
-            $stmt->execute([$id]);
+            $stmt->execute(['id' => $id]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             error_log("Category by ID error: " . $e->getMessage());
@@ -99,19 +99,31 @@ class CategorieModel {
         }
     }
 
-
-
-    /*public function getCategoriesHierarchy($parentId = null) {
-        $query = "SELECT * FROM categories WHERE parent_id " . ($parentId ? "= ?" : "IS NULL");
-        $stmt = $this->db->prepare($query);
-        $stmt->execute($parentId ? [$parentId] : []);
-        
-        $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-        foreach ($categories as &$categorie) {
-            $categorie['children'] = $this->getCategoriesHierarchy($categorie['id']);
+    public function renameCategory ($id, $newName) {
+        try {
+            $query = "UPDATE categories SET nom = :new_name WHERE id = :id";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute([
+                'id'    => $id,
+                'new_name' => $newName,
+            ]);
+            return true;
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return false;
         }
-        
-        return $categories;
-    }*/
+    }
+
+    public function getProductsOfCategory ($id) {
+        try {
+            $query = "SELECT id, libelle, reference, prix_u FROM produits WHERE categorie = :id";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute(['id' => $id]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return [];
+        }
+    }
 }

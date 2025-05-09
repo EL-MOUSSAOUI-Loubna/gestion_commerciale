@@ -11,7 +11,7 @@
 
                 <div class="detail-group">
                     <span class="detail-label">Prix unitaire</span>
-                    <span class="detail-value price"><?= isset($produit['prix_u']) ? number_format($produit['prix_u'], 2, ',', ' ') . ' €' : 'N/A' ?></span>
+                    <span class="detail-value price"><?= isset($produit['prix_u']) ? number_format($produit['prix_u'], 2, ',', ' ') . ' dh' : 'N/A' ?></span>
                 </div>
 
                 <div class="detail-group full-width">
@@ -31,17 +31,12 @@
             </div>
 
             <a href="/stage/produits" class="back-button">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                </svg>
-                Retour à la liste
+                <i class="fas fa-arrow-left"></i> Retour à la liste
             </a>
         </div>
     <?php else: ?>
         <div class="error-message">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
+            <i class="far fa-info-circle"></i>
             <p>Produit introuvable.</p>
         </div>
     <?php endif; ?>
@@ -135,11 +130,11 @@
         border-color: #2563eb;
     }
 
-    .back-button svg {
+    .back-button i {
         transition: transform 0.15s ease;
     }
 
-    .back-button:hover svg {
+    .back-button:hover i {
         transform: translateX(-2px);
     }
 
@@ -154,7 +149,7 @@
         border: 1px solid  #dc2626;
     }
 
-    .error-message svg {
+    .error-message i {
         flex-shrink: 0;
     }
 
