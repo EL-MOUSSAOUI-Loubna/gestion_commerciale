@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-evenly mb-3 gap-2 no-print">
     <!-- Modifier Button -->
-    <a href="/factures/edit?id=<?= $facture['id'] ?>" class="btn btn-primary">Modifier</a>
+    <a href="/bonsLivraison/edit?id=<?= $facture['id'] ?>" class="btn btn-primary">Modifier</a>
     
     <!-- Imprimer Button -->
     <button onclick="window.print()" class="btn btn-success">Imprimer</button>
@@ -28,13 +28,13 @@
             <div>
                 <div>
                     <p>Bon de Livraison N : <span style="font-size: 25px; font-weight: bold; color:rgb(81, 89, 141);">BON-2025-0012</span></p>
+                    <p>Date d'émossion : 2025-05-12</p>
                     <p>Date de départ : </p>
                     <p>Heure de départ : </p>
                 </div>
                 <div class="text-end">
                     <p>Nom du Transporteur : nom</p>
                     <p>Tel du Transporteur : 050000000</p>
-                    <p>Nom du Transporteur : nom</p>
                 </div>
             </div>
         </div>

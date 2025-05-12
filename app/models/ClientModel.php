@@ -33,7 +33,7 @@ class ClientModel {
     public function addClient($nom_ste, $ice, $idf, $adresse, $email, $telephone) {
         try {
             $query = "INSERT INTO clients (nom_ste, ice, `idf`, adresse, email, telephone) 
-                      VALUES (:nom_ste, :ice, :idf, :adresse, :email, :telephone,)";
+                      VALUES (:nom_ste, :ice, :idf, :adresse, :email, :telephone)";
             $stmt = $this->db->prepare($query);
             $stmt->execute([
                 'nom_ste'    => $nom_ste,

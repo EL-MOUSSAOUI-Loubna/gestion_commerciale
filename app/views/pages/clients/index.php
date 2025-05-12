@@ -47,7 +47,6 @@
         <table class="table table-striped" id="clientsTable">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Nom Société</th>
                     <th>ICE</th>
                     <th>Téléphone</th>
@@ -63,7 +62,6 @@
                 <?php else: ?>
                     <?php foreach ($clients as $client): ?>
                         <tr>
-                            <td><?= htmlspecialchars($client['id']) ?></td>
                             <td><?= htmlspecialchars($client['nom_ste']) ?></td>
                             <td><?= htmlspecialchars($client['ice']) ?></td>
                             <td><?= htmlspecialchars($client['telephone']) ?></td>

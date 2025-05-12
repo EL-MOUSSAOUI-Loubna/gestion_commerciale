@@ -17,11 +17,13 @@ require_once MODEL_PATH . '/ProduitModel.php';
 require_once MODEL_PATH . '/CategorieModel.php';
 require_once MODEL_PATH . '/FactureModel.php';
 require_once MODEL_PATH . '/FournisseurModel.php';
+require_once MODEL_PATH . '/BonLivraisonModel.php';
 require_once CONTROLLER_PATH . '/ClientController.php';
 require_once CONTROLLER_PATH . '/ProduitController.php';
 require_once CONTROLLER_PATH . '/CategorieController.php';
 require_once CONTROLLER_PATH . '/FactureController.php';
 require_once CONTROLLER_PATH . '/FournisseurController.php';
+require_once CONTROLLER_PATH . '/BonLivraisonController.php';
 
 
 //require_once ROUTING_PATH . '/Router.php';
@@ -96,6 +98,16 @@ $routes = [
     'POST /factures/delete' => 'FactureController@delete',
     'GET /factures/show' => 'FactureController@show',
     'POST /factures/saveLine' => 'FactureController@saveLine',
+
+    'GET /bonsLivraison' => 'BonLivraisonController@index',
+    'GET /bonsLivraison/add' => 'BonLivraisonController@create',
+    'POST /bonsLivraison/store' => 'BonLivraisonController@store',
+    'GET /bonsLivraison/edit' => 'BonLivraisonController@edit',
+    'POST /bonsLivraison/update' => 'BonLivraisonController@update',
+    'POST /bonsLivraison/delete' => 'BonLivraisonController@delete',
+    'GET /bonsLivraison/show' => 'BonLivraisonController@show',
+    'POST /bonsLivraison/saveLine' => 'BonLivraisonController@saveLine',
+    'POST /bonsLivraison/checkFacture' => 'BonLivraisonController@checkFacture',
 
 ];
 
