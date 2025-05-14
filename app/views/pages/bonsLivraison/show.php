@@ -1,87 +1,65 @@
 <div class="d-flex justify-content-evenly mb-3 gap-2 no-print">
     <!-- Modifier Button -->
-    <a href="/bonsLivraison/edit?id=<?= $facture['id'] ?>" class="btn btn-primary">Modifier</a>
+    <a href="/stage/bonsLivraison/edit?id=<?= $bonl['id'] ?>" class="btn btn-primary">Modifier</a>
     
     <!-- Imprimer Button -->
     <button onclick="window.print()" class="btn btn-success">Imprimer</button>
 </div>
 
 
-<div class="facture container bg-white p-4 d-block align-content-between" id="printable-invoice">
+<div class="bonl container bg-white p-4 d-block align-content-between" id="printable-bonl">
     <div class="">
         <div class='d-flex'>
             <img src= '/stage/public/assets/img/sellm.png' alt='logo sellm' class="logo me-3" style="width: 100px; height: 100px; object-fit: contain;" /> 
             <div class='mt-1'>
                 <h2 >SellM</h2>
-                <p>adresse :</p>
-                <p>telephone :</p>
+                <p>adresse : mon adresse</p>
+                <p>telephone : 0500000000</p>
             </div>
         </div>
         <div class="d-flex justify-content-between">
             <div class="mt-5">
-                <h3>Destinataire :</h3>
-                <p>nom : nom</p>
-                <p style="max-width: 250px">adresse : adresse</p>
-                <p>telephone : tel</p>
-                <p>email : email</p>
+                <h3>Destinataire</h3>
+                <p>nom : <?= $bonl['nom_ste'] ?></p>
+                <p style="max-width: 250px">Adresse : <?= $bonl['adresse'] ?></p>
+                <p>telephone : <?= $bonl['telephone'] ?></p>
+                <p>email : <?= $bonl['email'] ?></p>
             </div>
             <div>
                 <div>
-                    <p>Bon de Livraison N : <span style="font-size: 25px; font-weight: bold; color:rgb(81, 89, 141);">BON-2025-0012</span></p>
-                    <p>Date d'émossion : 2025-05-12</p>
+                    <p>Bon de Livraison N : <span style="font-size: 25px; font-weight: bold; color:rgb(81, 89, 141);"><?= $bonl['num_bonl'] ?></span></p>
+                    <p>Date d'émission : <?= $bonl['date_emission'] ?></p>
+                    <p>facture n : <?= $bonl['num_facture'] ?></p>
                     <p>Date de départ : </p>
                     <p>Heure de départ : </p>
                 </div>
                 <div class="text-end">
-                    <p>Nom du Transporteur : nom</p>
-                    <p>Tel du Transporteur : 050000000</p>
+                    <p>Nom Transporteur : <?= $bonl['nom_transport'] ?></p>
+                    <p>Tel Transporteur : <?= $bonl['telephone_transport'] ?></p>
                 </div>
             </div>
         </div>
     </div>
-    <?php
-    // Example data
-    $rows = [];
-    for ($i = 1; $i <= 10; $i++) {
-        $rows[] = [
-            'id' => $i,
-            'name' => 'Item ' . $i,
-            'description' => 'Description of item ' . $i
-        ];
-    }
-    ?>
-    <div class="mt-2 invoice-content">
+    <div class="mt-2 bonl-content">
         <h2 class="text-center mb-2">Bon de Livraison</h2>
         <table class='table table-borderless'>
             <thead>
                 <tr>
-                    <th>Designation</th>
                     <th>Reference</th>
+                    <th>Designation</th>
                     <th>Qte</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach($facture['lignes'] as $ligne): ?>
+                <?php foreach($bonl['lignes'] as $ligne): ?>
                 <tr>
+                    <td><?= $ligne['reference'] ?></td>
                     <td><?= $ligne['libelle'] ?></td>
                     <td><?= $ligne['qte'] ?></td>
-                    <td><?= $ligne['prix_u'] ?> dh</td>
-                    <td><?= $ligne['remise'] ?> %</td>
-                    <td><?= $ligne['ht'] ?> dh</td>
-                    <td><?= $ligne['ttc'] ?> dh</td>
                 </tr>
                 <?php endforeach; ?>
-
-                <?php foreach ($rows as $row): ?>
-            <tr>
-                <td><?= $row['id'] ?></td>
-                <td><?= htmlspecialchars($row['name']) ?></td>
-                <td><?= htmlspecialchars($row['description']) ?></td>
-            </tr>
-        <?php endforeach; ?>
             </tbody>
         </table>
-        <hr>
         <div class="signature d-flex justify-content-between mt-5">
             <p class=" text-center pt-2" style="">signature client :</p>
             <p class=" text-center pt-2" style="">signature transporteur :</p>
@@ -105,7 +83,7 @@
 
 <style>
     /* Regular styles for screen display */
-    .facture {
+    .bonl {
         width: 800px;
         margin: auto;
         border: 1px solid #ddd;
@@ -115,28 +93,28 @@
         padding: 30px;
     }
 
-    .facture h2 {
+    .bonl h2 {
         font-size: 28px;
         color: #333;
     }
 
-    .facture h3 {
+    .bonl h3 {
         font-size: 18px;
         margin-bottom: 10px;
     }
 
-    .facture p {
+    .bonl p {
         margin: 2px 0;
         font-size: 14px;
     }
 
-    .facture table {
+    .bonl table {
         width: 100%;
         margin-top: 15px;
         font-size: 14px;
     }
 
-    .facture th {
+    .bonl th {
         background-color: #f0f0f0;
         text-transform: uppercase;
         font-size: 13px;
@@ -144,27 +122,27 @@
         border-bottom: 1px solid #ddd;
     }
 
-    .facture td {
+    .bonl td {
         padding: 6px;
         border-bottom: 1px solid #eee;
     }
 
-    .facture hr {
+    .bonl hr {
         margin: 20px 0;
     }
 
-    .facture .signature {
+    .bonl .signature {
         border: 1px solid #aaa;
         width: 220px; 
         padding-bottom: 150px;
     }
 
-    .facture .footer {
+    .bonl .footer {
         border-top: 1px solid #ddd;
         margin-top: 10px;
     }
 
-    .facture .footer p {
+    .bonl .footer p {
         font-size: 12px;
         margin: 2px 0;
     }

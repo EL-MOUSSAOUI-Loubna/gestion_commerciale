@@ -13,7 +13,7 @@ class BonLivraisonController
     public function index()
     {
         $factures = $this->bonLivraisonModel->getBonsL();
-        $content_view = 'pages/factures/index';
+        $content_view = 'pages/bonslivraison/index';
         include VIEW_PATH . '/layouts/main.php';
     }
 
@@ -36,10 +36,7 @@ class BonLivraisonController
             ]);
             return;
         }
-        if (
-            !isset($data['client_id']) || !isset($data['date_emission']) || !isset($data['num_facture']) ||
-            !isset($data['lignes'])
-        ) {
+        if (!isset($data['client_id']) || !isset($data['date_emission']) || !isset($data['facture_id'])) {
             echo json_encode([
                 'success' => false,
                 'message' => 'Missing required fields'
@@ -47,16 +44,28 @@ class BonLivraisonController
             return;
         }
 
+        if (!is_array($data['lignes']) || count($data['lignes']) === 0) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Pas de produit selectionné'
+            ]);
+            return;
+        }
+
         $clientId = $data['client_id'];
         $date_emission = $data['date_emission'];
-        $num_facture = $data['num_facture'];
+        $facture_id = $data['facture_id'];
+        $nom_transport = $data['nom_transporteur'];
+        $telephone_transport = $data['telephone_transporteur'];
         $lignes = $data['lignes'];
 
         $resultat = $this->bonLivraisonModel->addBonL(
             $clientId,
             $date_emission,
-            $num_facture,
-            $lignes,
+            $facture_id,
+            $nom_transport,
+            $telephone_transport,
+            $lignes
         );
 
         if ($resultat) {
@@ -70,10 +79,10 @@ class BonLivraisonController
     public function edit()
     {
         $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-        $facture = $this->bonLivraisonModel->getBonLById($id);
+        $bonl = $this->bonLivraisonModel->getBonLById($id);
         $clients = $this->bonLivraisonModel->getClients();
         $produits = $this->bonLivraisonModel->getProduits();
-        $content_view = 'pages/factures/edit';
+        $content_view = 'pages/bonsLivraison/edit';
         include VIEW_PATH . '/layouts/main.php';
     }
 
@@ -124,16 +133,16 @@ class BonLivraisonController
     {
         $success = $this->bonLivraisonModel->deleteBonL($_POST['id']);
         if ($success) {
-            header('Location: /stage/factures?success=deleted');
+            header('Location: /stage/bonsLivraison?success=deleted');
         } else {
-            header('Location: /stage/factures?error=delete_failed');
+            header('Location: /stage/bonsLivraison?error=delete_failed');
         }
     }
 
     public function show()
     {
-        $facture = $this->bonLivraisonModel->getBonLById($_GET['id']);
-        $content_view = 'pages/factures/show';
+        $bonl = $this->bonLivraisonModel->getBonLById($_GET['id']);
+        $content_view = 'pages/bonsLivraison/show';
         include VIEW_PATH . '/layouts/main.php';
     }
 

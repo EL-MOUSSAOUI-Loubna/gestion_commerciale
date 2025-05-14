@@ -1,12 +1,15 @@
 <?php
-class BonLivraisonModel {
+class BonLivraisonModel
+{
     public $db;
 
-    public function __construct($dbConnection) {
+    public function __construct($dbConnection)
+    {
         $this->db = $dbConnection;
     }
 
-    public function getBonsL() {
+    public function getBonsL()
+    {
         try {
             $query = "SELECT f.id, f.num_facture, f.date_emission, f.total_ht, f.total_ttc, c.nom_ste FROM factures f INNER JOIN clients c ON f.client_id = c.id ORDER BY f.created_at DESC";
             $stmt = $this->db->prepare($query);
@@ -18,84 +21,79 @@ class BonLivraisonModel {
         }
     }
 
-    public function getBonLById($id) {
+    public function getBonLById($id)
+    {
         try {
-            $query = "SELECT f.*, c.id as client_id, c.nom_ste, c.ice, c.idf, c.adresse, c.email, c.telephone FROM factures f INNER JOIN clients c 
-            ON f.client_id = c.id WHERE f.id = :id";
+            $query = "SELECT bl.*, c.id as client_id, c.nom_ste, c.adresse, c.email, c.telephone FROM bonslivraison bl INNER JOIN clients c 
+            ON bl.client_id = c.id WHERE bl.id = :id";
             $stmt = $this->db->prepare($query);
             $stmt->execute(['id' => $id]);
-            $facture = $stmt->fetch(PDO::FETCH_ASSOC);
+            $bonl = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if (!$facture) {
+            if (!$bonl) {
                 return false;
             }
-            
-            if (isset($facture['modes_pay'])) {
-                $facture['modes_pay'] = explode(',', $facture['modes_pay']);
-            } else {
-                $facture['modes_pay'] = [];
-            }
 
-            $linesQuery = "SELECT lf.qte, lf.remise, lf.prix_u, lf.ht, lf.ttva, lf.ttc, p.id as produit_id, p.libelle 
-            FROM lignes_facture lf 
-            INNER JOIN produits p ON lf.produit_id = p.id 
-            WHERE lf.facture_id = :id";
+            $f = "SELECT f.num_facture FROM factures f INNER JOIN bonslivraison bl ON f.id = bl.facture_id WHERE bl.id = :id";
+            $res = $this->db->prepare($f);
+            $res->execute(["id"=> $id]);
+            $num_factureArray = $res->fetch(PDO::FETCH_ASSOC);
+            $bonl['num_facture'] = $num_factureArray ? $num_factureArray['num_facture'] : null;
+            
+            $linesQuery = "SELECT lbl.qte, p.id as produit_id, p.libelle, p.reference FROM lignes_bl lbl 
+            INNER JOIN produits p ON lbl.produit_id = p.id WHERE lbl.bl_id = :id";
             $stmt = $this->db->prepare($linesQuery);
             $stmt->execute(['id' => $id]);
-            $facture['lignes'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $bonl['lignes'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            return $facture;
+            return $bonl;
         } catch (PDOException $e) {
             error_log("Database error: " . $e->getMessage());
             return false;
         }
     }
 
-    public function addBonL ($clientId, $date_emission, $num_facture, $lignes) {
+    public function addBonL($clientId, $date_emission, $facture_id, $nom_transport, $telephone_transport, $lignes)
+    {
         try {
             $this->db->beginTransaction();
 
-            $query = "INSERT INTO bonslivraison (client_id, date_emission)
-                      VALUES (:client_id, :date_emission)";
+            $query = "INSERT INTO bonslivraison (client_id, date_emission, facture_id, nom_transport, telephone_transport)
+                      VALUES (:client_id, :date_emission, :facture_id, :nom_transport, :telephone_transport)";
             $stmt = $this->db->prepare($query);
             $stmt->execute([
-               'client_id' => $clientId,
-               'date_emission' => $date_emission,
-               'total_ht' => $total_ht,
-               'total_ttc' => $total_ttc,
-               'modes_pay' => $modes_paiement
+                'client_id' => $clientId,
+                'date_emission' => $date_emission,
+                'facture_id' => $facture_id,
+                'nom_transport' => $nom_transport,
+                'telephone_transport' => $telephone_transport
             ]);
             $bl_id = $this->db->lastInsertId();
 
             $year = date('Y', strtotime($date_emission));
-            $num_bl = "FAC-$year-" . str_pad($bl_id, 5, '0', STR_PAD_LEFT);
+            $num_bl = "BL-$year-" . str_pad($bl_id, 5, '0', STR_PAD_LEFT);
 
-            $updateQuery = "UPDATE factures SET num_bonl = :num WHERE id = :id";
+            $updateQuery = "UPDATE bonslivraison SET num_bonl = :num_bonl WHERE id = :id";
             $updateStmt = $this->db->prepare($updateQuery);
             $updateStmt->execute([
-                'num' => $num_facture,
-                'id' => $num_bl
+                'num_bonl' => $num_bl,
+                'id' => $bl_id
             ]);
 
-            $query2 = "INSERT INTO lignes_facture (facture_id, produit_id, qte, remise, prix_u, ttva, ht, ttc)
-                      VALUES (:facture_id, :produit_id, :qte, :remise, :prix_u, :ttva, :ht, :ttc)";
-                    
+            $query2 = "INSERT INTO lignes_bl (bl_id, produit_id, qte)
+                      VALUES (:bl_id, :produit_id, :qte)";
+
             $stmtLines = $this->db->prepare($query2);
             foreach ($lignes as $ligne) {
                 $stmtLines->execute([
-                    'facture_id' => $facture_id,
-                    'produit_id' =>  $ligne['produit_id'],
-                    'qte' =>  $ligne['qte'],
-                    'remise' =>  $ligne['remise'],
-                    'prix_u' =>  $ligne['prix_u'],
-                    'ttva' =>  $ligne['ttva'],
-                    'ht' =>  $ligne['ht'],
-                    'ttc' =>  $ligne['ttc']
+                    'bl_id' => $bl_id,
+                    'produit_id' => $ligne['produit_id'],
+                    'qte' => $ligne['qte'],
                 ]);
             }
-            
+
             $this->db->commit();
-            return $facture_id;
+            return $bl_id;
 
         } catch (PDOException $e) {
             $this->db->rollback();
@@ -105,52 +103,53 @@ class BonLivraisonModel {
     }
 
     public function updateBonL($factureData, $lignes)
-{
-    try {
-        $this->db->beginTransaction();
+    {
+        try {
+            $this->db->beginTransaction();
 
-        $stmt = $this->db->prepare("UPDATE factures SET client_id = :client_id, 
+            $stmt = $this->db->prepare("UPDATE factures SET client_id = :client_id, 
         date_emission = :date_emission, total_ht = :total_ht, total_ttc = :total_ttc, 
         modes_pay = :modes_paiement WHERE id = :id");
-        $stmt->execute([
-            'client_id' => $factureData['client_id'],
-            'date_emission' => $factureData['date_emission'],
-            'total_ht' => $factureData['total_ht'],
-            'total_ttc' => $factureData['total_ttc'],
-            'modes_paiement' => $factureData['modes_paiement'],
-            'id' => $factureData['id']
-        ]);
+            $stmt->execute([
+                'client_id' => $factureData['client_id'],
+                'date_emission' => $factureData['date_emission'],
+                'total_ht' => $factureData['total_ht'],
+                'total_ttc' => $factureData['total_ttc'],
+                'modes_paiement' => $factureData['modes_paiement'],
+                'id' => $factureData['id']
+            ]);
 
-        $stmt = $this->db->prepare("DELETE FROM lignes_facture WHERE facture_id = :facture_id");
-        $stmt->execute(['facture_id' => $factureData['id']]);
+            $stmt = $this->db->prepare("DELETE FROM lignes_facture WHERE facture_id = :facture_id");
+            $stmt->execute(['facture_id' => $factureData['id']]);
 
-        $stmt = $this->db->prepare("INSERT INTO lignes_facture (facture_id, produit_id, qte, prix_u, 
+            $stmt = $this->db->prepare("INSERT INTO lignes_facture (facture_id, produit_id, qte, prix_u, 
             remise, ht, ttva, ttc) VALUES (:facture_id, :produit_id, :qte, :prix_u, 
             :remise, :ht, :ttva, :ttc)");
 
-        foreach ($lignes as $ligne) {
-            $stmt->execute([
-                'facture_id' => $factureData['id'],
-                'produit_id' => $ligne['produit_id'],
-                'qte' => $ligne['qte'],
-                'prix_u' => $ligne['prix_u'],
-                'remise' => $ligne['remise'],
-                'ht' => $ligne['ht'],
-                'ttva' => $ligne['ttva'],
-                'ttc' => $ligne['ttc']
-            ]);
+            foreach ($lignes as $ligne) {
+                $stmt->execute([
+                    'facture_id' => $factureData['id'],
+                    'produit_id' => $ligne['produit_id'],
+                    'qte' => $ligne['qte'],
+                    'prix_u' => $ligne['prix_u'],
+                    'remise' => $ligne['remise'],
+                    'ht' => $ligne['ht'],
+                    'ttva' => $ligne['ttva'],
+                    'ttc' => $ligne['ttc']
+                ]);
+            }
+
+            $this->db->commit();
+
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            throw $e;
         }
-
-        $this->db->commit();
-
-    } catch (Exception $e) {
-        $this->db->rollBack();
-        throw $e;
     }
-}
 
 
-    public function deleteBonL($id) {
+    public function deleteBonL($id)
+    {
         try {
             $query = "DELETE FROM factures WHERE id = :id";
             $stmt = $this->db->prepare($query);
@@ -162,7 +161,8 @@ class BonLivraisonModel {
         }
     }
 
-    public function getClients() {
+    public function getClients()
+    {
         try {
             $query = "SELECT * FROM clients";
             $stmt = $this->db->prepare($query);
@@ -174,7 +174,8 @@ class BonLivraisonModel {
         }
     }
 
-    public function getClientById($id) {
+    public function getClientById($id)
+    {
         try {
             $query = "SELECT * FROM clients WHERE id = :id";
             $stmt = $this->db->prepare($query);
@@ -186,7 +187,8 @@ class BonLivraisonModel {
         }
     }
 
-    public function getProduits() {
+    public function getProduits()
+    {
         try {
             $query = "SELECT id, libelle FROM produits";
             $stmt = $this->db->prepare($query);
@@ -198,7 +200,8 @@ class BonLivraisonModel {
         }
     }
 
-    public function getProduitById($id) {
+    public function getProduitById($id)
+    {
         try {
             $query = "SELECT * FROM produits WHERE id = :id";
             $stmt = $this->db->prepare($query);
@@ -210,7 +213,8 @@ class BonLivraisonModel {
         }
     }
 
-    public function checkNumFacture($num) {
+    public function checkNumFacture($num)
+    {
         try {
             $sql = "SELECT id FROM factures WHERE num_facture LIKE :num_facture";
             $stmt = $this->db->prepare($sql);
@@ -221,5 +225,5 @@ class BonLivraisonModel {
             return false;
         }
     }
-    
+
 }

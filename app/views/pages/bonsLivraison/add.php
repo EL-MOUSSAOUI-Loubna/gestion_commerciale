@@ -38,7 +38,7 @@
                         <label for="nom_transporteur" class="form-label">Nom du transporteur <span
                                 class="text-danger">*</span></label>
                         <input type="text" id="nom_transporteur" name="nom_transporteur" class="form-control"
-                            placeholder="Nom du transporteur" required>
+                            placeholder="Nom du transporteur">
                         <div class="invalid-feedback">Veuillez saisir le nom du transporteur.</div>
                     </div>
 
@@ -262,7 +262,7 @@
             telephone_transporteur = $("input[name='telephone_transporteur']").val();
 
             // Validate form
-            if (!clientId || !blDate || !num_facture || !nom_transporteur) {
+            if (!clientId || !blDate || !num_facture) {
                 showNotification("Veuillez remplir tous les champs obligatoires.", "danger");
                 return false;
             }
@@ -333,15 +333,15 @@
                 dataType: "json",
                 success: function (res) {
                     // Add row to table
-                    const row = `<tr data-id="${res.id}">
+                    const row = `<tr data-id="${res.produit_id}">
                         <td>${res.reference}</td>
                         <td>${res.libelle}</td>
                         <td>${res.qte}</td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-warning btn-modifierQte me-2" data-id="${res.id}">
+                            <button class="btn btn-sm btn-warning btn-modifierQte me-2" data-id="${res.produit_id}">
                                 <i class="fas fa-edit"></i> Modifier
                             </button>
-                            <button class="btn btn-sm btn-danger btn-supprimer" data-id="${res.id}">
+                            <button class="btn btn-sm btn-danger btn-supprimer" data-id="${res.produit_id}">
                                 <i class="fas fa-trash"></i> Supprimer
                             </button>
                         </td>
@@ -351,6 +351,8 @@
 
                     // Save line for later
                     lignesProduits.push(res);
+                    console.log(ligneProduits);
+                    
 
                     // Reset form
                     $("#produitForm")[0].reset();
@@ -367,6 +369,8 @@
         // Delete product row
         $("#ligneProduits").on("click", ".btn-supprimer", function () {
             const id = $(this).data("id");
+            console.log(id);
+            
 
             // Remove from array
             lignesProduits = lignesProduits.filter(item => item.id !== id);
