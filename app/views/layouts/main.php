@@ -33,19 +33,42 @@ $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     </div>
 
     <?php include __DIR__ . '/b_nav.php'; ?>
-    <?php include __DIR__ . '/footer.php'; ?>
 
     <script src="/stage/public/assets/js/jquery-3.6.0.min.js"></script>
 
 
     <script>
         $(document).ready(function () {
-            $('#facturesTable').DataTable();
-            $('#clientsTable').DataTable();
-            $('#produitsTable').DataTable();
-            $('#categorieProduits').DataTable();
-            $('#fournisseursTable').DataTable();
-
+            $('#facturesTable').DataTable({
+                language: {
+                    emptyTable: "Aucune facture trouvée"
+                }
+            });
+            $('#clientsTable').DataTable({
+                language: {
+                    emptyTable: "Aucun client trouvé"
+                }
+            });
+            $('#produitsTable').DataTable({
+                language: {
+                    emptyTable: "Aucun produit trouvé"
+                }
+            });
+            $('#categorieProduits').DataTable({
+                language: {
+                    emptyTable: "Aucun produit trouvé pour cette catégorie"
+                }
+            });
+            $('#fournisseursTable').DataTable({
+                language: {
+                    emptyTable: "Aucun fournisseur trouvé"
+                }
+            });
+            $('#bonslTable').DataTable({
+                language: {
+                    emptyTable: "Aucun bon de livraison trouvé"
+                }
+            });
 
         });
     </script>
@@ -55,6 +78,7 @@ $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     <script src="/stage/public/assets/datatables/datatables.min.js"></script>
     <script src="/stage/public/assets/js/bootstrap.bundle.min.js"></script>
 
+    
 </body>
 
 </html>

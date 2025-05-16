@@ -55,11 +55,6 @@
                 </tr>
             </thead>
             <tbody>
-                <?php if (empty($clients)): ?>
-                    <tr>
-                        <td colspan="6" class="text-center">Aucun client trouvé</td>
-                    </tr>
-                <?php else: ?>
                     <?php foreach ($clients as $client): ?>
                         <tr>
                             <td><?= htmlspecialchars($client['nom_ste']) ?></td>
@@ -94,7 +89,6 @@
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                <?php endif; ?>
             </tbody>
         </table>
     </div>

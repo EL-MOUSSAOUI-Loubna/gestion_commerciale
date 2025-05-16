@@ -1,16 +1,3 @@
-<style>
-        #myTable thead th {
-        background-color: #0d6efd !important;
-        color: white !important;
-        font-weight: 600;
-        padding: 12px 10px !important;
-    }
-
-    #myTable tbody tr:hover {
-        background-color: rgba(13, 110, 253, 0.1) !important;
-    }
-</style>
-
 <div class="container">
     <h1>Liste des Factures</h1>
     <div class="my-4">
@@ -65,11 +52,6 @@
             </tr>
         </thead>
         <tbody>
-            <?php if (empty($factures)): ?>
-                <tr>
-                    <td colspan="5" class="text-center">Aucune facture trouvée</td>
-                </tr>
-            <?php else: ?>
                 <?php foreach ($factures as $facture): ?>
                     <tr>
                         <td><?= htmlspecialchars($facture['num_facture']) ?></td>
@@ -103,7 +85,6 @@
                         </td>
                     </tr>
                 <?php endforeach; ?>
-            <?php endif; ?>
         </tbody>
     </table></div>
 </div>

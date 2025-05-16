@@ -54,11 +54,6 @@
                 </tr>
             </thead>
             <tbody>
-                <?php if (empty($produits)): ?>
-                    <tr>
-                        <td colspan="7" class="text-center">Aucun produit trouvé</td>
-                    </tr>
-                <?php else: ?>
                     <?php foreach ($produits as $produit): ?>
                         <tr>
                             <td><?= htmlspecialchars($produit['reference']) ?></td>
@@ -93,7 +88,6 @@
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                <?php endif; ?>
             </tbody>
         </table>
     </div>

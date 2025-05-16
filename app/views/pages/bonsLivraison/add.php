@@ -1,5 +1,8 @@
 <div class='add_bl'>
-    <!-- Bootstrap modal -->
+    <a href="/stage/bonsLivraison" class=" back-button">
+        <i class="fas fa-arrow-left"></i>
+        Retour à la liste
+    </a>
     <div id="clientModal">
         <div class="modal-dialog">
             <form id="initForm" class="modal-content needs-validation" novalidate>
@@ -58,8 +61,16 @@
 
     <div id="blPage" class="card" style="display:none;">
         <div class="card-header bg-light">
-            <div id="clientInfo" class="mb-2 fw-bold"></div>
-            <div id="transportInfo" class="mb-2 fw-bold"></div>
+            <div>
+                <div class="mb-2">Client : <span class="info-highlight fw-bold" id="clientInfo"></span></div>
+                <div class="mb-2">Date émission : <span class="info-highlight fw-bold" id="dateEm"></span></div>
+                <div class="mb-2">Facture n : <span class="info-highlight fw-bold" id="factureNum"></span></div>
+            </div>
+            <div>
+                <div class="mb-2">Transport : <span class="info-highlight fw-bold" id="transportNom"></span></div>
+                <div class="mb-2">Téléphone transport : <span class="info-highlight fw-bold" id="transportTel"></span>
+                </div>
+            </div>
         </div>
 
         <div class="card-body">
@@ -105,7 +116,7 @@
             <input type="hidden" id="hiddenNomTransporteur">
             <input type="hidden" id="hiddenTelephoneTransporteur">
 
-            <button id="enregistrerBtn" class="btn btn-primary btn-lg" type="button">
+            <button id="enregistrerBtn" class="btn btn-primary" type="button">
                 <i class="fas fa-save me-2"></i>Enregistrer
             </button>
         </div>
@@ -168,15 +179,49 @@
         display: none !important;
     }
 
+    .back-button {
+        position: relative;
+        z-index: 1060;
+        margin-top: 1rem;
+        margin-bottom: 1.5rem;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background-color: white;
+        color: #2563eb;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.15s ease;
+    }
+
+    .back-button:hover {
+        background-color: #dbeafe;
+        border-color: #2563eb;
+    }
+
+    .back-button i {
+        transition: transform 0.15s ease;
+    }
+
+    .back-button:hover i {
+        transform: translateX(-2px);
+    }
+
     .add_bl .card {
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
         margin-bottom: 2rem;
+        margin-top: 2rem
     }
 
     .add_bl .card-header {
         padding: 1rem 1.25rem;
         border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .add_bl .card-body {
@@ -292,18 +337,15 @@
                         $("#hiddenTelephoneTransporteur").val(telephone_transporteur);
 
                         // Update info displays
-                        $("#clientInfo").html(`Client : <span class="info-highlight">${clientNom}</span> | 
-                            Date : <span class="info-highlight">${blDate}</span> | 
-                            Facture N° : <span class="info-highlight">${num_facture}</span>`);
-
-                        $("#transportInfo").html(`Transporteur : <span class="info-highlight">${nom_transporteur}</span>
-                            ${telephone_transporteur ? ' | Téléphone : <span class="info-highlight">' + telephone_transporteur + '</span>' : ''}`);
+                        $("#clientInfo").text(clientNom);
+                        $("#factureNum").text(num_facture);
+                        $("#dateEm").text(blDate);
+                        $("#transportNom").text(nom_transporteur);
+                        $("#transportTel").text(telephone_transporteur);
 
                         // Hide modal, show main page
                         $("#clientModal").hide();
                         $("#blPage").fadeIn();
-
-                        showNotification("Facture trouvée. Vous pouvez maintenant ajouter des produits.", "success");
                     } else {
                         showNotification("Aucune facture trouvée avec ce numéro.", "warning");
                     }
@@ -352,7 +394,7 @@
                     // Save line for later
                     lignesProduits.push(res);
                     console.log(ligneProduits);
-                    
+
 
                     // Reset form
                     $("#produitForm")[0].reset();
@@ -370,7 +412,7 @@
         $("#ligneProduits").on("click", ".btn-supprimer", function () {
             const id = $(this).data("id");
             console.log(id);
-            
+
 
             // Remove from array
             lignesProduits = lignesProduits.filter(item => item.id !== id);
@@ -381,10 +423,10 @@
             });
 
             showNotification("Produit supprimé avec succès.", "success");
-            
+
             const row = $(this).closest("tr");
             const produitId = row.data("id");
-            
+
             // If no more rows, show empty message
             if ($("#ligneProduits tr").length === 0) {
                 $("#ligneProduits").html(`
@@ -465,44 +507,45 @@
         });
 
 
-    // Save Bon de Livraison
-    $("#enregistrerBtn").on("click", function () {
-        if (lignesProduits.length === 0) {
-            showNotification("Veuillez ajouter au moins un produit au bon de livraison.", "warning");
-            return;
-        }
-
-        const data = {
-            client_id: $("#hiddenClientId").val(),
-            date_emission: $("#hiddenDateBL").val(),
-            facture_id: facture_id,
-            nom_transporteur: $("#hiddenNomTransporteur").val(),
-            telephone_transporteur: $("#hiddenTelephoneTransporteur").val(),
-            lignes: lignesProduits
-        };
-        console.log(data);
-
-        $.ajax({
-            url: "/stage/bonsLivraison/store",
-            method: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(data),
-            dataType: "json",
-            success: function (response) {
-                if (response.success) {
-                    showNotification("Bon de Livraison enregistré avec succès !", "success");
-                    setTimeout(function () {
-                        window.location.href = "/stage/bonsLivraison/show?id=" + response.bl_id + "&success=created";
-                    }, 1500);
-                } else {
-                    showNotification("Erreur lors de l'enregistrement : " + (response.message || "Erreur inconnue"), "danger");
-                }
-            },
-            error: function (xhr) {
-                console.error(xhr.responseText);
-                showNotification("Erreur lors de l'enregistrement du bon de livraison.", "danger");
+        // Save Bon de Livraison
+        $("#enregistrerBtn").on("click", function () {
+            if (lignesProduits.length === 0) {
+                showNotification("Veuillez ajouter au moins un produit au bon de livraison.", "warning");
+                return;
             }
+
+            const data = {
+                client_id: $("#hiddenClientId").val(),
+                date_emission: $("#hiddenDateBL").val(),
+                facture_id: facture_id,
+                nom_transporteur: $("#hiddenNomTransporteur").val(),
+                telephone_transporteur: $("#hiddenTelephoneTransporteur").val(),
+                lignes: lignesProduits
+            };
+            console.log(data);
+
+            $.ajax({
+                url: "/stage/bonsLivraison/store",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        showNotification("Bon de Livraison enregistré avec succès !", "success");
+                        setTimeout(function () {
+                            window.location.href = "/stage/bonsLivraison/show?id=" + response.bl_id + "&success=created";
+                        }, 1500);
+                    } else {
+                        showNotification("Erreur lors de l'enregistrement : " + (response.message || "Erreur inconnue"), "danger");
+                    }
+                },
+                error: function (xhr) {
+                    console.error(xhr.responseText);
+                    showNotification("Erreur lors de l'enregistrement du bon de livraison.", "danger");
+                }
+            });
+            console.log(data);
         });
-    });
     });
 </script>

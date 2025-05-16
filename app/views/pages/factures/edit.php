@@ -10,26 +10,39 @@
     </div>
 
 
-    <!-- Formulaire produit -->
-    <form id="produitForm" class="d-flex gap-2 mb-3">
-        <select class="form-select" name="produit_id" required>
-            <?php foreach ($produits as $p): ?>
-                <option value="<?= $p['id'] ?>"><?= htmlspecialchars($p['libelle']) ?></option>
-            <?php endforeach; ?>
-        </select>
-        <input type="number" name="quantite" class="form-control" placeholder="Quantité" min="1" required>
-        <input type="number" name="remise" class="form-control" placeholder="Remise (%)" min="0" max="100" value="0">
-        <button type="submit" class="btn btn-success">Ajouter Produit</button>
-    </form>
+<div class="card">
 
-    <!-- Info client/date avec bouton modifier -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
+<!-- Info client/date avec bouton modifier -->
+<div class="card-header bg-light d-flex justify-content-between align-items-center mb-3">
         <div id="clientInfo">
             Client : <span id="clientCurrentInfo" style="color:rgb(69, 97, 157); font-weight: bold;"><?= htmlspecialchars($facture['nom_ste']) ?></span> |
             Date : <span id="dateCurrentInfo" style="color: rgb(69, 97, 157); font-weight: bold;"><?= $facture['date_emission'] ?></span>
         </div>
         <button id="editClientBtn" class="btn btn-outline-secondary btn-sm">Modifier</button>
     </div>
+
+    <div class="card-body">
+    <!-- Formulaire produit -->
+    <form id="produitForm" class="row g-3 mb-4">
+        <div class="col-md-4">
+        <label class="">produit :</label>
+        <select class="form-select" name="produit_id" required>
+            <?php foreach ($produits as $p): ?>
+                <option value="<?= $p['id'] ?>"><?= htmlspecialchars($p['libelle']) ?></option>
+            <?php endforeach; ?>
+        </select>
+        </div>
+        <div class="col-md-3">
+        <label class="">quantité :</label>
+        <input type="number" name="quantite" class="form-control" placeholder="Quantité" min="1" required>
+            </div>
+            <div class="col-md-3">
+            <label class="">remise (%) :</label>
+        <input type="number" name="remise" class="form-control" placeholder="Remise (%)" min="0" max="100" value="0">
+            </div>
+        <button type="submit" class="btn btn-success col-md-2" style="height: 40px; align-self: flex-end;">Ajouter Produit</button>
+    </form>
+
 
     <!-- Modal pour modifier client/date -->
     <div id="clientModal" class="modal-custom">
@@ -50,15 +63,15 @@
                     <input type="date" name="date_emission" id="dateEmission" class="form-control mt-3" value="<?= $facture['date_emission'] ?>" required>
                 </div>
                 <div class="modal-footer mt-4 gap-2">
-                    <button type="button" class="btn btn-secondary" id="cancelEditBtn">Annuler</button>
                     <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    <button type="button" class="btn btn-secondary" id="cancelEditBtn">Annuler</button>
                 </div>
             </form>
         </div>
     </div>
 
     <div class="facture_details">
-        <table class="table table-bordered">
+        <table class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th>Produit</th>
@@ -120,14 +133,19 @@
             </div>
         </div>
     </div>
+    </div>
+
+    <div class="card-footer text-start">
 
     <!-- Hidden fields -->
     <input type="hidden" id="hiddenClientId" value="<?= $facture['client_id'] ?>">
     <input type="hidden" id="hiddenDateFacture" value="<?= $facture['date_emission'] ?>">
     <input type="hidden" id="factureId" value="<?= $facture['id'] ?>">
 
-    <button id="enregistrerBtn" type="button">Enregistrer les modifications</button>
+    <button id="enregistrerBtn" type="button" class='btn btn-primary'>Enregistrer les modifications</button>
+                    </div>
 </div>
+                    </div>
 
 <style>
     .main-content {
@@ -229,17 +247,59 @@
         transform: translateX(-2px);
     }
 
-    .edit_facture #enregistrerBtn {
-        background-color:rgb(87, 118, 187);
-        padding: 7px 11px ;
-        border-radius: 4px;
-        border: none;
-        color: white;
-        transition: background-color 0.2s ease;
+    .edit_facture .card {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        margin-top: 2rem
     }
-    
-    .edit_facture #enregistrerBtn:hover {
-        background-color: rgb(55, 79, 136);
+
+    .edit_facture .card-header {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .edit_facture .card-body {
+        padding: 1.5rem;
+    }
+
+    .edit_facture .card-footer {
+        padding: 1rem 1.25rem;
+        background-color: #f8f9fa;
+        border-top: 1px solid rgba(0, 0, 0, 0.125);
+    }
+
+    .edit_facture .table th {
+        background-color: #f8f9fa;
+    }
+
+    .edit_facture .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .edit_facture .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .edit_facture .btn-warning {
+        background-color: #ffc107;
+        border-color: #ffc107;
+        color: #212529;
+    }
+
+    .edit_facture .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .edit_facture .info-highlight {
+        color: rgb(69, 97, 157);
+        font-weight: bold;
     }
 
 </style>
@@ -388,18 +448,18 @@ $(document).ready(function() {
         
         // Update the local array
         const ligneIndex = lignesProduits.findIndex(l => l.produit_id == row.data("id"));
-    if (ligneIndex !== -1) {
-        lignesProduits[ligneIndex] = {
-            produit_id: produitId,
-            libelle: produitName,
-            qte: qte,
-            prix_u: prixU,
-            remise: remise,
-            ht: ht,
-            ttva: tva,
-            ttc: ttc
-        };
-    }
+        if (ligneIndex !== -1) {
+            lignesProduits[ligneIndex] = {
+                produit_id: produitId,
+                libelle: produitName,
+                qte: qte,
+                prix_u: prixU,
+                remise: remise,
+                ht: ht,
+                ttva: tva,
+                ttc: ttc
+            };
+        }
         
         // Update the row display
         row.html(`
@@ -468,67 +528,67 @@ $(document).ready(function() {
 
     // Save all changes
     // Save all changes
-$("#enregistrerBtn").on("click", function() {
+    $("#enregistrerBtn").on("click", function() {
 
-    const btn = $(this);
-    btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enregistrement...');
+        const btn = $(this);
+        btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enregistrement...');
 
-    // Collect payment methods
-    let selectedPaymentMethods = [];
-    $('.mode-paiement:checked').each(function() {
-        selectedPaymentMethods.push($(this).val());
-    });
-
-    // Prepare the data structure
-    const data = {
-        facture_id: factureId,
-        client_id: $("#hiddenClientId").val(),
-        date_emission: $("#hiddenDateFacture").val(),
-        lignes: [],
-        total_ht: totalHT,
-        total_ttc: totalTTC,
-        modes_paiement: selectedPaymentMethods.join(',')
-    };
-
-    // Collect all product lines (both existing and newly added)
-    $("#ligneProduits tr").each(function() {
-        // Skip the empty row if present
-        if ($(this).find("td").length === 1) return;
-
-        const produitId = $(this).data("id");
-        const tva = $(this).data("tva");
-        
-        data.lignes.push({
-            produit_id: produitId,
-            qte: parseFloat($(this).find("td:eq(1)").text()),
-            prix_u: parseFloat($(this).find("td:eq(2)").text().replace(" dh", "")),
-            remise: parseFloat($(this).find("td:eq(3)").text().replace(" %", "")),
-            ht: parseFloat($(this).find("td:eq(4)").text().replace(" dh", "")),
-            ttva: tva,
-            ttc: parseFloat($(this).find("td:eq(6)").text().replace(" dh", ""))
+        // Collect payment methods
+        let selectedPaymentMethods = [];
+        $('.mode-paiement:checked').each(function() {
+            selectedPaymentMethods.push($(this).val());
         });
-    });
 
-    // Send to server
-    $.ajax({
-        url: "/stage/factures/update",
-        method: "POST",
-        data: data,
-        success: function(response) {
-            if (response.success) {
-                alert("Facture mise à jour avec succès !");
-                window.location.href = "/stage/factures/show?id=" + factureId + "&success=updated";
-            } else {
-                alert("Erreur lors de la mise à jour : " + (response.message || "Erreur inconnue"));
+        // Prepare the data structure
+        const data = {
+            facture_id: factureId,
+            client_id: $("#hiddenClientId").val(),
+            date_emission: $("#hiddenDateFacture").val(),
+            lignes: [],
+            total_ht: totalHT,
+            total_ttc: totalTTC,
+            modes_paiement: selectedPaymentMethods.join(',')
+        };
+
+        // Collect all product lines (both existing and newly added)
+        $("#ligneProduits tr").each(function() {
+            // Skip the empty row if present
+            if ($(this).find("td").length === 1) return;
+
+            const produitId = $(this).data("id");
+            const tva = $(this).data("tva");
+            
+            data.lignes.push({
+                produit_id: produitId,
+                qte: parseFloat($(this).find("td:eq(1)").text()),
+                prix_u: parseFloat($(this).find("td:eq(2)").text().replace(" dh", "")),
+                remise: parseFloat($(this).find("td:eq(3)").text().replace(" %", "")),
+                ht: parseFloat($(this).find("td:eq(4)").text().replace(" dh", "")),
+                ttva: tva,
+                ttc: parseFloat($(this).find("td:eq(6)").text().replace(" dh", ""))
+            });
+        });
+
+        // Send to server
+        $.ajax({
+            url: "/stage/factures/update",
+            method: "POST",
+            data: data,
+            success: function(response) {
+                if (response.success) {
+                    alert("Facture mise à jour avec succès !");
+                    window.location.href = "/stage/factures/show?id=" + factureId + "&success=updated";
+                } else {
+                    alert("Erreur lors de la mise à jour : " + (response.message || "Erreur inconnue"));
+                }
+            },
+            error: function(xhr) {
+                alert("Erreur lors de la mise à jour : " + xhr.responseText);
             }
-        },
-        error: function(xhr) {
-            alert("Erreur lors de la mise à jour : " + xhr.responseText);
-        }
-    }).always(function() {
-        btn.prop("disabled", false).text("Enregistrer les modifications");
-    });
+        }).always(function() {
+            btn.prop("disabled", false).text("Enregistrer les modifications");
+        });
 
-});
+    });
 });
 </script>

@@ -18,7 +18,6 @@
                 </tr>
             </thead>
             <tbody>
-                <?php if (!empty($produits)): ?>
                     <?php foreach ($produits as $produit): ?>
                         <tr>
                             <td><?= htmlspecialchars($produit['reference']) ?></td>
@@ -27,11 +26,6 @@
                             <td><?= number_format($produit['prix_u'], 2, ',', ' ') ?> dh</td>
                         </tr>
                     <?php endforeach; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="3" class="no-products">Aucun produit dans cette catégorie</td>
-                    </tr>
-                <?php endif; ?>
             </tbody>
         </table>
     </div>

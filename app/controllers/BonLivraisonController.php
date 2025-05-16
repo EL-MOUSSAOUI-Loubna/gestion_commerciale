@@ -12,7 +12,7 @@ class BonLivraisonController
 
     public function index()
     {
-        $factures = $this->bonLivraisonModel->getBonsL();
+        $bonsl = $this->bonLivraisonModel->getBonsL();
         $content_view = 'pages/bonslivraison/index';
         include VIEW_PATH . '/layouts/main.php';
     }
@@ -39,7 +39,7 @@ class BonLivraisonController
         if (!isset($data['client_id']) || !isset($data['date_emission']) || !isset($data['facture_id'])) {
             echo json_encode([
                 'success' => false,
-                'message' => 'Missing required fields'
+                'message' => 'Données incomplètes'
             ]);
             return;
         }
@@ -55,8 +55,8 @@ class BonLivraisonController
         $clientId = $data['client_id'];
         $date_emission = $data['date_emission'];
         $facture_id = $data['facture_id'];
-        $nom_transport = $data['nom_transporteur'];
-        $telephone_transport = $data['telephone_transporteur'];
+        $nom_transport = $data['nom_transporteur'] ?? '';
+        $telephone_transport = $data['telephone_transporteur'] ?? '';
         $lignes = $data['lignes'];
 
         $resultat = $this->bonLivraisonModel->addBonL(
@@ -95,28 +95,31 @@ class BonLivraisonController
         }
 
         try {
-            $facture_id = $_POST['facture_id'] ?? null;
+            $num_facture = $_POST['num_facture'] ?? null;
+            $bonl_id = $_POST['bl_id'] ?? null;
             $client_id = $_POST['client_id'] ?? null;
             $date_emission = $_POST['date_emission'] ?? null;
-            $total_ht = $_POST['total_ht'] ?? 0;
-            $total_ttc = $_POST['total_ttc'] ?? 0;
-            $modes_paiement = $_POST['modes_paiement'] ?? '';
+            $nom_transport = $_POST['nom_transport'] ?? null;
+            $telephone_transport = $_POST['telephone_transport'] ?? null;
             $lignes = $_POST['lignes'] ?? [];
 
-            if (!$facture_id || !$client_id || !$date_emission || empty($lignes)) {
-                throw new Exception("Données incomplètes pour la facture");
+            $facture_id = $this->bonLivraisonModel->getFactureId($num_facture);
+
+
+            if (!$bonl_id || !$num_facture || !$client_id || !$date_emission || empty($lignes)) {
+                throw new Exception("Données incomplètes");
             }
 
-            $factureData = [
-                'id' => $facture_id,
+            $bonlData = [
+                'id' => $bonl_id,
+                'facture_id' => $facture_id,
                 'client_id' => $client_id,
                 'date_emission' => $date_emission,
-                'total_ht' => $total_ht,
-                'total_ttc' => $total_ttc,
-                'modes_paiement' => $modes_paiement
+                'nom_transport' => $nom_transport,
+                'telephone_transport' => $telephone_transport
             ];
 
-            $this->bonLivraisonModel->updateBonL($factureData, $lignes);
+            $this->bonLivraisonModel->updateBonL($bonlData, $lignes);
 
             header('Content-Type: application/json');
             echo json_encode(['success' => true]);
@@ -163,10 +166,9 @@ class BonLivraisonController
     public function checkFacture() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['num_facture'])) {
             $num = trim($_POST['num_facture']);
-            $id = $this->bonLivraisonModel->checkNumFacture($num);
-            $exists = $id ? true : false;
+            $exists = $this->bonLivraisonModel->checkNumFacture($num);
     
-            echo json_encode(['exists' => $exists, 'facture_id' => $id]);
+            echo json_encode(['exists' => $exists]);
         } else {
             http_response_code(400);
             echo json_encode(['error' => 'Requête invalide']);

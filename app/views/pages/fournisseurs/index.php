@@ -54,11 +54,6 @@
                 </tr>
             </thead>
             <tbody>
-                <?php if (empty($fournisseurs)): ?>
-                    <tr>
-                        <td colspan="6" class="text-center">Aucun fournisseurs trouvé</td>
-                    </tr>
-                <?php else: ?>
                     <?php foreach ($fournisseurs as $fournisseur): ?>
                         <tr>
                             <td><?= htmlspecialchars($fournisseur['nom_ste']) ?></td>
@@ -93,7 +88,6 @@
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                <?php endif; ?>
             </tbody>
         </table>
     </div>

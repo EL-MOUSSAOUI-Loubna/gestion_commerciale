@@ -1,4 +1,9 @@
 <div class='edit_bonl'>
+    <div id="notification" class="alert alert-dismissible fade" role="alert"
+        style="display: none; position: fixed; top: 20px; right: 20px; z-index: 9999;">
+        <span id="notificationMessage"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+    </div>
     <div class="position-relative mb-4">
         <a href="/stage/bonsLivraison" class="back-button">
             <i class="fas fa-arrow-left"></i>
@@ -29,7 +34,7 @@
             Date : <span id="dateCurrentInfo"
                 style="color: rgb(69, 97, 157); font-weight: bold;"><?= $bonl['date_emission'] ?></span> |
             facture n : <span id="numFactureCurrentInfo"
-                style="color: rgb(69, 97, 157); font-weight: bold;"><?= $bonl['nom_transport'] ?></span> |
+                style="color: rgb(69, 97, 157); font-weight: bold;"><?= $bonl['num_facture'] ?></span> |
             transport : <span id="nomTransportCurrentInfo"
                 style="color: rgb(69, 97, 157); font-weight: bold;"><?= $bonl['nom_transport'] ?></span> |
             tel transport : <span id="telephoneTransportCurrentInfo"
@@ -49,7 +54,7 @@
 
                     <div class="mb-3">
                         <label for="client_id" class="form-label">Client <span class="text-danger">*</span></label>
-                        <select class="form-select" name="client_id" id="clientSelect" required>
+                        <select class="form-select" name="client_id" id="clientSelect">
                             <option value="" disabled>-- Choisir un client --</option>
                             <?php foreach ($clients as $client): ?>
                                 <option value="<?= $client['id'] ?>" <?= $client['id'] == $bonl['client_id'] ? 'selected' : '' ?>>
@@ -57,15 +62,13 @@
                                 </option>
                             <?php endforeach; ?>
                         </select>
-                        <div class="invalid-feedback">Veuillez sélectionner un client.</div>
                     </div>
 
                     <div class="mb-3">
                         <label for="date_emission" class="form-label">Date d'émission <span
                                 class="text-danger">*</span></label>
                         <input type="date" name="date_emission" id="dateEmission" class="form-control"
-                            value="<?= $bonl['date_emission'] ?>" required>
-                        <div class="invalid-feedback">Veuillez sélectionner une date d'émission.</div>
+                            value="<?= $bonl['date_emission'] ?>">
                     </div>
 
                     <div class="mb-3">
@@ -73,31 +76,28 @@
                                 class="text-danger">*</span></label>
                         <input type="text" id="numFacture" name="num_facture" class="form-control"
                             value="<?= $bonl['num_facture'] ?>" required>
-                        <div class="invalid-feedback">Veuillez saisir un numéro de facture.</div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="nomTransporteur" class="form-label">Nom du transporteur <span
-                                class="text-danger">*</span></label>
+                        <label for="nomTransporteur" class="form-label">Nom du transporteur </label>
                         <input type="text" id="nomTransporteur" name="nom_transporteur" class="form-control"
-                        value="<?= $bonl['nom_transport'] ?>" >
+                            value="<?= $bonl['nom_transport'] ?>">
                     </div>
 
                     <div class="mb-3">
                         <label for="telephoneTransporteur" class="form-label">Téléphone du transporteur</label>
                         <input type="tel" id="telephoneTransporteur" name="telephone_transporteur" class="form-control"
-                        value="<?= $bonl['telephone_transport'] ?>">
-                        <div class="invalid-feedback">Veuillez saisir un numéro de téléphone valide.</div>
+                            value="<?= $bonl['telephone_transport'] ?>">
                     </div>
                 </div>
-
+                <div class="modal-footer mt-4 gap-2">
+                    <button type="button" class="btn btn-secondary" id="cancelEditBtn">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
 
         </div>
-        <div class="modal-footer mt-4 gap-2">
-            <button type="button" class="btn btn-secondary" id="cancelEditBtn">Annuler</button>
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
-        </div>
-        </form>
+
     </div>
 </div>
 
@@ -115,12 +115,12 @@
             <?php if (isset($bonl['lignes'])) { ?>
                 <?php foreach ($bonl['lignes'] as $ligne): ?>
                     <tr data-id="<?= $ligne['produit_id'] ?>">
-                        <td width="25%"><?= htmlspecialchars($ligne['reference']) ?></td>
-                        <td width="25%"><?= htmlspecialchars($ligne['libelle']) ?></td>
-                        <td width="8%"><?= $ligne['qte'] ?></td>
-                        <td width="15%">
-                            <button class="btn btn-sm btn-danger btn-supprimer">Supprimer</button>
+                        <td width="20%"><?= htmlspecialchars($ligne['reference']) ?></td>
+                        <td width="45%"><?= htmlspecialchars($ligne['libelle']) ?></td>
+                        <td width="15%"><?= $ligne['qte'] ?></td>
+                        <td width="20%">
                             <button class="btn btn-sm btn-warning btn-modifier">Modifier</button>
+                            <button class="btn btn-sm btn-danger btn-supprimer">Supprimer</button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -141,7 +141,6 @@
 <input type="hidden" id="hiddenNomTransport" value="<?= $bonl['nom_transport'] ?>">
 <input type="hidden" id="hiddenTelephoneTransport" value="<?= $bonl['telephone_transport'] ?>">
 
-<input type="hidden" id="factureId" value="<?= $bonl['id'] ?>">
 
 <button id="enregistrerBtn" type="button">Enregistrer les modifications</button>
 </div>
@@ -272,16 +271,31 @@
 
 <script>
     $(document).ready(function () {
+        let clientId = '<?= htmlspecialchars($bonl["client_id"]) ?>';
         let clientNom = '<?= htmlspecialchars($bonl["nom_ste"]) ?>';
+        let bonlId = <?= $bonl['id'] ?>;
         let bonlDate = '<?= $bonl["date_emission"] ?>';
         let numFacture = '<?= htmlspecialchars($bonl["num_facture"]) ?>';
         let nomTransport = '<?= htmlspecialchars($bonl["nom_transport"]) ?>';
         let telephoneTransport = '<?= htmlspecialchars($bonl["telephone_transport"]) ?>';
 
         let lignesProduits = <?= json_encode($bonl['lignes'] ?? []) ?>;
-        let bonlId = <?= $bonl['id'] ?>;
 
-        // Edit client/date modal
+        function showNotification(message, type) {
+            const notification = $("#notification");
+            $("#notificationMessage").text(message);
+
+            notification
+                .removeClass("alert-success alert-danger alert-warning")
+                .addClass("alert-" + type)
+                .addClass("show")
+                .show();
+
+            setTimeout(function () {
+                notification.removeClass("show").hide();
+            }, 5000);
+        }
+
         $("#editClientBtn").on("click", function () {
             $("#clientModal").css("display", "flex");
         });
@@ -292,28 +306,61 @@
 
         $("#editClientForm").on("submit", function (e) {
             e.preventDefault();
-            clientNom = $("#clientSelect option:selected").text();
-            bonlDate = $("#dateEmission").val();
-            numFacture = $("#numFacture").val();
-            nomTransport = $("#nomTransport").val();
-            telephoneTransport = $("#telephoneTransport").val();
 
-            $("#clientCurrentInfo").text(clientNom);
-            $("#dateCurrentInfo").text(bonlDate);
-            $("#numFactureCurrentInfo").text(numFacture);
-            $("#nomTransportCurrentInfo").text(nomTransport);
-            $("#telephoneTransportCurrentInfo").text(telephoneTransport);
+            const clientId = $("#clientSelect").val();
+            const clientNom = $("#clientSelect option:selected").text();
+            const bonlDate = $("#dateEmission").val();
+            const numFacture = $("#numFacture").val();
+            const nomTransport = $("#nomTransporteur").val();
+            const telephoneTransport = $("#telephoneTransporteur").val();
 
-            $("#hiddenClientId").val($("#clientSelect").val());
-            $("#hiddenDateBonl").val(bonlDate);
-            $("#hiddenNumFacture").val(numFacture);
-            $("#hiddenNomTransport").val(nomTransport);
-            $("#hiddenNomTransport").val(telephoneTransport);
+            const phoneRegex = /^[0-9]{10,15}$/;
+            if (telephoneTransport && !phoneRegex.test(telephoneTransport.replace(/\s/g, ''))) {
+                showNotification("Le numéro de téléphone n'est pas valide.", "danger");
+                return false;
+            }
 
-            $("#clientModal").css("display", "none");
+            if (!clientId || !bonlDate || !numFacture) {
+                showNotification("Veuillez remplir tous les champs obligatoires.", "danger");
+                return;
+            }
+
+            $.ajax({
+                url: "/stage/bonsLivraison/checkFacture",
+                method: "POST",
+                data: { num_facture: numFacture },
+                dataType: "json",
+                success: function (res) {
+                    if (res.exists) {
+                        // Mise à jour des infos à l'écran
+                        $("#clientCurrentInfo").text(clientNom);
+                        $("#dateCurrentInfo").text(bonlDate);
+                        $("#numFactureCurrentInfo").text(numFacture);
+                        $("#nomTransportCurrentInfo").text(nomTransport);
+                        $("#telephoneTransportCurrentInfo").text(telephoneTransport);
+
+                        // Mise à jour des champs cachés
+                        $("#hiddenClientId").val(clientId);
+                        $("#hiddenDateBonl").val(bonlDate);
+                        $("#hiddenNumFacture").val(numFacture);
+                        $("#hiddenNomTransport").val(nomTransport);
+                        $("#hiddenTelephoneTransport").val(telephoneTransport);
+
+                        // Fermer la modale
+                        $("#clientModal").css("display", "none");
+
+                        showNotification("Les informations ont été mises à jour avec succès.", "success");
+                    } else {
+                        showNotification("Aucune facture trouvée avec ce numéro.", "warning");
+                    }
+                },
+                error: function (xhr) {
+                    showNotification("Erreur serveur : " + xhr.responseText, "danger");
+                }
+            });
         });
 
-        // Add product
+
         $("#produitForm").on("submit", function (e) {
             e.preventDefault();
             const formData = $(this).serializeArray();
@@ -335,14 +382,14 @@
 
         function addProductRow(res) {
             const row = `<tr data-id="${res.produit_id}">
-            <td>${res.reference}</td>
-            <td>${res.libelle}</td>
-            <td>${res.qte}</td>
-            <td>
-                <button class="btn btn-sm btn-danger btn-supprimer">Supprimer</button>
-                <button class="btn btn-sm btn-warning btn-modifier">Modifier</button>
-            </td>
-        </tr>`;
+                <td width="20%">${res.reference}</td>
+                <td width="45%">${res.libelle}</td>
+                <td width="15%">${res.qte}</td>
+                <td width="20%">
+                    <button class="btn btn-sm btn-warning btn-modifier">Modifier</button>
+                    <button class="btn btn-sm btn-danger btn-supprimer">Supprimer</button>
+                </td>
+            </tr>`;
 
             // Remove empty row if it exists
             if ($("#ligneProduits tr").length === 1 && $("#ligneProduits tr td").length === 1) {
@@ -352,7 +399,6 @@
             $("#ligneProduits").append(row);
         }
 
-        // Product row editing
         $("#ligneProduits").on("click", ".btn-modifier", function () {
             const row = $(this).closest("tr");
 
@@ -364,64 +410,62 @@
             row.data("original", row.html());
 
             row.html(`
-            <td width='20%'><span class="edit-reference">${reference}</span></td>
-            <td width='20%'><span class="edit-produit" data-id="${produitId}">${produitName}</span></td>
-            <td width='10%'><input type="number" class="form-control form-control-sm edit-qte" value="${qte}" min="1"></td>
-            <td width='15%'>
-                <button class="btn btn-sm btn-success save-edit">Enregistrer</button>
-                <button class="btn btn-sm btn-secondary cancel-edit">Annuler</button>
-            </td>
-        `);
+                <td width='20%'><span class="edit-reference" data-id="${produitId}">${reference}</span></td>
+                <td width='45%'><span class="edit-produit">${produitName}</span></td>
+                <td width='15%'><input type="number" class="form-control form-control-sm edit-qte" value="${qte}" min="1"></td>
+                <td width='20%'>
+                    <button class="btn btn-sm btn-success save-edit">Enregistrer</button>
+                    <button class="btn btn-sm btn-secondary cancel-edit">Annuler</button>
+                </td>
+            `);
         });
 
-        // Save edited row
         $("#ligneProduits").on("click", ".save-edit", function () {
             const row = $(this).closest("tr");
-            const produitId = row.find(".edit-produit").data("id");
+            const produitId = row.find(".edit-reference").data("id");
             const reference = row.find(".edit-reference").text();
             const produitName = row.find(".edit-produit").text();
-            const qte = parseFloat(row.find(".edit-qte").val());
+            const qte = row.find(".edit-qte").val();
 
-            // Update the local array
+            if (isNaN(qte) || qte <= 0) {
+                showNotification("La quantité doit être d'au moins 1", "danger");
+                return;
+            }
+
             const ligneIndex = lignesProduits.findIndex(l => l.produit_id == row.data("id"));
             if (ligneIndex !== -1) {
                 lignesProduits[ligneIndex] = {
+                    ...lignesProduits[ligneIndex],
                     produit_id: produitId,
                     reference: reference,
                     libelle: produitName,
                     qte: qte,
                 };
             }
-
-            // Update the row display
             row.html(`
-            <td>${reference}</td>
-            <td>${produitName}</td>
-            <td>${qte}</td>
-            <td>
-                <button class="btn btn-sm btn-danger btn-supprimer">Supprimer</button>
-                <button class="btn btn-sm btn-warning btn-modifier">Modifier</button>
-            </td>
-        `);
+                <td width="20%">${reference}</td>
+                <td width="45%">${produitName}</td>
+                <td width="15%">${qte}</td>
+                <td width="20%">
+                    <button class="btn btn-sm btn-warning btn-modifier">Modifier</button>
+                    <button class="btn btn-sm btn-danger btn-supprimer">Supprimer</button>
+                </td>
+            `);
 
-            // Update data attributes
             row.data("id", produitId);
-
+            //showNotification("Produit modifié avec succès.", "success");
         });
 
-        // Cancel editing
         $("#ligneProduits").on("click", ".cancel-edit", function () {
             const row = $(this).closest("tr");
             row.html(row.data("original"));
         });
 
-        // Delete row
         $("#ligneProduits").on("click", ".btn-supprimer", function () {
             if (confirm("Voulez-vous vraiment supprimer ce produit ?")) {
                 const row = $(this).closest("tr");
                 const produitId = row.data("id");
 
-                // Remove from local array
                 lignesProduits = lignesProduits.filter(l => l.produit_id != produitId);
 
                 row.remove();
@@ -430,22 +474,20 @@
                 if ($("#ligneProduits tr").length === 0) {
                     $("#ligneProduits").html(`
                     <tr>
-                        <td colspan="8" class="text-center text-secondary" style="font-size: 14px">Pas de produits enregistrés</td>
+                        <td colspan="8" class="text-center text-secondary" style="font-size: 14px">Pas de produit enregistré</td>
                     </tr>
                 `);
                 }
             }
         });
 
-        // Save all changes
         $("#enregistrerBtn").on("click", function () {
 
             const btn = $(this);
             btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enregistrement...');
 
-            // Prepare the data structure
             const data = {
-                facture_id: factureId,
+                bl_id: bonlId,
                 client_id: $("#hiddenClientId").val(),
                 date_emission: $("#hiddenDateBonl").val(),
                 num_facture: $("#hiddenNumFacture").val(),
@@ -460,26 +502,27 @@
                 if ($(this).find("td").length === 1) return;
 
                 const produitId = $(this).data("id");
-                const tva = $(this).data("tva");
+                //const reference = $(this).data("tva");
 
                 data.lignes.push({
-                    reference: reference,
+                    reference: $(this).find("td:eq(0)").text(),
                     produit_id: produitId,
-                    quantite: parseFloat($(this).find("td:eq(2)").text()),
+                    qte: $(this).find("td:eq(2)").text(),
                 });
             });
 
-            // Send to server
             $.ajax({
                 url: "/stage/bonsLivraison/update",
                 method: "POST",
                 data: data,
                 success: function (response) {
                     if (response.success) {
-                        alert("Facture mise à jour avec succès !");
-                        window.location.href = "/stage/bonsLivraison/show?id=" + factureId + "&success=updated";
+                        showNotification("Modification enregistrée avec succès.", "success");
+                        setTimeout(function () {
+                            window.location.href = "/stage/bonsLivraison/show?id=" + bonlId + "&success=updated";
+                        }, 1500);
                     } else {
-                        alert("Erreur lors de la mise à jour : " + (response.message || "Erreur inconnue"));
+                        showNotification("Erreur lors de la mise à jour : " + (response.message || "Erreur inconnue"), 'danger');
                     }
                 },
                 error: function (xhr) {
@@ -488,7 +531,9 @@
             }).always(function () {
                 btn.prop("disabled", false).text("Enregistrer les modifications");
             });
+            console.log(data);
 
         });
+
     });
 </script>
