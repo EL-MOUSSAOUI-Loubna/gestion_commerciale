@@ -59,7 +59,7 @@ class BonLivraisonController
         $telephone_transport = $data['telephone_transporteur'] ?? '';
         $lignes = $data['lignes'];
 
-        $resultat = $this->bonLivraisonModel->addBonL(
+        $bl_id = $this->bonLivraisonModel->addBonL(
             $clientId,
             $date_emission,
             $facture_id,
@@ -68,8 +68,8 @@ class BonLivraisonController
             $lignes
         );
 
-        if ($resultat) {
-            echo json_encode(['success' => true, 'facture_id' => $resultat]);
+        if ($bl_id) {
+            echo json_encode(['success' => true, 'bl_id' => $bl_id]);
         } else {
             echo json_encode(['success' => false, 'error' => 'Database insert failed']);
             //header('Location: /stage/factures/add?error=create_failed');
@@ -166,9 +166,10 @@ class BonLivraisonController
     public function checkFacture() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['num_facture'])) {
             $num = trim($_POST['num_facture']);
-            $exists = $this->bonLivraisonModel->checkNumFacture($num);
+            $id = $this->bonLivraisonModel->getFactureId($num);
+            $exists = $id ? true : false;
     
-            echo json_encode(['exists' => $exists]);
+            echo json_encode(['exists' => $exists, 'facture_id' => $id]);
         } else {
             http_response_code(400);
             echo json_encode(['error' => 'Requête invalide']);

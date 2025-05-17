@@ -207,7 +207,7 @@ class BonLivraisonModel
         }
     }
 
-    public function checkNumFacture($num)
+    /*public function checkNumFacture($num)
     {
         try {
             $sql = "SELECT id FROM factures WHERE num_facture LIKE :num_facture";
@@ -218,7 +218,7 @@ class BonLivraisonModel
             error_log("Erreur DB : " . $e->getMessage());
             return false;
         }
-    }
+    }*/
 
     public function getFactureId ($num_facture){
         try {

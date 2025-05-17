@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-evenly mb-3 gap-2 no-print">
     <!-- Modifier Button -->
     <a href="/stage/bonsLivraison/edit?id=<?= $bonl['id'] ?>" class="btn btn-primary">Modifier</a>
-    
+
     <!-- Imprimer Button -->
     <button onclick="window.print()" class="btn btn-success">Imprimer</button>
 </div>
@@ -10,38 +10,36 @@
 <div class="bonl container bg-white p-4 d-block align-content-between" id="printable-bonl">
     <div class="">
         <div class='d-flex'>
-            <img src= '/stage/public/assets/img/sellm.png' alt='logo sellm' class="logo me-3" style="width: 100px; height: 100px; object-fit: contain;" /> 
+            <img src='/stage/public/assets/img/sellm.png' alt='logo sellm' class="logo me-3"
+                style="width: 100px; height: 100px; object-fit: contain;" />
             <div class='mt-1'>
-                <h2 >SellM</h2>
+                <h2>SellM</h2>
                 <p>adresse : mon adresse</p>
                 <p>telephone : 0500000000</p>
             </div>
         </div>
-        <div class="d-flex justify-content-between">
-            <div class="mt-5">
+        <div class="d-flex justify-content-between pe-3">
+            <div class="mt-5" style="">
                 <h3>Destinataire</h3>
                 <p>nom : <?= $bonl['nom_ste'] ?></p>
                 <p style="max-width: 250px">Adresse : <?= $bonl['adresse'] ?></p>
                 <p>telephone : <?= $bonl['telephone'] ?></p>
                 <p>email : <?= $bonl['email'] ?></p>
             </div>
-            <div>
-                <div>
-                    <p>Bon de Livraison N : <span style="font-size: 25px; font-weight: bold; color:rgb(81, 89, 141);"><?= $bonl['num_bonl'] ?></span></p>
-                    <p>Date d'émission : <?= $bonl['date_emission'] ?></p>
-                    <p>facture n : <?= $bonl['num_facture'] ?></p>
-                    <p>Date de départ : </p>
-                    <p>Heure de départ : </p>
-                </div>
-                <div class="text-end">
-                    <p>Nom Transporteur : <?= $bonl['nom_transport'] ?></p>
-                    <p>Tel Transporteur : <?= $bonl['telephone_transport'] ?></p>
-                </div>
+            <div class="">
+                <p>Facture n : <span class="fw-bold"><?= $bonl['num_facture'] ?></span></p>
+                <p>Nom Transporteur : <span class="fw-bold"><?= $bonl['nom_transport'] ?></span></p>
+                <p>Tel Transporteur : <span class="fw-bold"><?= $bonl['telephone_transport'] ?></span></p>
+                <p>Date d'émission : <span class="fw-bold"><?= $bonl['date_emission'] ?></span></p>
+                <p>Date de départ :</p>
+                <p>Heure de départ :</p>
             </div>
         </div>
     </div>
     <div class="mt-2 bonl-content">
-        <h2 class="text-center mb-2">Bon de Livraison</h2>
+        <p class="text-center mb-2" style="font-size: 21px;">Bon de Livraison n :
+            <span style="font-size: 24px; font-weight: bold; color:rgb(81, 89, 141);"><?= $bonl['num_bonl'] ?></span>
+        </p>
         <table class='table table-borderless'>
             <thead>
                 <tr>
@@ -51,16 +49,16 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach($bonl['lignes'] as $ligne): ?>
-                <tr>
-                    <td><?= $ligne['reference'] ?></td>
-                    <td><?= $ligne['libelle'] ?></td>
-                    <td><?= $ligne['qte'] ?></td>
-                </tr>
+                <?php foreach ($bonl['lignes'] as $ligne): ?>
+                    <tr>
+                        <td><?= $ligne['reference'] ?></td>
+                        <td><?= $ligne['libelle'] ?></td>
+                        <td><?= $ligne['qte'] ?></td>
+                    </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
-        <div class="signature d-flex justify-content-between mt-5">
+        <div class="signature d-flex justify-content-between">
             <p class=" text-center pt-2" style="">signature client :</p>
             <p class=" text-center pt-2" style="">signature transporteur :</p>
         </div>
@@ -87,7 +85,7 @@
         width: 800px;
         margin: auto;
         border: 1px solid #ddd;
-        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
         font-family: Arial, sans-serif;
         background-color: #f8f9fa;
         padding: 30px;
@@ -132,8 +130,15 @@
     }
 
     .bonl .signature {
+        padding: 50px 0 80px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .bonl .signature p {
         border: 1px solid #aaa;
-        width: 220px; 
+        width: 220px;
         padding-bottom: 150px;
     }
 
@@ -146,5 +151,4 @@
         font-size: 12px;
         margin: 2px 0;
     }
-    
 </style>

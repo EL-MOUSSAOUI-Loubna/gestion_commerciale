@@ -111,6 +111,7 @@
         <div class="card-footer text-end">
             <!-- Champs cachés -->
             <input type="hidden" id="hiddenClientId">
+            <input type="hidden" id="hiddenFactureId">
             <input type="hidden" id="hiddenDateBL">
             <input type="hidden" id="hiddenNumFacture">
             <input type="hidden" id="hiddenNomTransporteur">
@@ -275,7 +276,7 @@
         let num_facture = '';
         let nom_transporteur = '';
         let telephone_transporteur = '';
-        let facture_id = null;
+        //let facture_id = null;
         let lignesProduits = [];
 
         // Show notification function
@@ -327,10 +328,11 @@
                 dataType: "json",
                 success: function (res) {
                     if (res.exists) {
-                        facture_id = res.facture_id;
+                        let facture_id = res.facture_id;
 
                         // Set hidden fields
                         $("#hiddenClientId").val(clientId);
+                        $("#hiddenFactureId").val(facture_id);
                         $("#hiddenDateBL").val(blDate);
                         $("#hiddenNumFacture").val(num_facture);
                         $("#hiddenNomTransporteur").val(nom_transporteur);
@@ -464,7 +466,7 @@
             // Replace action buttons with save/cancel buttons
             row.find("td:nth-child(4)").html(`
                 <button class="btn btn-sm btn-success btn-save me-2" data-id="${id}">
-                    <i class="fas fa-check"></i> Valider
+                    <i class="fas fa-check"></i> Enregistrer
                 </button>
                 <button class="btn btn-sm btn-secondary btn-cancel">
                     <i class="fas fa-times"></i> Annuler
@@ -517,7 +519,8 @@
             const data = {
                 client_id: $("#hiddenClientId").val(),
                 date_emission: $("#hiddenDateBL").val(),
-                facture_id: facture_id,
+                facture_id: $("#hiddenFactureId").val(),
+                num_facture: $("#hiddenNumFacture").val(),
                 nom_transporteur: $("#hiddenNomTransporteur").val(),
                 telephone_transporteur: $("#hiddenTelephoneTransporteur").val(),
                 lignes: lignesProduits

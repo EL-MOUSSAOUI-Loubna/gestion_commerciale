@@ -96,8 +96,8 @@
                             <td width="8%"><?= $ligne['ttva'] ?> %</td>
                             <td width="13%"><?= number_format($ligne['ttc'], 2) ?> dh</td>
                             <td width="15%">
-                                <button class="btn btn-sm btn-danger btn-supprimer">Supprimer</button>
                                 <button class="btn btn-sm btn-warning btn-modifier">Modifier</button>
+                                <button class="btn btn-sm btn-danger btn-supprimer">Supprimer</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -341,6 +341,21 @@ $(document).ready(function() {
         $("#clientModal").css("display", "none");
     });
 
+    function showNotification(message, type) {
+            const notification = $("#notification");
+            $("#notificationMessage").text(message);
+
+            notification
+                .removeClass("alert-success alert-danger alert-warning")
+                .addClass("alert-" + type)
+                .addClass("show")
+                .show();
+
+            setTimeout(function () {
+                notification.removeClass("show").hide();
+            }, 5000);
+        }
+
     // Add product
     $("#produitForm").on("submit", function(e) {
         e.preventDefault();
@@ -372,8 +387,8 @@ $(document).ready(function() {
             <td>${res.ttva} %</td>
             <td>${res.ttc} dh</td>
             <td>
-                <button class="btn btn-sm btn-danger btn-supprimer">Supprimer</button>
                 <button class="btn btn-sm btn-warning btn-modifier">Modifier</button>
+                <button class="btn btn-sm btn-danger btn-supprimer">Supprimer</button>
             </td>
         </tr>`;
         
@@ -471,8 +486,8 @@ $(document).ready(function() {
             <td>${tva} %</td>
             <td>${ttc.toFixed(2)} dh</td>
             <td>
-                <button class="btn btn-sm btn-danger btn-supprimer">Supprimer</button>
                 <button class="btn btn-sm btn-warning btn-modifier">Modifier</button>
+                <button class="btn btn-sm btn-danger btn-supprimer">Supprimer</button>
             </td>
         `);
         
@@ -576,10 +591,11 @@ $(document).ready(function() {
             data: data,
             success: function(response) {
                 if (response.success) {
-                    alert("Facture mise à jour avec succès !");
+                    showNotification("Facture modifiée avec succès", "success");
                     window.location.href = "/stage/factures/show?id=" + factureId + "&success=updated";
                 } else {
-                    alert("Erreur lors de la mise à jour : " + (response.message || "Erreur inconnue"));
+                    //alert("Erreur lors de la mise à jour : " + (response.message || "Erreur inconnue"));
+                    showNotification("Erreur lors de la mise à jour : " + (response.message || "Erreur inconnue"), "danger");
                 }
             },
             error: function(xhr) {
