@@ -8,7 +8,7 @@ class ProduitModel {
 
     public function getProduits() {
         try {
-            $query = "SELECT p.*, c.nom AS nom_categorie FROM produits p LEFT JOIN categories c ON p.categorie = c.id";
+            $query = "SELECT p.*, c.nom AS nom_categorie FROM produits p LEFT JOIN categories c ON p.categorie_id = c.id";
             $stmt = $this->db->prepare($query);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -30,10 +30,10 @@ class ProduitModel {
         }
     }
 
-    public function addProduit($libelle, $reference, $description_p, $prix_u, $ttva, $categorie, $fournisseur) {
+    public function addProduit($libelle, $reference, $description_p, $prix_u, $ttva, $categorie_id, $fournisseur_id) {
         try {
-            $query = "INSERT INTO produits (libelle, reference, description_p, prix_u, ttva, categorie, fournisseur) 
-                      VALUES (:libelle, :reference, :description_p, :prix_u, :ttva, :categorie, :fournisseur)";
+            $query = "INSERT INTO produits (libelle, reference, description_p, prix_u, ttva, categorie_id, fournisseur_id) 
+                      VALUES (:libelle, :reference, :description_p, :prix_u, :ttva, :categorie_id, :fournisseur_id)";
             $stmt = $this->db->prepare($query);
             $stmt->execute([
                 'libelle'    => $libelle,
@@ -41,8 +41,8 @@ class ProduitModel {
                 'description_p'        => $description_p,
                 'prix_u'    => $prix_u,
                 'ttva'  => $ttva,
-                'categorie' => $categorie,
-                'fournisseur' => $fournisseur,
+                'categorie_id' => $categorie_id,
+                'fournisseur_id' => $fournisseur_id,
             ]);
             return true;
         } catch (PDOException $e) {
@@ -51,12 +51,12 @@ class ProduitModel {
         }
     }
 
-    public function updateProduit($id, $libelle, $reference, $description_p, $prix_u, $ttva, $categorie, $fournisseur) {
+    public function updateProduit($id, $libelle, $reference, $description_p, $prix_u, $ttva, $categorie_id, $fournisseur_id) {
         try {
             $query = "UPDATE produits SET 
                         libelle = :libelle, reference = :reference, description_p = :description_p, 
                         prix_u = :prix_u, ttva = :ttva, 
-                        categorie = :categorie, fournisseur = :fournisseur
+                        categorie_id = :categorie_id, fournisseur_id = :fournisseur_id
                         WHERE id = :id";
             $stmt = $this->db->prepare($query);
             $stmt->execute([
@@ -66,8 +66,8 @@ class ProduitModel {
                 'description_p'        => $description_p,
                 'prix_u'    => $prix_u,
                 'ttva'  => $ttva,
-                'categorie' => $categorie,
-                'fournisseur' => $fournisseur,
+                'categorie_id' => $categorie_id,
+                'fournisseur_id' => $fournisseur_id,
             ]);
             return true;
         } catch (PDOException $e) {
@@ -113,7 +113,19 @@ class ProduitModel {
     }
     public function getCategoryOfProduct ($id){
         try {
-            $query = "SELECT c.nom FROM categories c INNER JOIN produits p ON c.id = p.categorie WHERE p.id = :id ";
+            $query = "SELECT c.nom FROM categories c INNER JOIN produits p ON c.id = p.categorie_id WHERE p.id = :id ";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute(['id' => $id]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getFournisseurOfProduct ($id){
+        try {
+            $query = "SELECT f.nom_ste FROM fournisseurs f INNER JOIN produits p ON f.id = p.fournisseur_id WHERE p.id = :id ";
             $stmt = $this->db->prepare($query);
             $stmt->execute(['id' => $id]);
             return $stmt->fetch(PDO::FETCH_ASSOC);

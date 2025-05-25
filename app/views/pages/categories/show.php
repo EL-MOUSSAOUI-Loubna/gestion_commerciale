@@ -1,5 +1,5 @@
 <div class="category-details">
-    <a href="/stage/produits" class="back-button">
+    <a href="/stage/categories" class="back-button">
         <i class="fas fa-arrow-left"></i> Retour à la liste
     </a>
     <div class="category-header">

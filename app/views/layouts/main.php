@@ -73,10 +73,9 @@ $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         });
     </script>
     <script src="/stage/public/assets/js/app.js"></script>
-    <script src="/stage/public/assets/datatables/datatables.min.js"></script>
     <script src="/stage/public/assets/datatables/dataTables.bootstrap5.min.js"></script>
-    <script src="/stage/public/assets/datatables/datatables.min.js"></script>
     <script src="/stage/public/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/stage/public/assets/datatables/datatables.min.js"></script>
 
     
 </body>

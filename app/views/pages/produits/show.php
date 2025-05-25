@@ -26,7 +26,7 @@
 
                 <div class="detail-group">
                     <span class="detail-label">Fournisseur</span>
-                    <span class="detail-value supplier"><?= htmlspecialchars($produit['fournisseur'] ?? 'Non renseigné') ?></span>
+                    <span class="detail-value supplier"><?= htmlspecialchars($fournisseur["nom_ste"] ?? 'Non renseigné') ?></span>
                 </div>
             </div>
 

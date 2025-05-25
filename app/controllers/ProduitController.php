@@ -76,6 +76,7 @@ class ProduitController {
     public function show() {
         $produit = $this->produitModel->getProduitById($_GET['id']);
         $category = $this->produitModel->getCategoryOfProduct($_GET['id']);
+        $fournisseur = $this->produitModel->getFournisseurOfProduct($_GET['id']);
         $content_view = 'pages/produits/show';
         include VIEW_PATH . '/layouts/main.php';
     }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mer. 14 mai 2025 à 03:55
+-- Généré le : dim. 25 mai 2025 à 14:19
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -44,7 +44,12 @@ CREATE TABLE `bonslivraison` (
 --
 
 INSERT INTO `bonslivraison` (`id`, `num_bonl`, `date_emission`, `client_id`, `facture_id`, `nom_transport`, `telephone_transport`, `created_at`, `updated_at`) VALUES
-(9, 'BL-2025-00009', '2025-05-13', 4, 7, 'transport', '', '2025-05-13 16:31:27', '2025-05-13 16:31:27');
+(12, 'BL-2025-00012', '2025-05-17', 5, 6, 'aramex', '', '2025-05-17 00:33:27', '2025-05-17 00:33:27'),
+(13, 'BL-2025-00013', '2025-05-17', 2, 8, 'p', '', '2025-05-17 00:37:54', '2025-05-17 00:37:54'),
+(14, 'BL-2025-00014', '2025-05-17', 4, 7, 'transport00', '', '2025-05-17 00:40:30', '2025-05-17 00:40:30'),
+(15, 'BL-2025-00015', '2025-05-17', 4, 7, 'transport00', '', '2025-05-17 00:41:12', '2025-05-17 00:41:12'),
+(16, 'BL-2025-00016', '2025-05-17', 3, 7, 'transport00', '', '2025-05-17 00:41:59', '2025-05-17 00:41:59'),
+(17, 'BL-2025-00017', '2025-05-18', 3, 12, '', '', '2025-05-18 01:39:29', '2025-05-18 01:39:30');
 
 -- --------------------------------------------------------
 
@@ -132,11 +137,15 @@ INSERT INTO `factures` (`id`, `client_id`, `date_emission`, `num_facture`, `tota
 (7, 3, '2025-05-01', 'FAC-2025-00007', 90.00, 99.00, 'espèce,chèque', '2025-05-02 05:17:30', '2025-05-07 23:03:15'),
 (8, 2, '2025-05-02', 'FAC-2025-00008', 60.00, 66.00, 'espèce', '2025-05-02 05:29:34', NULL),
 (9, 2, '2025-05-02', 'FAC-2025-00009', 124.16, 140.30, 'espèce', '2025-05-02 05:32:35', NULL),
-(10, 3, '2025-05-02', 'FAC-2025-00010', 120.00, 132.00, 'carte', '2025-05-02 06:13:25', NULL),
+(10, 3, '2025-05-02', 'FAC-2025-00010', 15120.00, 18132.00, 'chèque,carte', '2025-05-02 06:13:25', '2025-05-18 00:37:00'),
 (11, 2, '2025-05-02', 'FAC-2025-00011', 30060.00, 36066.00, 'espèce,carte', '2025-05-02 06:28:08', NULL),
 (12, 3, '2025-05-03', 'FAC-2025-00012', 60.00, 66.00, 'effet', '2025-05-03 03:08:56', NULL),
 (13, 4, '2025-05-06', 'FAC-2025-00013', 60.00, 66.00, 'espèce', '2025-05-06 16:46:53', NULL),
-(14, 2, '2025-05-13', 'FAC-2025-00014', 90.00, 99.00, 'espèce', '2025-05-13 15:11:52', '2025-05-13 15:18:16');
+(14, 2, '2025-05-13', 'FAC-2025-00014', 90.00, 99.00, 'espèce', '2025-05-13 15:11:52', '2025-05-13 15:18:16'),
+(15, 2, '2025-05-16', 'FAC-2025-00015', 60.00, 66.00, 'carte', '2025-05-16 16:02:03', '2025-05-16 16:02:03'),
+(16, 4, '2025-05-16', 'FAC-2025-00016', 0.00, 0.00, 'chèque', '2025-05-16 17:24:55', '2025-05-16 17:24:56'),
+(17, 4, '2025-05-16', 'FAC-2025-00017', 30.00, 33.00, 'carte', '2025-05-16 19:48:15', '2025-05-16 19:48:15'),
+(18, 5, '2025-05-09', 'FAC-2025-00018', 15177.22, 18203.79, 'espèce,effet', '2025-05-18 00:30:23', '2025-05-18 00:30:23');
 
 -- --------------------------------------------------------
 
@@ -159,7 +168,8 @@ CREATE TABLE `fournisseurs` (
 --
 
 INSERT INTO `fournisseurs` (`id`, `nom_ste`, `ice`, `idf`, `adresse`, `email`, `telephone`) VALUES
-(2, 'fournisseeur ste', 764533, 6, 'maroc', 'frns@ste.com', '0000000000');
+(2, 'fournisseeur ste', 764533, 6, 'maroc', 'frns@ste.com', '0000000000'),
+(3, 'four 2', 123456, 111, 'rue, ville, maroc', 'four2@g.com', '0666666666');
 
 -- --------------------------------------------------------
 
@@ -179,8 +189,15 @@ CREATE TABLE `lignes_bl` (
 --
 
 INSERT INTO `lignes_bl` (`id`, `bl_id`, `produit_id`, `qte`) VALUES
-(5, 9, 3, 2),
-(6, 9, 5, 2);
+(22, 12, 1, 4),
+(23, 12, 5, 1),
+(24, 12, 4, 2),
+(25, 13, 3, 1),
+(26, 14, 5, 5),
+(27, 15, 5, 5),
+(28, 16, 4, 5),
+(29, 17, 1, 6),
+(30, 17, 4, 4);
 
 -- --------------------------------------------------------
 
@@ -195,7 +212,7 @@ CREATE TABLE `lignes_facture` (
   `qte` int(11) NOT NULL,
   `remise` int(11) DEFAULT NULL,
   `prix_u` decimal(10,2) DEFAULT NULL,
-  `ttva` int(11) DEFAULT NULL,
+  `ttva` decimal(10,2) DEFAULT NULL,
   `ht` decimal(10,2) DEFAULT NULL,
   `ttc` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -205,18 +222,25 @@ CREATE TABLE `lignes_facture` (
 --
 
 INSERT INTO `lignes_facture` (`id`, `facture_id`, `produit_id`, `qte`, `remise`, `prix_u`, `ttva`, `ht`, `ttc`) VALUES
-(1, 5, 3, 3, 0, 30.00, 10, 90.00, 99.00),
-(2, 5, 1, 1, 5, 5000.00, 20, 4750.00, 5700.00),
-(3, 6, 1, 2, 5, 5000.00, 20, 9500.00, 11400.00),
-(5, 8, 3, 2, 0, 30.00, 10, 60.00, 66.00),
-(6, 9, 4, 2, 3, 64.00, 13, 124.16, 140.30),
-(7, 10, 3, 4, 0, 30.00, 10, 120.00, 132.00),
-(8, 11, 3, 2, 0, 30.00, 10, 60.00, 66.00),
-(9, 11, 1, 6, 0, 5000.00, 20, 30000.00, 36000.00),
-(10, 12, 3, 2, 0, 30.00, 10, 60.00, 66.00),
-(11, 13, 3, 2, 0, 30.00, 10, 60.00, 66.00),
-(17, 7, 3, 3, 0, 30.00, 10, 90.00, 99.00),
-(19, 14, 3, 3, 0, 30.00, 10, 90.00, 99.00);
+(1, 5, 3, 3, 0, 30.00, 10.00, 90.00, 99.00),
+(2, 5, 1, 1, 5, 5000.00, 20.00, 4750.00, 5700.00),
+(3, 6, 1, 2, 5, 5000.00, 20.00, 9500.00, 11400.00),
+(5, 8, 3, 2, 0, 30.00, 10.00, 60.00, 66.00),
+(6, 9, 4, 2, 3, 64.00, 13.00, 124.16, 140.30),
+(8, 11, 3, 2, 0, 30.00, 10.00, 60.00, 66.00),
+(9, 11, 1, 6, 0, 5000.00, 20.00, 30000.00, 36000.00),
+(10, 12, 3, 2, 0, 30.00, 10.00, 60.00, 66.00),
+(11, 13, 3, 2, 0, 30.00, 10.00, 60.00, 66.00),
+(17, 7, 3, 3, 0, 30.00, 10.00, 90.00, 99.00),
+(19, 14, 3, 3, 0, 30.00, 10.00, 90.00, 99.00),
+(20, 15, 3, 2, 0, 30.00, 10.00, 60.00, 66.00),
+(21, 17, 3, 1, 0, 30.00, 10.00, 30.00, 33.00),
+(26, 18, 1, 3, 0, 5.00, 20.00, 15.00, 18.00),
+(27, 18, 4, 2, 1, 64.00, 13.00, 126.72, 143.19),
+(28, 18, 5, 1, 0, 30.50, 20.00, 30.50, 36.60),
+(29, 18, 6, 2, 0, 10.00, 20.00, 20.00, 24.00),
+(30, 10, 3, 4, 0, 30.00, 10.00, 120.00, 132.00),
+(31, 10, 1, 3, 0, 5000.00, 20.00, 15000.00, 18000.00);
 
 -- --------------------------------------------------------
 
@@ -231,20 +255,22 @@ CREATE TABLE `produits` (
   `description_p` text DEFAULT NULL,
   `prix_u` decimal(10,2) NOT NULL,
   `ttva` decimal(10,2) NOT NULL,
-  `categorie` int(11) DEFAULT NULL,
-  `fournisseur` varchar(150) DEFAULT NULL
+  `categorie_id` int(11) DEFAULT NULL,
+  `fournisseur_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `produits`
 --
 
-INSERT INTO `produits` (`id`, `libelle`, `reference`, `description_p`, `prix_u`, `ttva`, `categorie`, `fournisseur`) VALUES
-(1, 'samsung s24', 'a123a123', 'descr samsung', 5000.00, 20.00, 1, 'four2'),
-(3, 'libellé2', 'bio53', 'buio', 30.00, 10.00, 1, '0'),
-(4, 'zr', 'vjbk', 'k i', 64.00, 13.00, 2, 'four2'),
-(5, 'produit5', '987654321', '', 30.50, 20.00, 3, 'four1'),
-(6, 'produit 1', '951159', '', 10.00, 20.00, 2, '');
+INSERT INTO `produits` (`id`, `libelle`, `reference`, `description_p`, `prix_u`, `ttva`, `categorie_id`, `fournisseur_id`) VALUES
+(1, 'samsung s24', 'a123a123', 'descr samsung', 5000.00, 20.00, 1, NULL),
+(3, 'libellé2', 'bio53', 'buio', 30.00, 10.00, 1, NULL),
+(4, 'zr', 'vjbk', 'k i', 64.00, 13.00, 2, NULL),
+(5, 'produit5', '987654321', '', 30.50, 20.00, 3, NULL),
+(6, 'produit 1', '951159', '', 10.00, 20.00, 2, NULL),
+(7, 'tshirt', '3574126', 'tshirt blue', 90.00, 20.00, 9, NULL),
+(8, 'juice', '9438853', 'lemon juice', 10.00, 20.00, 52, 3);
 
 -- --------------------------------------------------------
 
@@ -260,6 +286,13 @@ CREATE TABLE `users` (
   `login` varchar(255) NOT NULL,
   `password` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `users`
+--
+
+INSERT INTO `users` (`id`, `nom`, `penom`, `role`, `login`, `password`) VALUES
+(1, 'el moussaoui', 'loubna', 'admin', 'adminloubna', 'admin');
 
 --
 -- Index pour les tables déchargées
@@ -323,7 +356,8 @@ ALTER TABLE `lignes_facture`
 ALTER TABLE `produits`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `reference` (`reference`),
-  ADD KEY `fk_produits_categorie` (`categorie`);
+  ADD KEY `fk_produits_categorie` (`categorie_id`),
+  ADD KEY `fk_produits_fournisseur` (`fournisseur_id`);
 
 --
 -- Index pour la table `users`
@@ -340,7 +374,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `bonslivraison`
 --
 ALTER TABLE `bonslivraison`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT pour la table `categories`
@@ -358,37 +392,37 @@ ALTER TABLE `clients`
 -- AUTO_INCREMENT pour la table `factures`
 --
 ALTER TABLE `factures`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT pour la table `fournisseurs`
 --
 ALTER TABLE `fournisseurs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `lignes_bl`
 --
 ALTER TABLE `lignes_bl`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT pour la table `lignes_facture`
 --
 ALTER TABLE `lignes_facture`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT pour la table `produits`
 --
 ALTER TABLE `produits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Contraintes pour les tables déchargées
@@ -431,7 +465,8 @@ ALTER TABLE `lignes_facture`
 -- Contraintes pour la table `produits`
 --
 ALTER TABLE `produits`
-  ADD CONSTRAINT `fk_produits_categorie` FOREIGN KEY (`categorie`) REFERENCES `categories` (`id`);
+  ADD CONSTRAINT `fk_produits_categorie` FOREIGN KEY (`categorie_id`) REFERENCES `categories` (`id`),
+  ADD CONSTRAINT `fk_produits_fournisseur` FOREIGN KEY (`fournisseur_id`) REFERENCES `fournisseurs` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

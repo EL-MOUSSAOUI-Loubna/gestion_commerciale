@@ -1,12 +1,13 @@
+<!-- No-print buttons -->
 <div class="d-flex justify-content-evenly mb-3 gap-2 no-print">
     <!-- Modifier Button -->
-    <a href="/stage/bonsLivraison/edit?id=<?= $bonl['id'] ?>" class="btn btn-primary">Modifier</a>
+    <a href="/stage/bonsLivraison/edit?id=<?= $bonl['id']; ?>" class="btn btn-primary">Modifier</a>
 
     <!-- Imprimer Button -->
-    <button onclick="window.print()" class="btn btn-success">Imprimer</button>
+    <button onclick="printInvoice()" class="btn btn-success">Imprimer</button>
 </div>
 
-
+<!-- Printable invoice content -->
 <div class="bonl container bg-white p-4 d-block align-content-between" id="printable-bonl">
     <div class="">
         <div class='d-flex'>
@@ -48,7 +49,7 @@
                     <th>Qte</th>
                 </tr>
             </thead>
-            <tbody>
+            <>
                 <?php foreach ($bonl['lignes'] as $ligne): ?>
                     <tr>
                         <td><?= $ligne['reference'] ?></td>
@@ -59,11 +60,11 @@
             </tbody>
         </table>
         <div class="signature d-flex justify-content-between">
-            <p class=" text-center pt-2" style="">signature client :</p>
-            <p class=" text-center pt-2" style="">signature transporteur :</p>
+            <p class="text-center pt-2" style="">signature client :</p>
+            <p class="text-center pt-2" style="">signature transporteur :</p>
         </div>
     </div>
-    <div class="footer d-flex justify-content-evenly pt-2">
+    <div class="footer d-flex justify-content-evenly pt-2" id="print-footer">
         <div class="">
             <p>ice : 000222111555</p>
             <p>if : 369874521</p>
@@ -151,4 +152,59 @@
         font-size: 12px;
         margin: 2px 0;
     }
+
+    /* Print-specific styles */
+    @media print {
+        /* Hide everything by default */
+        body * {
+            visibility: hidden;
+        }
+        
+        /* Then show only the printable element and all its children */
+        #printable-bonl, #printable-bonl * {
+            visibility: visible;
+        }
+        
+        /* Position the printable element at the top of the page */
+        #printable-bonl {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            border: none;
+            box-shadow: none;
+            padding: 15px;
+            margin: 0;
+        }
+        
+        /* Table pagination settings */
+        table { 
+            page-break-inside: auto; 
+        }
+        
+        tr { 
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+        
+        thead { 
+            display: table-header-group; 
+        }
+        
+        tfoot { 
+            display: table-footer-group; 
+        }
+    }
+
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
 </style>
+
+<script>
+    // Simplified print function without Paged.js to avoid the error
+    function printInvoice() {
+        window.print();
+    }
+</script>
