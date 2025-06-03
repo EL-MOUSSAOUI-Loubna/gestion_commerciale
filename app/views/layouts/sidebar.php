@@ -15,10 +15,10 @@
                 </h2>
                 <div id="factures" class="accordion-collapse collapse" data-bs-parent="#sidebarMenu">
                     <div class="accordion-body p-0">
-                        <div class="submenu-item ms-3"><a href="/stage/factures/add"
+                        <div class="submenu-item ms-3"><a href="/sggi/factures/add"
                                 class="text-decoration-none d-block"><i class="fas fa-plus-circle me-2"></i> Ajouter
                                 Factures</a></div>
-                        <div class="submenu-item ms-3"><a href="/stage/factures" class="text-decoration-none d-block"><i
+                        <div class="submenu-item ms-3"><a href="/sggi/factures" class="text-decoration-none d-block"><i
                                     class="fas fa-list me-2"></i> Liste Factures</a></div>
                     </div>
                 </div>
@@ -34,10 +34,10 @@
                 </h2>
                 <div id="bonl" class="accordion-collapse collapse" data-bs-parent="#sidebarMenu">
                     <div class="accordion-body p-0">
-                        <div class="submenu-item ms-3"><a href="/stage/bonsLivraison/add"
+                        <div class="submenu-item ms-3"><a href="/sggi/bonsLivraison/add"
                                 class="text-decoration-none d-block"><i class="fas fa-plus-circle me-2"></i> Ajouter Bon
                                 de L</a></div>
-                        <div class="submenu-item ms-3"><a href="/stage/bonsLivraison"
+                        <div class="submenu-item ms-3"><a href="/sggi/bonsLivraison"
                                 class="text-decoration-none d-block"><i class="fas fa-list me-2"></i> Liste Bons de
                                 Livraison</a></div>
                     </div>
@@ -54,10 +54,10 @@
                 </h2>
                 <div id="clients" class="accordion-collapse collapse" data-bs-parent="#sidebarMenu">
                     <div class="accordion-body p-0">
-                        <div class="submenu-item ms-3"><a href="/stage/clients/add"
+                        <div class="submenu-item ms-3"><a href="/sggi/clients/add"
                                 class="text-decoration-none d-block"><i class="fas fa-plus-circle me-2"></i> Ajouter
                                 Client</a></div>
-                        <div class="submenu-item ms-3"><a href="/stage/clients" class="text-decoration-none d-block"><i
+                        <div class="submenu-item ms-3"><a href="/sggi/clients" class="text-decoration-none d-block"><i
                                     class="fas fa-list me-2"></i> Liste Clients</a></div>
                     </div>
                 </div>
@@ -73,10 +73,10 @@
                 </h2>
                 <div id="fournisseurs" class="accordion-collapse collapse" data-bs-parent="#sidebarMenu">
                     <div class="accordion-body p-0">
-                        <div class="submenu-item ms-3"><a href="/stage/fournisseurs/add"
+                        <div class="submenu-item ms-3"><a href="/sggi/fournisseurs/add"
                                 class="text-decoration-none d-block"><i class="fas fa-plus-circle me-2"></i> Ajouter
                                 Fournisseurs</a></div>
-                        <div class="submenu-item ms-3"><a href="/stage/fournisseurs"
+                        <div class="submenu-item ms-3"><a href="/sggi/fournisseurs"
                                 class="text-decoration-none d-block"><i class="fas fa-list me-2"></i> Liste
                                 Fournisseurs</a></div>
                     </div>
@@ -94,9 +94,9 @@
                 </h2>
                 <div id="products" class="accordion-collapse collapse" data-bs-parent="#sidebarMenu">
                     <div class="accordion-body p-0">
-                        <div class="submenu-item"><a href="/stage/produits/add" class="text-decoration-none d-block"><i
+                        <div class="submenu-item"><a href="/sggi/produits/add" class="text-decoration-none d-block"><i
                                     class="fas fa-plus-circle me-2"></i> Ajouter Produit</a></div>
-                        <div class="submenu-item"><a href="/stage/produits" class="text-decoration-none d-block"><i
+                        <div class="submenu-item"><a href="/sggi/produits" class="text-decoration-none d-block"><i
                                     class="fas fa-list me-2"></i> Liste Produits</a></div>
                     </div>
                 </div>
@@ -114,7 +114,7 @@
                     <div class="accordion-body p-0">
                         <div class="submenu-item"><a href="" class="text-decoration-none d-block"><i
                                     class="fas fa-plus-circle me-2"></i> Ajouter Catégorie</a></div>
-                        <div class="submenu-item"><a href="/stage/categories" class="text-decoration-none d-block"><i
+                        <div class="submenu-item"><a href="/sggi/categories" class="text-decoration-none d-block"><i
                                     class="fas fa-list me-2"></i> Liste Catégories</a></div>
                     </div>
                 </div>

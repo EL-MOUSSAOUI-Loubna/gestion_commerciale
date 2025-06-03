@@ -1,5 +1,5 @@
 <div class='add_bl'>
-    <a href="/stage/bonsLivraison" class=" back-button">
+    <a href="/sggi/bonsLivraison" class=" back-button">
         <i class="fas fa-arrow-left"></i>
         Retour à la liste
     </a>
@@ -266,7 +266,7 @@
     }
 </style>
 
-<script src="/stage/public/assets/js/jquery-3.6.0.min.js"></script>
+<script src="/sggi/public/assets/js/jquery-3.6.0.min.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -322,7 +322,7 @@
 
             // Check if facture exists
             $.ajax({
-                url: "/stage/bonsLivraison/checkFacture",
+                url: "/sggi/bonsLivraison/checkFacture",
                 method: "POST",
                 data: { num_facture: num_facture },
                 dataType: "json",
@@ -371,7 +371,7 @@
             }
 
             $.ajax({
-                url: "/stage/bonsLivraison/saveLine",
+                url: "/sggi/bonsLivraison/saveLine",
                 method: "POST",
                 data: $(this).serialize(),
                 dataType: "json",
@@ -528,7 +528,7 @@
             console.log(data);
 
             $.ajax({
-                url: "/stage/bonsLivraison/store",
+                url: "/sggi/bonsLivraison/store",
                 method: "POST",
                 contentType: "application/json",
                 data: JSON.stringify(data),
@@ -537,7 +537,7 @@
                     if (response.success) {
                         showNotification("Bon de Livraison enregistré avec succès !", "success");
                         setTimeout(function () {
-                            window.location.href = "/stage/bonsLivraison/show?id=" + response.bl_id + "&success=created";
+                            window.location.href = "/sggi/bonsLivraison/show?id=" + response.bl_id + "&success=created";
                         }, 1500);
                     } else {
                         showNotification("Erreur lors de l'enregistrement : " + (response.message || "Erreur inconnue"), "danger");

@@ -30,7 +30,7 @@
                 </div>
             </div>
 
-            <a href="/stage/fournisseurs" class="back-button">
+            <a href="/sggi/fournisseurs" class="back-button">
                 <i class="fas fa-arrow-left"></i> Retour à la liste
             </a>
         </div>

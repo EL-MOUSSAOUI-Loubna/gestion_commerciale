@@ -23,9 +23,9 @@ class CategorieController
             $_POST['parentCategory'] ?? '',
         );
         if ($success) {
-            header('Location: /stage/categories?success=created');
+            header('Location: /sggi/categories?success=created');
         } else {
-            header('Location: /stage/categories?error=create_failed');
+            header('Location: /sggi/categories?error=create_failed');
         }
     }
 
@@ -44,27 +44,27 @@ class CategorieController
             $_POST['categorie_parente'] === '' ? null : $_POST['categorie_parente'],
         );
         if ($success) {
-            header('Location: /stage/categories?success=updated');
+            header('Location: /sggi/categories?success=updated');
         } else {
-            header('Location: /stage/categories?id=' . $_POST['id'] . '&error=update_failed');
+            header('Location: /sggi/categories?id=' . $_POST['id'] . '&error=update_failed');
         }
     }*/
 
     public function delete() {
         $success = $this->categorieModel->deleteCategory($_POST['id']);
         if ($success) {
-            header('Location: /stage/categories?success=deleted');
+            header('Location: /sggi/categories?success=deleted');
         } else {
-            header('Location: /stage/categories?error=delete_failed');
+            header('Location: /sggi/categories?error=delete_failed');
         }
     }
 
     public function rename(){
         $success = $this->categorieModel->renameCategory($_POST['id'], $_POST['categoryName']);
         if ($success) {
-            header('Location: /stage/categories?success=renamed');
+            header('Location: /sggi/categories?success=renamed');
         } else {
-            header('Location: /stage/categories?error=rename_failed');
+            header('Location: /sggi/categories?error=rename_failed');
         }
     }
 

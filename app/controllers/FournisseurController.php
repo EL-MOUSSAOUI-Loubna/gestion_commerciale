@@ -32,9 +32,9 @@ class FournisseurController {
             $_POST['telephone'] ?? '',
         );
         if ($success) {
-            header('Location: /stage/fournisseurs?success=created');
+            header('Location: /sggi/fournisseurs?success=created');
         } else {
-            header('Location: /stage/fournisseurs/add?error=create_failed');
+            header('Location: /sggi/fournisseurs/add?error=create_failed');
         }
     }
 
@@ -57,9 +57,9 @@ class FournisseurController {
             $_POST['telephone'] ?? '',
         );
         if ($success) {
-            header('Location: /stage/fournisseurs?success=updated');
+            header('Location: /sggi/fournisseurs?success=updated');
         } else {
-            header('Location: /stage/fournisseurs/edit?id='.$_POST['id'].'&error=update_failed');
+            header('Location: /sggi/fournisseurs/edit?id='.$_POST['id'].'&error=update_failed');
         }
     }
 
@@ -67,9 +67,9 @@ class FournisseurController {
     public function delete() {
         $success = $this->fournisseurModel->deleteFournisseur($_POST['id']);
         if ($success) {
-            header('Location: /stage/fournisseurs?success=deleted');
+            header('Location: /sggi/fournisseurs?success=deleted');
         } else {
-            header('Location: /stage/fournisseurs?error=delete_failed');
+            header('Location: /sggi/fournisseurs?error=delete_failed');
         }
     }
 

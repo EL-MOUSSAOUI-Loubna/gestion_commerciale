@@ -43,8 +43,8 @@ spl_autoload_register(function($class) {
 $request_uri = $_SERVER['REQUEST_URI'];
 $method = $_SERVER['REQUEST_METHOD'];
 
-// Strip the "/stage" prefix from the request URI
-$request_uri = preg_replace('/\/stage/', '', $request_uri, 1);
+// Strip the "/sggi" prefix from the request URI
+$request_uri = preg_replace('/\/sggi/', '', $request_uri, 1);
 
 // Get the path part (without query string)
 $uri_parts = parse_url($request_uri);
@@ -172,7 +172,7 @@ $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
 
 
 /*
-if (!empty($requestParts[0]) && $requestParts[0] !== 'stage') {
+if (!empty($requestParts[0]) && $requestParts[0] !== 'sggi') {
     $controllerName = ucfirst($requestParts[0]) . 'Controller';
 }*/
 

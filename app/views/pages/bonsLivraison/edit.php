@@ -5,7 +5,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
     </div>
     <div class="position-relative mb-4">
-        <a href="/stage/bonsLivraison" class="back-button">
+        <a href="/sggi/bonsLivraison" class="back-button">
             <i class="fas fa-arrow-left"></i>
             Retour à la liste
         </a>
@@ -266,7 +266,7 @@
     }
 </style>
 
-<script src="/stage/public/assets/js/jquery-3.6.0.min.js"></script>
+<script src="/sggi/public/assets/js/jquery-3.6.0.min.js"></script>
 
 
 <script>
@@ -326,7 +326,7 @@
             }
 
             $.ajax({
-                url: "/stage/bonsLivraison/checkFacture",
+                url: "/sggi/bonsLivraison/checkFacture",
                 method: "POST",
                 data: { num_facture: numFacture },
                 dataType: "json",
@@ -366,7 +366,7 @@
             const formData = $(this).serializeArray();
 
             $.ajax({
-                url: "/stage/bonsLivraison/saveLine",
+                url: "/sggi/bonsLivraison/saveLine",
                 method: "POST",
                 data: formData,
                 dataType: "json",
@@ -512,14 +512,14 @@
             });
 
             $.ajax({
-                url: "/stage/bonsLivraison/update",
+                url: "/sggi/bonsLivraison/update",
                 method: "POST",
                 data: data,
                 success: function (response) {
                     if (response.success) {
                         showNotification("Modification enregistrée avec succès.", "success");
                         setTimeout(function () {
-                            window.location.href = "/stage/bonsLivraison/show?id=" + bonlId + "&success=updated";
+                            window.location.href = "/sggi/bonsLivraison/show?id=" + bonlId + "&success=updated";
                         }, 1500);
                     } else {
                         showNotification("Erreur lors de la mise à jour : " + (response.message || "Erreur inconnue"), 'danger');

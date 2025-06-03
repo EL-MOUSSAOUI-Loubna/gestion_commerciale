@@ -41,7 +41,7 @@
 
     <h2>Liste des Bons de Livraison</h2>
     <div class="my-4 d-block self-end">
-        <a href="/stage/bonsLivraison/add" class="btn btn-primary">
+        <a href="/sggi/bonsLivraison/add" class="btn btn-primary">
             <i class="fas fa-plus"></i> Ajouter un bon de livraison
         </a>
     </div>
@@ -99,19 +99,19 @@
                             <td><?= htmlspecialchars($bonl['nom_transport']) ?></td>
                             <td class="d-flex">
                                 <!-- Show button -->
-                                <a href="/stage/bonsLivraison/show?id=<?= $bonl['id'] ?>" class="btn btn-info btn-sm me-1"
+                                <a href="/sggi/bonsLivraison/show?id=<?= $bonl['id'] ?>" class="btn btn-info btn-sm me-1"
                                     title="Détails">
                                     <i class="fas fa-eye"></i>
                                 </a>
 
                                 <!-- Edit button -->
-                                <a href="/stage/bonsLivraison/edit?id=<?= $bonl['id'] ?>" class="btn btn-warning btn-sm me-1"
+                                <a href="/sggi/bonsLivraison/edit?id=<?= $bonl['id'] ?>" class="btn btn-warning btn-sm me-1"
                                     title="Modifier">
                                     <i class="fas fa-edit"></i>
                                 </a>
 
                                 <!-- Delete button -->
-                                <form method="post" action="/stage/bonsLivraison/delete" class="d-inline"
+                                <form method="post" action="/sggi/bonsLivraison/delete" class="d-inline"
                                     onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette facture?');">
                                     <?php if (isset($_SESSION['csrf_token'])): ?>
                                         <input type="hidden" name="csrf_token"

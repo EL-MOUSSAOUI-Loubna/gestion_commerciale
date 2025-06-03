@@ -1,7 +1,7 @@
 <div class="container">
     <h1>Liste des Factures</h1>
     <div class="my-4">
-        <a href="/stage/factures/add" class="btn btn-primary">
+        <a href="/sggi/factures/add" class="btn btn-primary">
             <i class="fas fa-plus"></i> Ajouter une facture
         </a>
     </div>
@@ -60,19 +60,19 @@
                         <td><?= htmlspecialchars($facture['total_ttc']) ?></td>
                         <td class="d-flex">
                             <!-- Show button -->
-                            <a href="/stage/factures/show?id=<?= $facture['id'] ?>" class="btn btn-info btn-sm me-1"
+                            <a href="/sggi/factures/show?id=<?= $facture['id'] ?>" class="btn btn-info btn-sm me-1"
                                 title="Détails">
                                 <i class="fas fa-eye"></i>
                             </a>
 
                             <!-- Edit button -->
-                            <a href="/stage/factures/edit?id=<?= $facture['id'] ?>" class="btn btn-warning btn-sm me-1"
+                            <a href="/sggi/factures/edit?id=<?= $facture['id'] ?>" class="btn btn-warning btn-sm me-1"
                                 title="Modifier">
                                 <i class="fas fa-edit"></i>
                             </a>
 
                             <!-- Delete button -->
-                            <form method="post" action="/stage/facture/delete" class="d-inline"
+                            <form method="post" action="/sggi/facture/delete" class="d-inline"
                                 onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette facture?');">
                                 <?php if (isset($_SESSION['csrf_token'])): ?>
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">

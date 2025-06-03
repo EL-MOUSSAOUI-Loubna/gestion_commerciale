@@ -1,5 +1,5 @@
-<script src="/stage/public/assets/js/bootstrap.bundle.min.js"></script>
-<script src="/stage/public/assets/js/jquery-3.6.0.min.js"></script>
+<script src="/sggi/public/assets/js/bootstrap.bundle.min.js"></script>
+<script src="/sggi/public/assets/js/jquery-3.6.0.min.js"></script>
 
 <div class="container categories mt-4">
 
@@ -59,7 +59,7 @@
             <div class="h5 mb-0"><i class="fas fa-folder-plus me-2"></i>Ajouter une Nouvelle Catégorie</div>
         </div>
         <div class="card-body">
-            <form id="addCategoryForm" action="/stage/categories/store" method="POST" class="needs-validation"
+            <form id="addCategoryForm" action="/sggi/categories/store" method="POST" class="needs-validation"
                 novalidate>
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                 <div class="row g-3">
@@ -108,7 +108,7 @@
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <div class="h5 mb-0"><i class="fas fa-sitemap me-2"></i>Liste des Catégories</div>
             <button id="expandAllBtn" class="btn btn-sm btn-outline-light">
-                <i class="fas fa-expand me-1"></i> Développer Tout
+                <i class="fas fa-expand me-1"></i> Déplier Tout
             </button>
         </div>
         <div class="card-body p-0">
@@ -127,11 +127,11 @@
                                 <?php endif; ?>
 
                                 <span class="node-name-container">
-                                    <a href="/stage/categories/show?id=<?= $category['id'] ?>" class="node-name">
+                                    <a href="/sggi/categories/show?id=<?= $category['id'] ?>" class="node-name">
                                         <?= htmlspecialchars($category['nom']) ?>
                                     </a>
                                     <!-- Formulaire de renommage (initialement caché) -->
-                                    <form action="/stage/categories/rename" method="POST" class="rename-form d-none">
+                                    <form action="/sggi/categories/rename" method="POST" class="rename-form d-none">
                                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                                         <input type="hidden" name="id" value="<?= $category['id'] ?>">
                                         <div class="input-group input-group-sm">
@@ -159,7 +159,7 @@
                                             </button>
                                         </li>
                                         <li>
-                                            <form method="POST" action="/stage/categories/delete" class="delete-category-form"
+                                            <form method="POST" action="/sggi/categories/delete" class="delete-category-form"
                                                 data-category-id="<?= $category['id'] ?>">
                                                 <input type="hidden" name="csrf_token"
                                                     value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
@@ -356,8 +356,8 @@
 
             $btn.toggleClass('active', shouldExpand);
             $btn.html(shouldExpand
-                ? '<i class="fas fa-compress me-1"></i> Réduire Tout'
-                : '<i class="fas fa-expand me-1"></i> Développer Tout');
+                ? '<i class="fas fa-compress me-1"></i> Replier Tout'
+                : '<i class="fas fa-expand me-1"></i> Déplier Tout');
 
             $('.tree-node').each(function () {
                 if ($(this).find('.node-children').length) {

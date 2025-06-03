@@ -1,6 +1,6 @@
 <div class='edit_facture'>
     <div class="position-relative mb-4">
-        <a href="/stage/factures" class="back-button">
+        <a href="/sggi/factures" class="back-button">
         <i class="fas fa-arrow-left"></i>
             Retour à la liste
         </a>
@@ -304,7 +304,7 @@
 
 </style>
 
-<script src="/stage/public/assets/js/jquery-3.6.0.min.js"></script>
+<script src="/sggi/public/assets/js/jquery-3.6.0.min.js"></script>
 
 
 <script>
@@ -362,7 +362,7 @@ $(document).ready(function() {
         const formData = $(this).serializeArray();
         
         $.ajax({
-            url: "/stage/factures/saveLine",
+            url: "/sggi/factures/saveLine",
             method: "POST",
             data: formData,
             dataType: "json",
@@ -586,13 +586,13 @@ $(document).ready(function() {
 
         // Send to server
         $.ajax({
-            url: "/stage/factures/update",
+            url: "/sggi/factures/update",
             method: "POST",
             data: data,
             success: function(response) {
                 if (response.success) {
                     showNotification("Facture modifiée avec succès", "success");
-                    window.location.href = "/stage/factures/show?id=" + factureId + "&success=updated";
+                    window.location.href = "/sggi/factures/show?id=" + factureId + "&success=updated";
                 } else {
                     //alert("Erreur lors de la mise à jour : " + (response.message || "Erreur inconnue"));
                     showNotification("Erreur lors de la mise à jour : " + (response.message || "Erreur inconnue"), "danger");

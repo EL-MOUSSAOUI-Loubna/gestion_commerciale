@@ -67,7 +67,7 @@ class FactureController
             echo json_encode(['success' => true, 'facture_id' => $resultat]);
         } else {
             echo json_encode(['success' => false, 'error' => 'Database insert failed']);
-            //header('Location: /stage/factures/add?error=create_failed');
+            //header('Location: /sggi/factures/add?error=create_failed');
         }
     }
 
@@ -128,9 +128,9 @@ class FactureController
     {
         $success = $this->factureModel->deleteFacture($_POST['id']);
         if ($success) {
-            header('Location: /stage/factures?success=deleted');
+            header('Location: /sggi/factures?success=deleted');
         } else {
-            header('Location: /stage/factures?error=delete_failed');
+            header('Location: /sggi/factures?error=delete_failed');
         }
     }
 

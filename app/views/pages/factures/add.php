@@ -1,5 +1,5 @@
 <div class='add_facture'>
-    <a href="/stage/factures" class="back-button">
+    <a href="/sggi/factures" class="back-button">
         <i class="fas fa-arrow-left"></i>
         Retour à la liste
     </a>
@@ -254,7 +254,7 @@
         font-weight: bold;
     }
 </style>
-<script src="/stage/public/assets/js/jquery-3.6.0.min.js"></script>
+<script src="/sggi/public/assets/js/jquery-3.6.0.min.js"></script>
 
 <script>
     let clientNom = '';
@@ -417,7 +417,7 @@
         if (!isValid) return;
 
         $.ajax({
-            url: "/stage/factures/saveLine",
+            url: "/sggi/factures/saveLine",
             method: "POST",
             data: $(this).serialize(),
             dataType: "json",
@@ -630,7 +630,7 @@
         console.log(data);
 
         $.ajax({
-            url: "/stage/factures/store",
+            url: "/sggi/factures/store",
             method: "POST",
             contentType: "application/json", // Make sure this is set
             data: JSON.stringify(data),
@@ -638,7 +638,7 @@
             success: function (response) {
                 if (response.success) {
                     alert("Facture enregistrée avec succès !");
-                    window.location.href = "/stage/factures/show?id=" + response.facture_id + "&success=created";
+                    window.location.href = "/sggi/factures/show?id=" + response.facture_id + "&success=created";
                 } else {
                     alert("Erreur lors de l'enregistrement : " + (response.message || "Erreur inconnue"));
                 }

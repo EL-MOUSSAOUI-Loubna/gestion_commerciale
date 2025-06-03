@@ -1,7 +1,7 @@
 <!-- No-print buttons -->
 <div class="d-flex justify-content-evenly mb-3 gap-2 no-print">
     <!-- Modifier Button -->
-    <a href="/stage/bonsLivraison/edit?id=<?= $bonl['id']; ?>" class="btn btn-primary">Modifier</a>
+    <a href="/sggi/bonsLivraison/edit?id=<?= $bonl['id']; ?>" class="btn btn-primary">Modifier</a>
 
     <!-- Imprimer Button -->
     <button onclick="printInvoice()" class="btn btn-success">Imprimer</button>
@@ -11,7 +11,7 @@
 <div class="bonl container bg-white p-4 d-block align-content-between" id="printable-bonl">
     <div class="">
         <div class='d-flex'>
-            <img src='/stage/public/assets/img/sellm.png' alt='logo sellm' class="logo me-3"
+            <img src='/sggi/public/assets/img/sellm.png' alt='logo sellm' class="logo me-3"
                 style="width: 100px; height: 100px; object-fit: contain;" />
             <div class='mt-1'>
                 <h2>SellM</h2>

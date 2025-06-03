@@ -72,7 +72,7 @@ class BonLivraisonController
             echo json_encode(['success' => true, 'bl_id' => $bl_id]);
         } else {
             echo json_encode(['success' => false, 'error' => 'Database insert failed']);
-            //header('Location: /stage/factures/add?error=create_failed');
+            //header('Location: /sggi/factures/add?error=create_failed');
         }
     }
 
@@ -136,9 +136,9 @@ class BonLivraisonController
     {
         $success = $this->bonLivraisonModel->deleteBonL($_POST['id']);
         if ($success) {
-            header('Location: /stage/bonsLivraison?success=deleted');
+            header('Location: /sggi/bonsLivraison?success=deleted');
         } else {
-            header('Location: /stage/bonsLivraison?error=delete_failed');
+            header('Location: /sggi/bonsLivraison?error=delete_failed');
         }
     }
 

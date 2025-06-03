@@ -32,9 +32,9 @@ class ProduitController {
             $_POST['fournisseur'] ?? '',
         );
         if ($success) {
-            header('Location: /stage/produits?success=created');
+            header('Location: /sggi/produits?success=created');
         } else {
-            header('Location: /stage/produits/add?error=create_failed');
+            header('Location: /sggi/produits/add?error=create_failed');
         }
     }
 
@@ -58,18 +58,18 @@ class ProduitController {
             $_POST['fournisseur'] ?? '',
         );
         if ($success) {
-            header('Location: /stage/produits?success=updated');
+            header('Location: /sggi/produits?success=updated');
         } else {
-            header('Location: /stage/produits/edit?id='.$_POST['id'].'&error=update_failed');
+            header('Location: /sggi/produits/edit?id='.$_POST['id'].'&error=update_failed');
         }
     }
 
     public function delete() {
         $success = $this->produitModel->deleteProduit($_POST['id']);
         if ($success) {
-            header('Location: /stage/produits?success=deleted');
+            header('Location: /sggi/produits?success=deleted');
         } else {
-            header('Location: /stage/produits?error=delete_failed');
+            header('Location: /sggi/produits?error=delete_failed');
         }
     }
 

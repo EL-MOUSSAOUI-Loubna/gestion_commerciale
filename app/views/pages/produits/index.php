@@ -3,7 +3,7 @@
     <h1>Liste des Produits</h1>
 
     <div class="mb-3">
-        <a href="/stage/produits/add" class="btn btn-primary">
+        <a href="/sggi/produits/add" class="btn btn-primary">
             <i class="fas fa-plus"></i> Ajouter un produit
         </a>
     </div>
@@ -62,19 +62,19 @@
                             <td><?= htmlspecialchars($produit['nom_categorie']) ?></td>
                             <td class="d-flex">
                                 <!-- Show button -->
-                                <a href="/stage/produits/show?id=<?= $produit['id'] ?>" class="btn btn-info btn-sm me-1"
+                                <a href="/sggi/produits/show?id=<?= $produit['id'] ?>" class="btn btn-info btn-sm me-1"
                                     title="Détails">
                                     <i class="fas fa-eye"></i>
                                 </a>
 
                                 <!-- Edit button -->
-                                <a href="/stage/produits/edit?id=<?= $produit['id'] ?>" class="btn btn-warning btn-sm me-1"
+                                <a href="/sggi/produits/edit?id=<?= $produit['id'] ?>" class="btn btn-warning btn-sm me-1"
                                     title="Modifier">
                                     <i class="fas fa-edit"></i>
                                 </a>
 
                                 <!-- Delete button (form with POST method) -->
-                                <form method="post" action="/stage/produits/delete" class="d-inline"
+                                <form method="post" action="/sggi/produits/delete" class="d-inline"
                                     onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit?');">
                                     <?php if (isset($_SESSION['csrf_token'])): ?>
                                         <input type="hidden" name="csrf_token"

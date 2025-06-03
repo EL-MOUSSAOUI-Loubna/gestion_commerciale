@@ -32,9 +32,9 @@ class ClientController {
             $_POST['telephone'] ?? '',
         );
         if ($success) {
-            header('Location: /stage/clients?success=created');
+            header('Location: /sggi/clients?success=created');
         } else {
-            header('Location: /stage/clients/add?error=create_failed');
+            header('Location: /sggi/clients/add?error=create_failed');
         }
     }
 
@@ -57,9 +57,9 @@ class ClientController {
             $_POST['telephone'] ?? '',
         );
         if ($success) {
-            header('Location: /stage/clients?success=updated');
+            header('Location: /sggi/clients?success=updated');
         } else {
-            header('Location: /stage/clients/edit?id='.$_POST['id'].'&error=update_failed');
+            header('Location: /sggi/clients/edit?id='.$_POST['id'].'&error=update_failed');
         }
     }
 
@@ -67,9 +67,9 @@ class ClientController {
     public function delete() {
         $success = $this->clientModel->deleteClient($_POST['id']);
         if ($success) {
-            header('Location: /stage/clients?success=deleted');
+            header('Location: /sggi/clients?success=deleted');
         } else {
-            header('Location: /stage/clients?error=delete_failed');
+            header('Location: /sggi/clients?error=delete_failed');
         }
     }
 

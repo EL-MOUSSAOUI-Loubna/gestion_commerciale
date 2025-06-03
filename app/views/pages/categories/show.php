@@ -1,5 +1,5 @@
 <div class="category-details">
-    <a href="/stage/categories" class="back-button">
+    <a href="/sggi/categories" class="back-button">
         <i class="fas fa-arrow-left"></i> Retour à la liste
     </a>
     <div class="category-header">
@@ -21,7 +21,7 @@
                     <?php foreach ($produits as $produit): ?>
                         <tr>
                             <td><?= htmlspecialchars($produit['reference']) ?></td>
-                            <td><a href="/stage/produits/show?id=<?= $produit['id'] ?>" target="_blank"
+                            <td><a href="/sggi/produits/show?id=<?= $produit['id'] ?>" target="_blank"
                                     class="product-link"><?= htmlspecialchars($produit['libelle']) ?></a></td>
                             <td><?= number_format($produit['prix_u'], 2, ',', ' ') ?> dh</td>
                         </tr>

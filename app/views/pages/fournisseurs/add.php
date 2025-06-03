@@ -13,7 +13,7 @@
                 </div>
             <?php endif; ?>
 
-            <form method="post" action="/stage/fournisseurs/store" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <form method="post" action="/sggi/fournisseurs/store" enctype="multipart/form-data" class="needs-validation" novalidate>
                 <!-- CSRF Token -->
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
 
@@ -65,7 +65,7 @@
                     <button type="submit" class="btn btn-primary px-4">
                         <i class="fas fa-save me-2"></i>Ajouter
                     </button>
-                    <a href="/stage/fournisseurs" class="btn btn-outline-secondary px-4">
+                    <a href="/sggi/fournisseurs" class="btn btn-outline-secondary px-4">
                         <i class="fas fa-times me-2"></i>Annuler
                     </a>
                 </div>

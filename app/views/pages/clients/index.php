@@ -3,7 +3,7 @@
     <h1>Liste des Clients</h1>
 
     <div class="mb-3">
-        <a href="/stage/clients/add" class="btn btn-primary">
+        <a href="/sggi/clients/add" class="btn btn-primary">
             <i class="fas fa-plus"></i> Ajouter un client
         </a>
     </div>
@@ -63,19 +63,19 @@
                             <td><?= htmlspecialchars($client['email']) ?></td>
                             <td class="d-flex">
                                 <!-- Show button -->
-                                <a href="/stage/clients/show?id=<?= $client['id'] ?>" class="btn btn-info btn-sm me-1"
+                                <a href="/sggi/clients/show?id=<?= $client['id'] ?>" class="btn btn-info btn-sm me-1"
                                     title="Détails">
                                     <i class="fas fa-eye"></i>
                                 </a>
 
                                 <!-- Edit button -->
-                                <a href="/stage/clients/edit?id=<?= $client['id'] ?>" class="btn btn-warning btn-sm me-1"
+                                <a href="/sggi/clients/edit?id=<?= $client['id'] ?>" class="btn btn-warning btn-sm me-1"
                                     title="Modifier">
                                     <i class="fas fa-edit"></i>
                                 </a>
 
                                 <!-- Delete button (form with POST method) -->
-                                <form method="post" action="/stage/clients/delete" class="d-inline"
+                                <form method="post" action="/sggi/clients/delete" class="d-inline"
                                     onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce client?');">
                                     <?php if (isset($_SESSION['csrf_token'])): ?>
                                         <input type="hidden" name="csrf_token"
