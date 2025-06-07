@@ -11,12 +11,12 @@
 <div class="bonl container bg-white p-4 d-block align-content-between" id="printable-bonl">
     <div class="">
         <div class='d-flex'>
-            <img src='/sggi/public/assets/img/sellm.png' alt='logo sellm' class="logo me-3"
+            <img src='/sggi/public/assets/img/black.jpg' alt='logo sellm' class="logo me-3"
                 style="width: 100px; height: 100px; object-fit: contain;" />
             <div class='mt-1'>
-                <h2>SellM</h2>
-                <p>adresse : mon adresse</p>
-                <p>telephone : 0500000000</p>
+                <h2>Raison sociale de l'entreprise</h2>
+                <p>adresse : rue, ville, pays</p>
+                <p>telephone : 05 ** ** ** **</p>
             </div>
         </div>
         <div class="d-flex justify-content-between pe-3">
@@ -49,7 +49,7 @@
                     <th>Qte</th>
                 </tr>
             </thead>
-            <>
+            <tbody>
                 <?php foreach ($bonl['lignes'] as $ligne): ?>
                     <tr>
                         <td><?= $ligne['reference'] ?></td>
@@ -66,16 +66,16 @@
     </div>
     <div class="footer d-flex justify-content-evenly pt-2" id="print-footer">
         <div class="">
-            <p>ice : 000222111555</p>
-            <p>if : 369874521</p>
+            <p>ice : 123***********</p>
+            <p>if : 123******</p>
         </div>
         <div>
-            <p>adresse : notre adresse, Marrakech, Morocco</p>
-            <p>telephone : 0500000000</p>
+            <p>adresse : rue, ville, pays</p>
+            <p>telephone : 05 ** ** ** **</p>
         </div>
         <div>
-            <p>email : contact@sellm.ma</p>
-            <p>siteweb : w.sellm.ma</p>
+            <p>email : contact@exemple.ma</p>
+            <p>siteweb : w.exemple.ma</p>
         </div>
     </div>
 </div>

@@ -67,8 +67,18 @@
                         </div>
                     </div>
 
-                    <!-- Catégorie -->
+                    <!-- Quantité alerte -->
                     <div class="col-md-4">
+                        <label for="qte_alerte" class="form-label">Quantité stock alerte</label>
+                        <input type="number" step="1" min="0" class="form-control" id="qte_alerte" name="qte_alerte"
+                            value="<?= $produit['qte_alerte'] ?? '' ?>">
+                        <div class="invalid-feedback">
+                            Veuillez saisir une quantité valide.
+                        </div>
+                    </div>
+
+                    <!-- Catégorie -->
+                    <div class="col-md-6">
                         <label for="categorie" class="form-label">Catégorie</label>
                         <select class="form-select" id="categorie" name="categorie">
                         <?php if (!empty($fournisseurs)): ?>

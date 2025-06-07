@@ -10,11 +10,11 @@
 <div class="facture container bg-white p-4 d-block align-content-between" id="printable-invoice">
     <div class="">
         <div class='d-flex'>
-            <img src= '/sggi/public/assets/img/sellm.png' alt='logo sellm' class="logo me-3" style="width: 100px; height: 100px; object-fit: contain;" /> 
+            <img src= '/sggi/public/assets/img/black.jpg' alt='logo sellm' class="logo me-3" style="width: 100px; height: 100px; object-fit: contain;" /> 
             <div class='mt-1'>
-                <h2 >SellM</h2>
-                <p>adresse :</p>
-                <p>telephone :</p>
+                <h2>Raison sociale de l'entreprise</h2>
+                <p>adresse : rue, ville, pays</p>
+                <p>telephone : 05 ** ** ** **</p>
             </div>
         </div>
         <div class="d-flex justify-content-between">
@@ -83,12 +83,12 @@
     </div>
     <div class="footer d-flex justify-content-evenly pt-2">
         <div class="">
-            <p>ice : <?= $facture['ice'] ?></p>
-            <p>if : <?= $facture['idf'] ?></p>
+            <p>ice : 123***********</p>
+            <p>if : 123******</p>
         </div>
         <div>
-            <p>adresse : notre adresse, Marrakech, Morocco</p>
-            <p>telephone : 0500000000</p>
+            <p>adresse : rue, ville, pays</p>
+            <p>telephone : 05 ** ** ** **</p>
         </div>
         <div>
             <p>email : contact@sellm.ma</p>

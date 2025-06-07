@@ -20,6 +20,16 @@
                 </div>
 
                 <div class="detail-group">
+                    <span class="detail-label">Taux TVA</span>
+                    <span class="detail-value price"><?= isset($produit['ttva']) ? number_format($produit['ttva'], 2, ',', ' ') . ' %' : 'N/A' ?></span>
+                </div>
+
+                <div class="detail-group">
+                    <span class="detail-label">Quantité stock alerte</span>
+                    <span class="detail-value"><?= $produit['qte_alerte'] ?? 'N/A' ?></span>
+                </div>
+
+                <div class="detail-group">
                     <span class="detail-label">Catégorie</span>
                     <span class="detail-value category"><?= htmlspecialchars($category['nom'] ?? 'Non classé') ?></span>
                 </div>

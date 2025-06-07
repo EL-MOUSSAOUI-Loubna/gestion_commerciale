@@ -51,7 +51,7 @@
                 <div class="col-md-4">
                     <label class="">produit :</label>
                     <select class="form-select" name="produit_id" required>
-                        <option value="" disabled selected>-- Choisir un client --</option>
+                        <option value="" disabled selected>-- Choisir un produit --</option>
                         <?php foreach ($produits as $p): ?>
                             <option value="<?= $p['id'] ?>"><?= htmlspecialchars($p['libelle']) ?></option>
                         <?php endforeach; ?>

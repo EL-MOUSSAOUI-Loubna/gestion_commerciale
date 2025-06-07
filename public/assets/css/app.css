@@ -164,13 +164,9 @@ navbar .notification-badge:after {
 
 .sidebar-header {
     border-bottom: 1px solid rgba(0,0,0,0.08);
-    padding: 1.45rem 1.5rem !important;
+    padding: 1.3rem 1.5rem !important;
 }
 
-.sidebar-header h5 {
-    font-weight: 600;
-    letter-spacing: 0.3px;
-}
 
 /* Accordion styling */
 .accordion-button {

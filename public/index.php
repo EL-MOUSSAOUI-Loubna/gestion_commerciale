@@ -25,17 +25,12 @@ require_once CONTROLLER_PATH . '/FactureController.php';
 require_once CONTROLLER_PATH . '/FournisseurController.php';
 require_once CONTROLLER_PATH . '/BonLivraisonController.php';
 
-
-//require_once ROUTING_PATH . '/Router.php';
-//require_once ROUTING_PATH . '/routes.php';  // This will contain our route definitions
-
-
-// Database Connection
+// DB Connection
 $db = databaseConnection();
 
 // Autoload Controllers
 spl_autoload_register(function($class) {
-    $file = APP_PATH . "/controllers/$class.php";
+    $file = CONTROLLER_PATH . "/$class.php";
     if (file_exists($file)) require $file;
 });
 
@@ -43,19 +38,19 @@ spl_autoload_register(function($class) {
 $request_uri = $_SERVER['REQUEST_URI'];
 $method = $_SERVER['REQUEST_METHOD'];
 
-// Strip the "/sggi" prefix from the request URI
+// Remove "/sggi" prefix from the URI
 $request_uri = preg_replace('/\/sggi/', '', $request_uri, 1);
 
 // Get the path part (without query string)
 $uri_parts = parse_url($request_uri);
 $path = $uri_parts['path'];
 
-// Remove trailing slash for consistency (except for root path)
+// Supprimer la / à la fin (sauf pour la racine)
 if ($path != '/' && substr($path, -1) == '/') {
     $path = rtrim($path, '/');
 }
 
-// Simple Routing Table
+// Routing
 $routes = [
     'GET /' => 'DashboardController@index',
     'GET /login' => 'DashboardController@login',
@@ -111,7 +106,7 @@ $routes = [
 
 ];
 
-// Find Matching Route - Using exact match
+// Find a matching route
 $route_key = "$method $path";
 if (isset($routes[$route_key])) {
     list($controller, $action) = explode('@', $routes[$route_key]);
@@ -119,10 +114,10 @@ if (isset($routes[$route_key])) {
     exit;
 }
 
-// 404 if no route matches
+// 404 if no route is matching
 header("HTTP/1.0 404 Not Found");
 include VIEW_PATH . '/errors/404.php';
-
+exit;
 
 
 

@@ -1,7 +1,7 @@
 <!-- Sidebar -->
 <div class="sidebar d-none d-md-block">
-    <div class="sidebar-header p-3">
-        <h5 class="mb-0 text-primary"><i class="fas fa-cube me-2"></i>Menu</h5>
+    <div class="sidebar-header">
+        <img src='/sggi/public/assets/img/logo-sggi.svg' alt='logo sggi' style="width: 70px;" >
     </div>
     <div class="sidebar-menu">
         <div class="accordion" id="sidebarMenu">
@@ -36,7 +36,7 @@
                     <div class="accordion-body p-0">
                         <div class="submenu-item ms-3"><a href="/sggi/bonsLivraison/add"
                                 class="text-decoration-none d-block"><i class="fas fa-plus-circle me-2"></i> Ajouter Bon
-                                de L</a></div>
+                                de Livraison</a></div>
                         <div class="submenu-item ms-3"><a href="/sggi/bonsLivraison"
                                 class="text-decoration-none d-block"><i class="fas fa-list me-2"></i> Liste Bons de
                                 Livraison</a></div>
@@ -89,7 +89,7 @@
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#products">
-                        <i class="fas fa-boxes me-2" style='color: rgb(175, 142, 107);'></i>Produits
+                        <i class="fas fa-boxes me-2" style='color: rgb(255, 255, 255);'></i>Produits
                     </button>
                 </h2>
                 <div id="products" class="accordion-collapse collapse" data-bs-parent="#sidebarMenu">
@@ -105,19 +105,12 @@
             <!-- Categories -->
             <div class="accordion-item border-0">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#categories">
-                        <i class="fas fa-tags me-2" style='color: rgb(237, 117, 25);'></i>Catégories
+                    <button class="accordion-button collapsed" type="button">
+                        <a href="/sggi/categories" class="text-decoration-none d-block text-white">
+                            <i class="fas fa-tags me-2" style='color: rgb(255, 255, 255);'></i>Catégories
+                        </a>
                     </button>
                 </h2>
-                <div id="categories" class="accordion-collapse collapse " data-bs-parent="#sidebarMenu">
-                    <div class="accordion-body p-0">
-                        <div class="submenu-item"><a href="" class="text-decoration-none d-block"><i
-                                    class="fas fa-plus-circle me-2"></i> Ajouter Catégorie</a></div>
-                        <div class="submenu-item"><a href="/sggi/categories" class="text-decoration-none d-block"><i
-                                    class="fas fa-list me-2"></i> Liste Catégories</a></div>
-                    </div>
-                </div>
             </div>
 
             <!-- Documents 

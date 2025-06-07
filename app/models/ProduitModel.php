@@ -30,10 +30,10 @@ class ProduitModel {
         }
     }
 
-    public function addProduit($libelle, $reference, $description_p, $prix_u, $ttva, $categorie_id, $fournisseur_id) {
+    public function addProduit($libelle, $reference, $description_p, $prix_u, $ttva, $qte_alerte, $categorie_id, $fournisseur_id) {
         try {
-            $query = "INSERT INTO produits (libelle, reference, description_p, prix_u, ttva, categorie_id, fournisseur_id) 
-                      VALUES (:libelle, :reference, :description_p, :prix_u, :ttva, :categorie_id, :fournisseur_id)";
+            $query = "INSERT INTO produits (libelle, reference, description_p, prix_u, ttva, qte_alerte, categorie_id, fournisseur_id) 
+                      VALUES (:libelle, :reference, :description_p, :prix_u, :ttva, :qte_alerte, :categorie_id, :fournisseur_id)";
             $stmt = $this->db->prepare($query);
             $stmt->execute([
                 'libelle'    => $libelle,
@@ -41,6 +41,7 @@ class ProduitModel {
                 'description_p'        => $description_p,
                 'prix_u'    => $prix_u,
                 'ttva'  => $ttva,
+                'qte_alerte' => $qte_alerte,
                 'categorie_id' => $categorie_id,
                 'fournisseur_id' => $fournisseur_id,
             ]);
@@ -51,11 +52,11 @@ class ProduitModel {
         }
     }
 
-    public function updateProduit($id, $libelle, $reference, $description_p, $prix_u, $ttva, $categorie_id, $fournisseur_id) {
+    public function updateProduit($id, $libelle, $reference, $description_p, $prix_u, $ttva, $qte_alerte, $categorie_id, $fournisseur_id) {
         try {
             $query = "UPDATE produits SET 
                         libelle = :libelle, reference = :reference, description_p = :description_p, 
-                        prix_u = :prix_u, ttva = :ttva, 
+                        prix_u = :prix_u, ttva = :ttva, qte_alerte = :qte_alerte,
                         categorie_id = :categorie_id, fournisseur_id = :fournisseur_id
                         WHERE id = :id";
             $stmt = $this->db->prepare($query);
@@ -66,6 +67,7 @@ class ProduitModel {
                 'description_p'        => $description_p,
                 'prix_u'    => $prix_u,
                 'ttva'  => $ttva,
+                'qte_alerte' => $qte_alerte,
                 'categorie_id' => $categorie_id,
                 'fournisseur_id' => $fournisseur_id,
             ]);

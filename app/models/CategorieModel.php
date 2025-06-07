@@ -116,7 +116,7 @@ class CategorieModel {
 
     public function getProductsOfCategory ($id) {
         try {
-            $query = "SELECT id, libelle, reference, prix_u FROM produits WHERE categorie = :id";
+            $query = "SELECT id, libelle, reference, prix_u FROM produits WHERE categorie_id = :id";
             $stmt = $this->db->prepare($query);
             $stmt->execute(['id' => $id]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);

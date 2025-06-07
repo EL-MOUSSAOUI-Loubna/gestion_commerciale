@@ -28,6 +28,7 @@ class ProduitController {
             $_POST['description_p'] ?? '',
             $_POST['prix_u'] ?? '',
             $_POST['ttva'] ?? '',
+            $_POST['qte_alerte'] ?? '',
             $_POST['categorie'] ?? '',
             $_POST['fournisseur'] ?? '',
         );
@@ -54,6 +55,7 @@ class ProduitController {
             $_POST['description_p'] ?? '',
             $_POST['prix_u'] ?? '',
             $_POST['ttva'] ?? '',
+            $_POST['qte_alerte'] ?? '',
             $_POST['categorie'] ?? '',
             $_POST['fournisseur'] ?? '',
         );

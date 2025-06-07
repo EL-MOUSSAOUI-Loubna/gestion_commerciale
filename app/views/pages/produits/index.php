@@ -48,6 +48,7 @@
                 <tr>
                     <th>reference</th>
                     <th>Libellé</th>
+                    <th>Qte alerte</th>
                     <th>P.U</th>
                     <th>categorie</th>
                     <th>Actions</th>
@@ -58,6 +59,7 @@
                         <tr>
                             <td><?= htmlspecialchars($produit['reference']) ?></td>
                             <td><?= htmlspecialchars($produit['libelle']) ?></td>
+                            <td><?= htmlspecialchars($produit['qte_alerte']) ?></td>
                             <td><?= htmlspecialchars($produit['prix_u']) ?></td>
                             <td><?= htmlspecialchars($produit['nom_categorie']) ?></td>
                             <td class="d-flex">
